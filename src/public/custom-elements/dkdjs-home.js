@@ -207,14 +207,236 @@ function formatKey(key) {
   });
 }
 
+/* === GENERATED DEFAULTS — do not edit by hand. Run tools/build-defaults.mjs === */
+const DEFAULT_CONTENT = {
+  "seoTitle": "Treasure Valley DJ Services | Daniel & Kathy DJs",
+  "seoDescription": "Professional DJ entertainment for weddings, birthdays, private parties, karaoke and special events throughout Boise, Eagle, Meridian and the Treasure Valley.",
+  "hero": {
+    "eyebrow": "Treasure Valley DJ & MC",
+    "h1": "Nobody remembers the centerpieces.",
+    "sub": "They remember the dance floor. Daniel & Kathy are a husband-and-wife DJ team bringing great music, professional sound, lighting and interactive entertainment to weddings, parties and special events throughout Boise and the Treasure Valley.",
+    "primaryCta": "Check your date",
+    "secondaryCta": "View packages",
+    "checkerLabel": "Is your date still open?",
+    "checkerButton": "Check it",
+    "checkerHint": "Instant answer — no waiting on an email."
+  },
+  "about": {
+    "eyebrow": "More than music",
+    "h2": "You get the two of us. Every time.",
+    "body": "We’re Daniel and Kathy, a husband-and-wife DJ team serving Boise and the Treasure Valley. From planning through the last song, we’re the team you work with and the team at your event. While one of us focuses on music, sound and announcements, the other can help with requests, guests, karaoke and the flow of the event.",
+    "stats": [
+      {
+        "value": "2",
+        "label": "DJs always"
+      },
+      {
+        "value": "100%",
+        "label": "Backup gear on site"
+      },
+      {
+        "value": "8",
+        "label": "Cities served"
+      }
+    ]
+  },
+  "services": {
+    "eyebrow": "What we do",
+    "h2": "Four kinds of night.",
+    "items": [
+      {
+        "id": "weddings",
+        "title": "Weddings",
+        "url": "/weddings",
+        "img": "weddings",
+        "copy": "Ceremony audio, cocktail hour, introductions, reception music, MC support and guest requests.",
+        "icon": "<path d=\"M12 20s-7-4.4-7-9.3A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7c0 4.9-7 9.3-7 9.3z\"/>"
+      },
+      {
+        "id": "events",
+        "title": "Parties & Events",
+        "url": "/events",
+        "img": "events",
+        "copy": "Birthdays, anniversaries, graduations, company parties and private celebrations.",
+        "icon": "<path d=\"M4 20l5-12 8 8-13 4z\"/><path d=\"M15 4l1 2M20 9l-2 1M19 3l-2 2\"/>"
+      },
+      {
+        "id": "karaoke",
+        "title": "Karaoke",
+        "url": "/karaoke",
+        "img": "karaoke",
+        "copy": "Hosted karaoke with wireless microphones, on-screen lyrics and interactive entertainment.",
+        "icon": "<rect x=\"9\" y=\"2\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8\"/>"
+      },
+      {
+        "id": "line-dancing",
+        "title": "Line Dancing",
+        "url": "/events",
+        "img": "line-dancing",
+        "copy": "Beginner-friendly line dancing and crowd favorites, wherever the room is up for it.",
+        "icon": "<path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/>"
+      }
+    ]
+  },
+  "included": {
+    "eyebrow": "What comes with us",
+    "h2": "What rolls in the door.",
+    "items": [
+      {
+        "title": "Room-filling sound",
+        "copy": "Clear sound designed for even coverage — loud on the dance floor, civil at grandma’s table.",
+        "icon": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><circle cx=\"8\" cy=\"12\" r=\"3\"/><circle cx=\"16\" cy=\"12\" r=\"3\"/>"
+      },
+      {
+        "title": "LED video DJ booth",
+        "copy": "A curved LED video booth that displays visuals and custom content through your event.",
+        "icon": "<path d=\"M12 3v7M8 6l4-3 4 3\"/><rect x=\"4\" y=\"12\" width=\"16\" height=\"9\" rx=\"2\"/><path d=\"M9 16h6\"/>"
+      },
+      {
+        "title": "Dance floor lighting",
+        "copy": "Lighting that changes with the energy of the event — and stays down during dinner.",
+        "icon": "<path d=\"M12 2v6M5 8l3 4M19 8l-3 4\"/><rect x=\"6\" y=\"12\" width=\"12\" height=\"4\" rx=\"1\"/><path d=\"M9 16l-2 6M15 16l2 6\"/>"
+      },
+      {
+        "title": "Wireless microphones",
+        "copy": "For vows, toasts, announcements and karaoke.",
+        "icon": "<rect x=\"9\" y=\"2\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5 11a7 7 0 0 0 14 0M12 18v4\"/>"
+      },
+      {
+        "title": "Ceremony audio",
+        "copy": "An optional second system where you say the vows, so the back row hears them too.",
+        "icon": "<path d=\"M3 12a9 9 0 0 1 18 0\"/><rect x=\"3\" y=\"12\" width=\"4\" height=\"7\" rx=\"2\"/><rect x=\"17\" y=\"12\" width=\"4\" height=\"7\" rx=\"2\"/>"
+      },
+      {
+        "title": "Backup equipment",
+        "copy": "Spare microphones, cables and critical audio gear travel to every single event.",
+        "icon": "<path d=\"M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z\"/><path d=\"M9 12l2 2 4-4\"/>"
+      }
+    ]
+  },
+  "pricing": {
+    "eyebrow": "Straight pricing",
+    "h2": "Here’s what it costs.",
+    "intro": "No “contact us for a quote.” Every package includes both of us, all the gear, setup and teardown, backup equipment and a planning call."
+  },
+  "booth": {
+    "eyebrow": "DKDJS visual experience",
+    "h2": "Make the booth part of the show.",
+    "body": "Our curved LED video DJ booth can display custom animations, names, photos, logos, event colors, themed visuals and promotions throughout your event — from personalized wedding graphics and birthday messages to corporate branding and venue promotions.",
+    "uses": [
+      {
+        "label": "Weddings",
+        "copy": "Names, monograms, photos and event visuals in your colors."
+      },
+      {
+        "label": "Birthdays",
+        "copy": "Birthday messages, themed graphics and custom transitions."
+      },
+      {
+        "label": "Restaurants",
+        "copy": "Drink specials, happy hour, food promotions and what’s on next."
+      },
+      {
+        "label": "Corporate",
+        "copy": "Logos, sponsor graphics, awards, schedules and branded visuals."
+      }
+    ]
+  },
+  "gallery": {
+    "eyebrow": "Real nights",
+    "h2": "See us work.",
+    "cta": "See the full gallery"
+  },
+  "cta": {
+    "h2": "Let’s see if your date is open.",
+    "body": "Tell us the date and roughly what you’re planning. We answer every inquiry within 24 hours.",
+    "button": "Check your date"
+  },
+  "cities": [
+    "Boise",
+    "Eagle",
+    "Meridian",
+    "Nampa",
+    "Caldwell",
+    "Kuna",
+    "Star",
+    "Garden City"
+  ],
+  "trust": [
+    "Two DJs, every event",
+    "Professional sound",
+    "Backup equipment",
+    "Treasure Valley local"
+  ]
+};
+const DEFAULT_PRICING = {
+  "packages": [
+    {
+      "id": "reception",
+      "name": "The Reception",
+      "price": 1095,
+      "hours": 4,
+      "featured": false,
+      "badge": "",
+      "includes": [
+        "Daniel & Kathy",
+        "DJ + MC",
+        "Professional sound",
+        "Dance floor lighting",
+        "Wireless microphone",
+        "Planning consultation",
+        "Music questionnaire",
+        "Backup equipment"
+      ]
+    },
+    {
+      "id": "full-day",
+      "name": "The Full Day",
+      "price": 1595,
+      "hours": 6,
+      "featured": true,
+      "badge": "MOST BOOKED",
+      "includes": [
+        "Everything in The Reception",
+        "Ceremony audio",
+        "Officiant microphone",
+        "Cocktail-hour music",
+        "Two wireless microphones",
+        "Timeline coordination",
+        "Curved LED Video DJ Booth",
+        "Basic personalized visuals"
+      ]
+    },
+    {
+      "id": "whole-night",
+      "name": "The Whole Night",
+      "price": 2095,
+      "hours": 8,
+      "featured": false,
+      "badge": "",
+      "includes": [
+        "Everything in The Full Day",
+        "Enhanced lighting / uplighting",
+        "Karaoke hour",
+        "Guest song-request portal",
+        "Extended coverage",
+        "Premium send-off music",
+        "Full Custom LED Visual Experience"
+      ]
+    }
+  ],
+  "otherLine": "Private Party from $595 · Karaoke Night from $450 · Corporate / Holiday Event from $895 · See all packages and add-ons"
+};
+/* === END GENERATED DEFAULTS === */
+
 class DkdjsHome extends HTMLElement {
   static get observedAttributes() { return ['content', 'pricing', 'config', 'availability']; }
 
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this._content = null;
-    this._pricing = { packages: [] };
+    this._content = DEFAULT_CONTENT;
+    this._pricing = DEFAULT_PRICING;
     this._config = { images: {} };
     this._availability = null;
     this._painted = false;
@@ -250,14 +472,10 @@ class DkdjsHome extends HTMLElement {
   go(url) { this.emit('navigate', { url }); }
 
   render() {
-    const c = this._content;
-    if (!c || !c.hero) {
-      // No copy yet. Render nothing rather than a half-page of empty headings.
-      this.shadowRoot.innerHTML = `<style>${STYLES}</style>`;
-      this._painted = false;
-      return;
-    }
-
+    // Baked-in defaults mean the element is never blank — in the editor canvas,
+    // or on the live site if the page-code handoff ever fails. Page code
+    // overrides them with the same values from public/content.js.
+    const c = this._content || DEFAULT_CONTENT;
     const cfg = this._config;
     const tiers = this._pricing.packages || [];
 
