@@ -10,7 +10,7 @@
  */
 
 import wixLocation from 'wix-location';
-import { wixSeoFrontend } from 'wix-seo-frontend';
+import wixSeoFrontend from 'wix-seo-frontend';
 import { checkDate } from 'backend/availability.web';
 import { getPackage, visibleIncludes, formatMoney } from 'public/pricing';
 import { HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, servicesSchema } from 'public/content';
@@ -40,15 +40,13 @@ const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
 $w.onReady(() => {
   const el = $w('#dkdjsHome');
 
+  // Content and behaviour first. SEO is wrapped separately below, because a
+  // failure there must never take the page down with it — that is exactly
+  // what happened when this file used a named import for wix-seo-frontend:
+  // the throw aborted onReady and the buttons never got wired.
   el.setAttribute('content', JSON.stringify(Object.assign({}, HOME, { cities: CITIES, trust: TRUST })));
   el.setAttribute('config', JSON.stringify(CONFIG));
   el.setAttribute('pricing', JSON.stringify(buildPricing()));
-
-  // Crawlers that don't run JavaScript see this instead of an empty element.
-  el.seoMarkup = homeSeoMarkup();
-
-  // Structured data must be set inside onReady for search engines to read it.
-  wixSeoFrontend.setStructuredData([localBusinessSchema()].concat(servicesSchema()));
 
   el.on('checkdate', async (event) => {
     const date = event.detail && event.detail.date;
@@ -65,7 +63,26 @@ $w.onReady(() => {
     const url = event.detail && event.detail.url;
     if (url) wixLocation.to(url);
   });
+
+  applySeo(el);
 });
+
+/** Nice-to-have, never load-bearing. Everything here is allowed to fail quietly. */
+function applySeo(el) {
+  try {
+    // Crawlers that don't run JavaScript see this instead of an empty element.
+    el.seoMarkup = homeSeoMarkup();
+  } catch (err) {
+    console.error('[home] seoMarkup failed', err);
+  }
+
+  try {
+    // Structured data must be set inside onReady for search engines to read it.
+    wixSeoFrontend.setStructuredData([localBusinessSchema()].concat(servicesSchema()));
+  } catch (err) {
+    console.error('[home] setStructuredData failed', err);
+  }
+}
 
 /** Tiers derived from public/pricing so no figure is ever typed twice. */
 function buildPricing() {
