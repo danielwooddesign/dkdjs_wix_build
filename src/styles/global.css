@@ -1,0 +1,206 @@
+/* ============================================================================
+   DKDJS design system
+   ----------------------------------------------------------------------------
+   How this works in Wix Studio:
+     1. Select an element on the canvas
+     2. In the right panel, find "Custom classes"
+     3. Type the class name WITHOUT the dot  ->  dk-btn-primary
+     4. The styles below apply immediately
+
+   Fonts: add Anton and Barlow through the Wix font picker (Text theme) so the
+   site actually loads them. The families below are references, not loaders —
+   naming a font here does not download it.
+
+   Everything is derived from the same palette as the page renders, so the
+   editor build and those PNGs stay consistent.
+   ========================================================================= */
+
+:root {
+  --dk-bg:        #07070B;   /* page ground */
+  --dk-surface:   #101018;   /* cards, panels */
+  --dk-surface-2: #0B0B12;   /* alternating section bands */
+  --dk-line:      #22222F;   /* borders, dividers */
+  --dk-text:      #F4F4F7;   /* body copy */
+  --dk-muted:     #A2A2B4;   /* secondary copy */
+  --dk-dim:       #8E8EA6;   /* labels, captions */
+  --dk-pink:      #FF2E9A;   /* primary accent — CTAs only */
+  --dk-pink-soft: #FF8FC6;
+  --dk-cyan:      #3FE0F0;   /* secondary accent */
+  --dk-ink:       #0A0A0F;   /* text on pink/cyan */
+
+  --dk-radius: 3px;
+  --dk-glow-pink: 0 0 28px rgba(255, 46, 154, 0.38);
+  --dk-glow-soft: 0 0 46px rgba(255, 46, 154, 0.16);
+}
+
+/* ---------------------------------------------------------------- TYPE ---- */
+
+/* Big display headings — hero H1, section H2s. */
+.dk-display {
+  font-family: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: #FFFFFF;
+}
+
+/* Hero headline. Scales with the viewport so it never needs per-breakpoint sizes. */
+.dk-h1 { font-size: clamp(38px, 8.5vw, 84px); text-shadow: 0 0 60px rgba(255, 46, 154, 0.28); }
+.dk-h2 { font-size: clamp(30px, 5vw, 50px); }
+.dk-h3 { font-size: clamp(20px, 2.4vw, 26px); }
+
+/* The small cyan label above a headline. Pair with .dk-eyebrow--pink to flip it. */
+.dk-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--dk-cyan);
+}
+.dk-eyebrow--pink { color: var(--dk-pink); }
+
+.dk-body  { font-size: 17px; line-height: 1.6; color: var(--dk-muted); }
+.dk-lead  { font-size: clamp(16px, 2.2vw, 20px); line-height: 1.5; color: #C4C4D2; }
+.dk-small { font-size: 14px; line-height: 1.55; color: var(--dk-dim); }
+
+/* Never use neon on small text — it fails contrast and halates on black. */
+.dk-cyan-text { color: var(--dk-cyan); }
+.dk-pink-text { color: var(--dk-pink); }
+
+/* ------------------------------------------------------------- BUTTONS ---- */
+
+.dk-btn-primary {
+  background-color: var(--dk-pink);
+  color: var(--dk-ink);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 0;
+  border-radius: var(--dk-radius);
+  box-shadow: var(--dk-glow-pink);
+}
+.dk-btn-primary:hover { background-color: #FF4EA9; }
+
+.dk-btn-ghost {
+  background-color: transparent;
+  color: var(--dk-text);
+  font-weight: 600;
+  border: 1px solid #43435A;
+  border-radius: var(--dk-radius);
+}
+.dk-btn-ghost:hover { border-color: var(--dk-cyan); color: var(--dk-cyan); }
+
+.dk-btn-cyan {
+  background-color: var(--dk-cyan);
+  color: #06131A;
+  font-weight: 700;
+  border: 0;
+  border-radius: var(--dk-radius);
+}
+
+/* -------------------------------------------------------------- PANELS ---- */
+
+/* Generic dark card — service cards, feature boxes. */
+.dk-card {
+  background-color: var(--dk-surface);
+  border: 1px solid var(--dk-line);
+  border-radius: var(--dk-radius);
+}
+.dk-card:hover { border-color: var(--dk-pink); }
+
+/* The translucent box the date checker sits in. */
+.dk-panel {
+  background-color: rgba(16, 16, 24, 0.88);
+  border: 1px solid #2B2B3A;
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+}
+
+/* Alternating darker band to separate sections. */
+.dk-band {
+  background-color: var(--dk-surface-2);
+  border-top: 1px solid var(--dk-line);
+  border-bottom: 1px solid var(--dk-line);
+}
+
+.dk-divider { border-top: 1px solid var(--dk-line); }
+
+/* ------------------------------------------------------- PRICING TIERS ---- */
+
+.dk-tier {
+  background-color: var(--dk-surface);
+  border: 1px solid var(--dk-line);
+  border-radius: var(--dk-radius);
+}
+
+/* The middle tier — the one you want booked. */
+.dk-tier--featured {
+  background-color: #14101C;
+  border: 1px solid var(--dk-pink);
+  box-shadow: var(--dk-glow-soft);
+}
+
+/* "MOST BOOKED" pill. */
+.dk-badge {
+  background-color: var(--dk-pink);
+  color: var(--dk-ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.dk-price {
+  font-family: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(34px, 4vw, 46px);
+  color: #FFFFFF;
+}
+
+/* ------------------------------------------------------- FORM CONTROLS ---- */
+
+.dk-input {
+  background-color: var(--dk-bg);
+  border: 1px solid #33334A;
+  border-radius: 2px;
+  color: var(--dk-text);
+  font-size: 16px;
+}
+.dk-input:focus { outline: 2px solid var(--dk-cyan); outline-offset: 1px; }
+
+/* ------------------------------------------------- AVAILABILITY RESULT ---- */
+
+.dk-result-open   { background-color: rgba(63, 224, 240, 0.08); border: 1px solid #1E5B66; border-radius: var(--dk-radius); }
+.dk-result-taken  { background-color: rgba(255, 46, 154, 0.08); border: 1px solid #5B2044; border-radius: var(--dk-radius); }
+.dk-result-plain  { background-color: var(--dk-surface); border: 1px solid var(--dk-line); border-radius: var(--dk-radius); }
+
+/* ---------------------------------------------------------- ATMOSPHERE ---- */
+
+/* Pink haze behind a closing CTA section. Apply to a container, not to text. */
+.dk-glow-pink {
+  background-image: radial-gradient(circle at 50% 0%, rgba(255, 46, 154, 0.20) 0%, rgba(255, 46, 154, 0) 70%);
+}
+
+/* Scrim over a hero photo so white text stays readable on any image. */
+.dk-hero-scrim {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(7, 7, 11, 0.72) 0%,
+    rgba(7, 7, 11, 0.55) 30%,
+    rgba(7, 7, 11, 0.96) 85%,
+    var(--dk-bg) 100%
+  );
+}
+
+/* A left accent rule — used on the LED booth use-case blocks. */
+.dk-rule-pink { border-left: 2px solid var(--dk-pink); }
+
+/* ------------------------------------------------------------ MOBILE ------ */
+
+/* Tap targets must never drop below 44px. Apply to buttons that shrink. */
+@media (max-width: 767px) {
+  .dk-btn-primary,
+  .dk-btn-ghost,
+  .dk-btn-cyan { min-height: 48px; }
+}
