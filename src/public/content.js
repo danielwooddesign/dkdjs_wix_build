@@ -17,6 +17,8 @@
  * Business facts. Anything blank is unknown and must NOT be invented —
  * schema.org markup with made-up contact details is worse than none.
  */
+import { getPackage, visibleIncludes, formatMoney } from 'public/pricing';
+
 export const SITE = {
   name: 'DKDJS — Daniel & Kathy DJs',
   legalName: '',          // TBD: 'New Ad City' DBA? confirm before publishing
@@ -161,7 +163,11 @@ export function homeSeoMarkup() {
   const c = HOME;
   const parts = [];
 
-  parts.push(`<h1>${escapeHtml(c.hero.h1)} ${escapeHtml('They remember the dance floor.')}</h1>`);
+  // The element renders <h1>{hero.h1}</h1> and <p>{hero.sub}</p>. This must
+  // match it exactly. An earlier version appended a second sentence here that
+  // the visible heading did not carry — that is the cloaking mismatch this
+  // whole file exists to prevent.
+  parts.push(`<h1>${escapeHtml(c.hero.h1)}</h1>`);
   parts.push(`<p>${escapeHtml(c.hero.sub)}</p>`);
   parts.push(`<p>Serving ${escapeHtml(CITIES.join(', '))}.</p>`);
 
@@ -179,6 +185,21 @@ export function homeSeoMarkup() {
   parts.push('</ul>');
 
   parts.push(`<h2>${escapeHtml(c.pricing.h2)}</h2><p>${escapeHtml(c.pricing.intro)}</p>`);
+
+  // Prices belong in the crawlable copy — "wedding dj boise pricing" is a real
+  // query and the element renders these figures anyway. Straight from
+  // public/pricing so the markup can never quote a stale number.
+  parts.push('<ul>');
+  ['reception', 'full-day', 'whole-night'].forEach((id) => {
+    const pkg = getPackage(id);
+    if (!pkg) return;
+    const inc = visibleIncludes(pkg).join(', ');
+    parts.push(
+      `<li><strong>${escapeHtml(pkg.name)}</strong> — ${escapeHtml(formatMoney(pkg.price))}` +
+      ` for ${pkg.hours} hours. ${escapeHtml(inc)}.</li>`
+    );
+  });
+  parts.push('</ul>');
 
   parts.push(`<h2>${escapeHtml(c.booth.h2)}</h2><p>${escapeHtml(c.booth.body)}</p><ul>`);
   c.booth.uses.forEach((u) => {
