@@ -22,7 +22,7 @@
 const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&display=swap';
 
 const STYLES = `
-:host { display: block; --bg:#07070B; --surface:#101018; --surface2:#0B0B12; --line:#22222F;
+:host { display: block; box-sizing: border-box; --bg:#07070B; --surface:#101018; --surface2:#0B0B12; --line:#22222F;
   --text:#F4F4F7; --muted:#A2A2B4; --dim:#8E8EA6; --pink:#FF2E9A; --cyan:#3FE0F0;
   color: var(--text); background: var(--bg);
   font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
@@ -451,6 +451,42 @@ class DkdjsHome extends HTMLElement {
       document.head.appendChild(link);
     }
     this.render();
+    this.fitToViewport();
+
+    // Wix sizes this element's container with 100vw, which INCLUDES the
+    // scrollbar. The visible area does not, so every section ends up
+    // scrollbar-width too wide and the content centres that far off. The error
+    // grows with the screen: ~11px at 1440, ~20px at 2560. Nothing inside the
+    // shadow root can read Wix's intent, so measure the real overhang and pad
+    // it away. Re-run on resize because the scrollbar can appear or vanish.
+    this._onResize = () => {
+      clearTimeout(this._fitTimer);
+      this._fitTimer = setTimeout(() => this.fitToViewport(), 120);
+    };
+    window.addEventListener('resize', this._onResize);
+  }
+
+  disconnectedCallback() {
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    clearTimeout(this._fitTimer);
+  }
+
+  /**
+   * Trim however much of this element sits past the right edge of the visible
+   * viewport. Deliberately conservative: it only ever removes a small positive
+   * overhang, so if Wix's sizing changes and the element already fits, or the
+   * measurement looks wrong, this does nothing at all.
+   */
+  fitToViewport() {
+    const visible = document.documentElement.clientWidth;
+    if (!visible) return;
+
+    this.style.paddingRight = '0px';
+    const rect = this.getBoundingClientRect();
+    const overhang = Math.round((rect.left + rect.width) - visible);
+
+    // A scrollbar is ~15-20px. Anything outside 1-60px is not this bug.
+    this.style.paddingRight = (overhang > 0 && overhang <= 60) ? overhang + 'px' : '0px';
   }
 
   attributeChangedCallback(name, _old, value) {
