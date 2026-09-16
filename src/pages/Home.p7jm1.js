@@ -13,7 +13,7 @@ import wixLocation from 'wix-location';
 import wixSeoFrontend from 'wix-seo-frontend';
 import { checkDate } from 'backend/availability.web';
 import { getPackage, visibleIncludes, formatMoney } from 'public/pricing';
-import { HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, servicesSchema } from 'public/content';
+import { SITE, HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, servicesSchema } from 'public/content';
 
 /**
  * Images and phone. Upload to the Wix Media Manager, copy the URL, paste here.
@@ -21,7 +21,7 @@ import { HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, servicesSchema
  * the page is never broken and never fakes a photo it doesn't have.
  */
 const CONFIG = {
-  phone: '',          // e.g. '(208) 555-0134' — also fill SITE.phone in content.js
+  phone: SITE.phone,  // single source of truth — edit it in public/content.js
   images: {
     heroDesktop: '',  // 2400x1350
     danielKathy: '',  // 1200x1500

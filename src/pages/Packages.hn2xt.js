@@ -12,6 +12,7 @@
  */
 
 import wixLocation from 'wix-location';
+import { SITE } from 'public/content';
 import {
   PACKAGES,
   POLICY,
@@ -25,7 +26,7 @@ import {
 
 /** Same CONFIG shape as the home page — keep the two in step. */
 const CONFIG = {
-  phone: '',
+  phone: SITE.phone,
   images: { booth: '' }   // 2400x1350
 };
 

@@ -23,8 +23,8 @@ export const SITE = {
   name: 'DKDJS — Daniel & Kathy DJs',
   legalName: '',          // TBD: 'New Ad City' DBA? confirm before publishing
   url: 'https://dkdjs.com',
-  phone: '',              // TBD
-  email: '',              // TBD
+  phone: '(208) 972-1308',
+  email: 'contact@dkdjs.com',
   city: '',               // TBD — the city DKDJS is based in
   region: 'ID',
   country: 'US',
