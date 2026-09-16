@@ -58,6 +58,12 @@ img.photo { width:100%; height:100%; object-fit:cover; display:block; }
 .hero { position:relative; padding:0; min-height:620px; display:flex; align-items:flex-end; }
 .hero-bg { position:absolute; inset:0; }
 .hero-bg .ph { position:absolute; inset:0; border:none; }
+/* A real photo is wrapped in .frame, which is position:relative and sits in
+   normal flow — so the image rendered at its natural 16:9 height and overflowed
+   the hero on wide screens (514px of spill at 2560px). Pin it like the
+   placeholder so object-fit:cover has a definite box to fill. */
+.hero-bg .frame { position:absolute; inset:0; border-radius:0; }
+.hero { overflow:hidden; }
 .hero-scrim { position:absolute; inset:0;
   background:linear-gradient(to bottom, rgba(7,7,11,.72) 0%, rgba(7,7,11,.55) 30%, rgba(7,7,11,.96) 85%, var(--bg) 100%); }
 .hero-inner { position:relative; width:100%; padding:80px 20px 44px; }
