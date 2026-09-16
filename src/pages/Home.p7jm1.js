@@ -23,16 +23,15 @@ import { SITE, HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, services
 const CONFIG = {
   phone: SITE.phone,  // single source of truth — edit it in public/content.js
   images: {
-    // Wix Media Manager URLs. Sizes noted are what was uploaded, not what the
-    // slot wants — see the mismatch note on heroDesktop.
-    heroDesktop: 'https://static.wixstatic.com/media/fb34fd_7153592507cd4452a1b2ca46220cb623~mv2.jpg',   // 1536x1024 — slot wants 2560x1440, see note
+    // Wix Media Manager URLs. Uploaded size noted where it differs from the slot.
+    heroDesktop: 'https://static.wixstatic.com/media/fb34fd_db9c339b34dc49f08e24a74e92ae1317~mv2.jpg',   // 2560x1440 — correct
     danielKathy: 'https://static.wixstatic.com/media/fb34fd_d5a611bb78cc4b9282cf84b6287fdfdb~mv2.jpg',   // 1122x1402, 4:5
     weddings:    'https://static.wixstatic.com/media/fb34fd_baf18976b82d4e7c9866f5ece489d17a~mv2.jpg',   // 1536x1024
-    events:      'https://static.wixstatic.com/media/fb34fd_1a51697befa64989b95e679165ab0538~mv2.jpg',   // 1536x1024
-    karaoke:     '',                                                    // TODO — no karaoke image supplied yet
+    events:      'https://static.wixstatic.com/media/fb34fd_09636f5792c6457fb028f10170b58116~mv2.jpg',   // 1536x1024 — birthday
+    karaoke:     'https://static.wixstatic.com/media/fb34fd_8eaf4b26647d4720b388263cff46f014~mv2.jpg',   // 2560x1440 — crops to 4:3 for the card
     'line-dancing': 'https://static.wixstatic.com/media/fb34fd_f3d165569f3f46b2a1e296f6b75bba78~mv2.jpg', // 1536x1024
     booth:       'https://static.wixstatic.com/media/fb34fd_00745eef392e4d64b3c27db5ca7a089f~mv2.jpg',   // 2400x1350 — exactly the spec
-    // Gallery still to come. Spare on hand: fb34fd_09636f5792c6457fb028f10170b58116 (birthday, 1536x1024)
+    // Spare, not placed: fb34fd_1a51697befa64989b95e679165ab0538 (lounge, 1536x1024)
     gallery1: '', gallery2: '', gallery3: '',
     gallery4: '', gallery5: '', gallery6: ''   // 1600x1200 each
   }
