@@ -23,13 +23,16 @@ import { SITE, HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, services
 const CONFIG = {
   phone: SITE.phone,  // single source of truth — edit it in public/content.js
   images: {
-    heroDesktop: '',  // 2400x1350
-    danielKathy: '',  // 1200x1500
-    weddings: '',     // 1200x900
-    events: '',       // 1200x900
-    karaoke: '',      // 1200x900
-    'line-dancing': '', // 1200x900
-    booth: '',        // 2400x1350
+    // Wix Media Manager URLs. Sizes noted are what was uploaded, not what the
+    // slot wants — see the mismatch note on heroDesktop.
+    heroDesktop: 'https://static.wixstatic.com/media/fb34fd_7153592507cd4452a1b2ca46220cb623~mv2.jpg',   // 1536x1024 — slot wants 2560x1440, see note
+    danielKathy: 'https://static.wixstatic.com/media/fb34fd_d5a611bb78cc4b9282cf84b6287fdfdb~mv2.jpg',   // 1122x1402, 4:5
+    weddings:    'https://static.wixstatic.com/media/fb34fd_baf18976b82d4e7c9866f5ece489d17a~mv2.jpg',   // 1536x1024
+    events:      'https://static.wixstatic.com/media/fb34fd_1a51697befa64989b95e679165ab0538~mv2.jpg',   // 1536x1024
+    karaoke:     '',                                                    // TODO — no karaoke image supplied yet
+    'line-dancing': 'https://static.wixstatic.com/media/fb34fd_f3d165569f3f46b2a1e296f6b75bba78~mv2.jpg', // 1536x1024
+    booth:       'https://static.wixstatic.com/media/fb34fd_00745eef392e4d64b3c27db5ca7a089f~mv2.jpg',   // 2400x1350 — exactly the spec
+    // Gallery still to come. Spare on hand: fb34fd_09636f5792c6457fb028f10170b58116 (birthday, 1536x1024)
     gallery1: '', gallery2: '', gallery3: '',
     gallery4: '', gallery5: '', gallery6: ''   // 1600x1200 each
   }
