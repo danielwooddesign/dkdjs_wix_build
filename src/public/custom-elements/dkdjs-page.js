@@ -191,6 +191,68 @@ h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 @media (min-width:900px) { .two-col { grid-template-columns:1fr 1fr; gap:64px; } }
 .terms { display:grid; gap:26px; margin-top:8px; }
 @media (min-width:768px) { .terms { grid-template-columns:repeat(3,1fr); gap:36px; } }
+
+/* ---------------------------------------------------------------- FORMS --- */
+.form { margin-top:28px; max-width:760px; }
+.field { margin-bottom:18px; }
+.field label { display:block; font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:600; color:var(--dim); margin-bottom:8px; }
+.field .opt { color:#5F5F72; letter-spacing:.06em; }
+.field input, .field select, .field textarea {
+  width:100%; min-height:52px; background:var(--bg); border:1px solid #33334A; border-radius:2px;
+  padding:0 14px; color:var(--text); font-size:16px; font-family:inherit; }
+.field textarea { min-height:120px; padding:14px; line-height:1.5; resize:vertical; }
+.field select { appearance:none; cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,#8E8EA6 50%),linear-gradient(135deg,#8E8EA6 50%,transparent 50%);
+  background-position:calc(100% - 20px) 23px, calc(100% - 14px) 23px;
+  background-size:6px 6px, 6px 6px; background-repeat:no-repeat; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline:2px solid var(--cyan); outline-offset:1px; }
+.field .err { margin-top:7px; font-size:13px; color:#FF8FC6; display:none; }
+.field.invalid input, .field.invalid select { border-color:var(--pink); }
+.field.invalid .err { display:block; }
+.grid2 { display:grid; grid-template-columns:1fr; gap:0 16px; }
+.formnote { font-size:13px; color:var(--dim); line-height:1.5; margin:4px 0 20px; }
+.submitrow { display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:8px; }
+.formstate { font-size:14px; color:var(--dim); }
+.formstate.bad { color:#FF8FC6; }
+.done { background:rgba(63,224,240,.08); border:1px solid #1E5B66; border-radius:3px;
+  padding:26px 24px; margin-top:28px; }
+.done h3 { font-family:'Anton','Arial Narrow',Impact,sans-serif; font-weight:400;
+  text-transform:uppercase; font-size:26px; color:#fff; margin:0 0 10px; }
+
+/* ------------------------------------------------------------ CONTACT ----- */
+.contactgrid { display:grid; grid-template-columns:1fr; gap:28px; margin-top:28px; align-items:start; }
+.infocard { background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:26px 24px; }
+.infocard + .infocard { margin-top:16px; }
+.infocard .lbl { font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--dim); font-weight:600; margin-bottom:8px; }
+.infocard a { color:var(--cyan); text-decoration:none; font-size:20px; }
+.infocard a:hover { text-decoration:underline; }
+.mapwrap { border:1px solid var(--line); border-radius:3px; overflow:hidden; background:var(--surface); }
+.mapwrap iframe { width:100%; height:340px; border:0; display:block; filter:grayscale(.35) contrast(1.05); }
+.citylist { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.citylist span { font-size:13px; letter-spacing:.06em; color:#B4B4C4;
+  border:1px solid var(--line); border-radius:2px; padding:6px 11px; }
+
+/* -------------------------------------------------------------- ABOUT ----- */
+.split { display:grid; grid-template-columns:1fr; gap:28px; align-items:center; margin-top:28px; }
+.valuegrid { display:grid; grid-template-columns:1fr; gap:18px; margin-top:28px; }
+.value { background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:22px 20px; }
+.value b { display:block; font-size:17px; color:#fff; margin-bottom:6px; }
+.value p { font-size:14px; }
+
+@media (min-width:768px) {
+  .grid2 { grid-template-columns:repeat(2,1fr); }
+  .valuegrid { grid-template-columns:repeat(2,1fr); }
+}
+@media (min-width:900px) {
+  .contactgrid { grid-template-columns:1fr 1fr; }
+  .split { grid-template-columns:5fr 7fr; gap:36px; }
+}
+@media (min-width:1100px) {
+  .valuegrid { grid-template-columns:repeat(3,1fr); }
+}
 `;
 
 function esc(value) {
@@ -210,6 +272,70 @@ function media(config, key, label, extraClass) {
     ? `<div class="frame${cls}"><img class="photo" src="${esc(src)}" alt="${esc(label)}" loading="lazy"></div>`
     : `<div class="ph${cls}">[ ${esc(label)} ]</div>`;
 }
+
+/* === PAGE COPY — defaults. Page code may override via the `content` attribute. */
+const DEFAULT_PAGE_CONTENT = {
+  availability: {
+    eyebrow: 'Check your date',
+    h1: 'Is your date still open?',
+    intro: 'We only take one event a day, so the answer is always a straight yes or no. '
+         + 'Tell us about your event and we will come back to you personally — not with an automated quote.',
+    note: 'Sending this does not commit you to anything and does not take a payment. '
+        + 'It tells us you are interested and puts your date on our radar while we talk.',
+    submit: 'Send it over',
+    doneTitle: 'Got it.',
+    doneBody: 'We have your details and we will be in touch shortly. '
+            + 'If your event is close, call or text and you will hear back faster.'
+  },
+  contact: {
+    eyebrow: 'Get in touch',
+    h1: 'Talk to the people who show up.',
+    intro: 'Call, text or email and you reach Daniel or Kathy directly. '
+         + 'There is no office, no account manager, and no call centre.',
+    areaBody: 'We cover Boise and the Treasure Valley. If your venue is a little further out, '
+            + 'ask anyway — we travel for the right event.',
+    cta: 'Check your date',
+    ctaBody: 'The quickest route is to check whether your date is free. It takes a few seconds.',
+    mapQuery: 'Boise, Idaho',
+    mapZoom: 9,
+    mapTitle: 'Map of the Treasure Valley service area',
+    mapNote: 'We are a mobile service — we come to your venue. '
+           + 'The map shows the area we cover rather than a shopfront.'
+  },
+  about: {
+    eyebrow: 'More than music',
+    h1: 'You get the two of us. Every time.',
+    body: [
+      'We are Daniel and Kathy, a husband-and-wife DJ team serving Boise and the Treasure Valley.',
+      'Most DJ companies sell you a brand and send whoever is free that Saturday. '
+        + 'You will not meet a stranger on your wedding day. The people you plan with are the '
+        + 'people who turn up, unload the van and read your dance floor.',
+      'Working as a pair changes what we can do. While one of us is on music, sound and '
+        + 'announcements, the other is free to handle requests, cue the next moment, help a '
+        + 'nervous speaker find the microphone, or run karaoke — without the music stopping.',
+      'That is also why we only take one event a day. Nobody gets the tired half of us.'
+    ],
+    valuesEyebrow: 'How we work',
+    valuesH2: 'What you can count on.',
+    values: [
+      { title: 'Two of us, always',
+        copy: 'Every booking includes both of us. It is not an upgrade and it is not conditional on the package.' },
+      { title: 'One event a day',
+        copy: 'We never double-book a date. Your event gets the whole day, including setup and teardown.' },
+      { title: 'Backup gear on site',
+        copy: 'Spare microphones, cables and critical audio equipment travel to every single event.' },
+      { title: 'Straight pricing',
+        copy: 'Every package is published on the site. No "contact us for a quote" and no surprise line items.' },
+      { title: 'We plan with you',
+        copy: 'A planning call and a music questionnaire come with every package, so nothing is improvised.' },
+      { title: 'Treasure Valley local',
+        copy: 'We live here. We know the venues, the drive times and which rooms need what.' }
+    ],
+    ctaH2: 'Let us know what you are planning.',
+    ctaBody: 'Tell us the date and we will tell you straight away whether we are free.',
+    cta: 'Check your date'
+  }
+};
 
 /* === GENERATED DEFAULTS — do not edit by hand. Run tools/build-page-defaults.mjs === */
 const DEFAULT_PRICING = {
@@ -358,7 +484,7 @@ const DEFAULT_PRICING = {
 /* === END GENERATED DEFAULTS === */
 
 class DkdjsPage extends HTMLElement {
-  static get observedAttributes() { return ['page', 'pricing', 'config']; }
+  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission']; }
 
   constructor() {
     super();
@@ -366,6 +492,7 @@ class DkdjsPage extends HTMLElement {
     this._page = 'packages';
     this._pricing = DEFAULT_PRICING;
     this._config = { images: {} };
+    this._content = DEFAULT_PAGE_CONTENT;
   }
 
   connectedCallback() {
@@ -412,6 +539,11 @@ class DkdjsPage extends HTMLElement {
       const parsed = JSON.parse(value);
       if (name === 'pricing') this._pricing = parsed;
       if (name === 'config') this._config = Object.assign({ images: {} }, parsed);
+      if (name === 'content') this._content = parsed;
+      // These paint in place — repainting the whole page would wipe what the
+      // visitor has typed into the form.
+      if (name === 'availability') { this.paintDate(parsed); return; }
+      if (name === 'submission')   { this.paintSubmission(parsed); return; }
       this.render();
     } catch (err) { /* half-written attribute; the next one wins */ }
   }
@@ -421,11 +553,348 @@ class DkdjsPage extends HTMLElement {
   }
 
   render() {
-    const html = this._page === 'packages' ? this.packages() : '';
-    this.shadowRoot.innerHTML = `<style>${STYLES}</style>${html}`;
+    const pages = {
+      packages: () => this.packages(),
+      availability: () => this.availability(),
+      contact: () => this.contact(),
+      about: () => this.about()
+    };
+    const build = pages[this._page] || pages.packages;
+    this.shadowRoot.innerHTML = `<style>${STYLES}</style>${build()}`;
     this.shadowRoot.querySelectorAll('[data-go]').forEach((el) => {
       el.addEventListener('click', () => this.go(el.getAttribute('data-go')));
     });
+    if (this._page === 'availability') this.wireForm();
+  }
+
+
+
+  /* ------------------------------------------------- AVAILABILITY FORM --- */
+
+  /**
+   * The element never talks to the backend itself. It validates, then emits:
+   *   checkdate    { date }    — page code replies by setting the `availability` attribute
+   *   requesthold  { details } — page code calls requestHold() and sets `submission`
+   * Same contract as dkdjs-home.js, so the backend stays server-side.
+   */
+  wireForm() {
+    const root = this.shadowRoot;
+    const form = root.getElementById('holdForm');
+    if (!form) return;
+
+    const dateInput = root.getElementById('fDate');
+    // Never let anyone pick yesterday.
+    dateInput.min = new Date().toLocaleDateString('en-CA');
+
+    dateInput.addEventListener('change', () => {
+      this.paintDate(null);
+      const v = dateInput.value;
+      if (v) this.emit('checkdate', { date: v });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (this._sending) return;
+
+      const invalid = this.validate();
+      if (invalid) {
+        invalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const input = invalid.querySelector('input, select, textarea');
+        if (input) input.focus();
+        return;
+      }
+
+      this.setSending(true);
+      this.emit('requesthold', { details: this.collect() });
+    });
+  }
+
+  emit(type, detail) {
+    this.dispatchEvent(new CustomEvent(type, { detail, bubbles: true, composed: true }));
+  }
+
+  /** Returns the first invalid .field, or null when everything required is present. */
+  validate() {
+    const root = this.shadowRoot;
+    let first = null;
+    const check = (id, ok) => {
+      const field = root.getElementById(id).closest('.field');
+      field.classList.toggle('invalid', !ok);
+      if (!ok && !first) first = field;
+    };
+    const email = root.getElementById('fEmail').value.trim();
+    check('fDate', Boolean(root.getElementById('fDate').value));
+    check('fName', root.getElementById('fName').value.trim().length > 0);
+    // Deliberately loose: a real address check is the server's job, and an
+    // over-strict pattern rejects valid addresses and loses the enquiry.
+    check('fEmail', email.includes('@') && email.indexOf('@') > 0 && email.lastIndexOf('.') > email.indexOf('@'));
+    return first;
+  }
+
+  collect() {
+    const root = this.shadowRoot;
+    const val = (id) => {
+      const el = root.getElementById(id);
+      return el ? String(el.value || '').trim() : '';
+    };
+    const guests = parseInt(val('fGuests'), 10);
+    return {
+      eventDate: val('fDate'),
+      name: val('fName'),
+      email: val('fEmail').toLowerCase(),
+      phone: val('fPhone'),
+      eventType: val('fType'),
+      venue: val('fVenue'),
+      city: val('fCity'),
+      guestCount: Number.isFinite(guests) ? guests : null,
+      packageId: val('fPkg'),
+      notes: val('fNotes'),
+      source: 'check-availability'
+    };
+  }
+
+  setSending(on) {
+    const root = this.shadowRoot;
+    this._sending = on;
+    const btn = root.getElementById('holdSubmit');
+    const state = root.getElementById('formState');
+    if (btn) btn.disabled = on;
+    if (state) {
+      state.className = 'formstate';
+      state.textContent = on ? 'Sending…' : '';
+    }
+  }
+
+  /** Page code sets the `availability` attribute; this paints the answer. */
+  paintDate(result) {
+    const box = this.shadowRoot.getElementById('dateResult');
+    if (!box) return;
+    if (!result || !result.status) { box.className = 'result'; box.innerHTML = ''; return; }
+
+    const copy = {
+      open:    ['That date is open.', 'Nobody else has it held. Fill this in and we will keep it for you.', 'open'],
+      taken:   ['That date is already booked.', 'We only take one event a day so nobody gets half of us. Send the form anyway and we will suggest what is close.', 'taken'],
+      past:    ['That date has already passed.', 'Pick a date in the future and we will check it.', 'neutral'],
+      invalid: ['That does not look like a date.', 'Pick a day from the calendar.', 'neutral'],
+      error:   ['We could not check that just now.', 'Send the form anyway, or call us and we will check by hand.', 'neutral']
+    };
+    const row = copy[result.status] || copy.error;
+    box.className = 'result show ' + row[2];
+    box.innerHTML = `<strong>${esc(row[0])}</strong>${esc(row[1])}`;
+  }
+
+  /** Page code sets `submission` to {ok:true} or {ok:false, reason}. */
+  paintSubmission(result) {
+    const root = this.shadowRoot;
+    const form = root.getElementById('holdForm');
+    const done = root.getElementById('holdDone');
+    this.setSending(false);
+    if (!form || !done) return;
+
+    if (result && result.ok) {
+      form.hidden = true;
+      done.hidden = false;
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    const state = root.getElementById('formState');
+    if (state) {
+      state.className = 'formstate bad';
+      const reasons = {
+        'invalid-date': 'That date did not look right — check it and try again.',
+        'invalid-email': 'That email address did not look right.',
+        taken: 'That date was taken while you were filling this in. Change the date and resend.',
+        error: 'Something went wrong on our end. Call or text us and we will sort it out.'
+      };
+      state.textContent = reasons[(result && result.reason)] || reasons.error;
+    }
+  }
+
+  /* =================================================== CHECK AVAILABILITY == */
+
+  availability() {
+    const c = (this._content && this._content.availability) || DEFAULT_PAGE_CONTENT.availability;
+    const cfg = this._config || {};
+    const types = [
+      ['', 'Select one'], ['wedding', 'Wedding'], ['birthday', 'Birthday'],
+      ['anniversary', 'Anniversary'], ['graduation', 'Graduation'],
+      ['corporate', 'Corporate / holiday party'], ['karaoke', 'Karaoke night'],
+      ['private', 'Private party'], ['other', 'Something else']
+    ];
+    const pkgs = (this._pricing && this._pricing.tiers) || [];
+
+    return `
+      <section>
+        <div class="wrap">
+          <div class="eyebrow"><i></i>${esc(c.eyebrow)}</div>
+          <h1 class="disp sec">${esc(c.h1)}</h1>
+          <p class="lead" style="margin-top:16px;max-width:62ch">${esc(c.intro)}</p>
+
+          <form class="form" id="holdForm" novalidate>
+            <div class="field">
+              <label for="fDate">Event date</label>
+              <input type="date" id="fDate" name="eventDate" required>
+              <div class="err">Pick the date of your event.</div>
+            </div>
+
+            <div class="result" id="dateResult"></div>
+
+            <div class="grid2">
+              <div class="field">
+                <label for="fName">Your name</label>
+                <input type="text" id="fName" name="name" autocomplete="name">
+                <div class="err">Tell us who you are.</div>
+              </div>
+              <div class="field">
+                <label for="fEmail">Email</label>
+                <input type="email" id="fEmail" name="email" autocomplete="email" required>
+                <div class="err">We need an email to reply to.</div>
+              </div>
+              <div class="field">
+                <label for="fPhone">Phone <span class="opt">optional</span></label>
+                <input type="tel" id="fPhone" name="phone" autocomplete="tel">
+              </div>
+              <div class="field">
+                <label for="fType">Event type</label>
+                <select id="fType" name="eventType">
+                  ${types.map((t) => `<option value="${esc(t[0])}">${esc(t[1])}</option>`).join('')}
+                </select>
+              </div>
+              <div class="field">
+                <label for="fVenue">Venue <span class="opt">if you know it</span></label>
+                <input type="text" id="fVenue" name="venue">
+              </div>
+              <div class="field">
+                <label for="fCity">City</label>
+                <input type="text" id="fCity" name="city" list="cityOptions">
+                <datalist id="cityOptions">
+                  ${(cfg.cities || []).map((n) => `<option value="${esc(n)}"></option>`).join('')}
+                </datalist>
+              </div>
+              <div class="field">
+                <label for="fGuests">Roughly how many guests <span class="opt">optional</span></label>
+                <input type="number" id="fGuests" name="guestCount" min="1" max="2000">
+              </div>
+              <div class="field">
+                <label for="fPkg">Package you're looking at <span class="opt">optional</span></label>
+                <select id="fPkg" name="packageId">
+                  <option value="">Not sure yet</option>
+                  ${pkgs.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="fNotes">Anything else <span class="opt">optional</span></label>
+              <textarea id="fNotes" name="notes" placeholder="Timings, must-play songs, questions — whatever helps."></textarea>
+            </div>
+
+            <p class="formnote">${esc(c.note)}</p>
+
+            <div class="submitrow">
+              <button class="btn btn-primary" type="submit" id="holdSubmit">${esc(c.submit)}</button>
+              <span class="formstate" id="formState"></span>
+            </div>
+          </form>
+
+          <div class="done" id="holdDone" hidden>
+            <h3>${esc(c.doneTitle)}</h3>
+            <p>${esc(c.doneBody)}</p>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  /* ================================================================ CONTACT = */
+
+  contact() {
+    const c = (this._content && this._content.contact) || DEFAULT_PAGE_CONTENT.contact;
+    const cfg = this._config || {};
+    const cities = cfg.cities || [];
+    // Service area, deliberately not a pinned home address.
+    const mapSrc = 'https://www.google.com/maps?q=' + encodeURIComponent(c.mapQuery)
+      + '&z=' + encodeURIComponent(c.mapZoom || 10) + '&output=embed';
+
+    return `
+      <section>
+        <div class="wrap">
+          <div class="eyebrow"><i></i>${esc(c.eyebrow)}</div>
+          <h1 class="disp sec">${esc(c.h1)}</h1>
+          <p class="lead" style="margin-top:16px;max-width:60ch">${esc(c.intro)}</p>
+
+          <div class="contactgrid">
+            <div>
+              ${cfg.phone ? `
+              <div class="infocard">
+                <div class="lbl">Call or text</div>
+                <a href="tel:${esc(String(cfg.phone).replace(/[^0-9+]/g, ''))}">${esc(cfg.phone)}</a>
+              </div>` : ''}
+              ${cfg.email ? `
+              <div class="infocard">
+                <div class="lbl">Email</div>
+                <a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>
+              </div>` : ''}
+              <div class="infocard">
+                <div class="lbl">Where we work</div>
+                <p>${esc(c.areaBody)}</p>
+                <div class="citylist">${cities.map((n) => `<span>${esc(n)}</span>`).join('')}</div>
+              </div>
+              <div class="infocard">
+                <div class="lbl">Fastest way to book</div>
+                <p style="margin-bottom:16px">${esc(c.ctaBody)}</p>
+                <button class="btn btn-primary" type="button" data-go="/check-availability">${esc(c.cta)}</button>
+              </div>
+            </div>
+            <div>
+              <div class="mapwrap">
+                <iframe src="${esc(mapSrc)}" loading="lazy" title="${esc(c.mapTitle)}"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+              <p class="small" style="margin-top:12px">${esc(c.mapNote)}</p>
+            </div>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  /* ================================================================== ABOUT = */
+
+  about() {
+    const c = (this._content && this._content.about) || DEFAULT_PAGE_CONTENT.about;
+    const cfg = this._config || {};
+
+    return `
+      <section>
+        <div class="wrap">
+          <div class="eyebrow pink"><i></i>${esc(c.eyebrow)}</div>
+          <h1 class="disp sec">${esc(c.h1)}</h1>
+          <div class="split">
+            <div>${media(cfg, 'danielKathy', 'DANIEL & KATHY — 1600×2000', 'portrait')}</div>
+            <div>
+              ${(c.body || []).map((t) => `<p class="body" style="margin-bottom:16px">${esc(t)}</p>`).join('')}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="wrap">
+          <div class="eyebrow"><i></i>${esc(c.valuesEyebrow)}</div>
+          <h2 class="disp sec">${esc(c.valuesH2)}</h2>
+          <div class="valuegrid">
+            ${(c.values || []).map((v) => `
+              <div class="value"><b>${esc(v.title)}</b><p>${esc(v.copy)}</p></div>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap" style="text-align:center">
+          <h2 class="disp sec">${esc(c.ctaH2)}</h2>
+          <p class="lead" style="margin:16px auto 24px;max-width:52ch">${esc(c.ctaBody)}</p>
+          <button class="btn btn-primary" type="button" data-go="/check-availability">${esc(c.cta)}</button>
+        </div>
+      </section>`;
   }
 
   packages() {

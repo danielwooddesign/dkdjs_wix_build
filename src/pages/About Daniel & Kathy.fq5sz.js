@@ -1,10 +1,30 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+/**
+ * About (/about) — feeds <dkdjs-page page="about">.
+ *
+ * Canvas setup:
+ *   Velo file   dkdjs-page.js
+ *   Tag name    dkdjs-page
+ *   ID          dkdjsPage
+ *   Attribute   page = about
+ */
 
-$w.onReady(function () {
-    // Write your JavaScript here
+import wixLocation from 'wix-location';
+import { SITE } from 'public/content';
 
-    // To select an element by ID use: $w('#elementID')
+/** Same portrait as the home page. Keep the two in step. */
+const CONFIG = {
+  phone: SITE.phone,
+  email: SITE.email,
+  images: {
+    danielKathy: 'https://static.wixstatic.com/media/fb34fd_d5a611bb78cc4b9282cf84b6287fdfdb~mv2.jpg'
+  }
+};
 
-    // Click 'Preview' to run your code
+$w.onReady(() => {
+  const el = $w('#dkdjsPage');
+  el.setAttribute('config', JSON.stringify(CONFIG));
+  el.on('navigate', (event) => {
+    const url = event.detail && event.detail.url;
+    if (url) wixLocation.to(url);
+  });
 });
