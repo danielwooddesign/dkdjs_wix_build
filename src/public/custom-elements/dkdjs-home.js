@@ -192,6 +192,20 @@ function esc(value) {
 }
 
 /** A real photo when config supplies one, an honest labelled box when it doesn't. */
+/**
+ * The gallery section renders only when there is at least one real photo for it.
+ * A "Real nights — See us work." heading over six empty boxes is worse than no
+ * section at all: it advertises an absence. Drop a URL into any of gallery1-6 in
+ * the page code's CONFIG and the section reappears on its own.
+ */
+function hasGallery(config) {
+  const images = (config && config.images) || {};
+  return [1, 2, 3, 4, 5, 6].some((n) => {
+    const src = images['gallery' + n];
+    return typeof src === 'string' && src.trim() !== '';
+  });
+}
+
 function media(config, key, label, extraClass) {
   const src = (config.images || {})[key];
   const cls = extraClass ? ` ${extraClass}` : '';
@@ -638,6 +652,7 @@ class DkdjsHome extends HTMLElement {
         </div>
       </section>
 
+      ${hasGallery(cfg) ? `
       <section>
         <div class="wrap">
           <div class="eyebrow"><i></i>${esc(c.gallery.eyebrow)}</div>
@@ -647,7 +662,7 @@ class DkdjsHome extends HTMLElement {
           </div>
           <div class="hero-actions"><button class="btn btn-ghost" type="button" data-go="/gallery">${esc(c.gallery.cta)}</button></div>
         </div>
-      </section>
+      </section>` : ''}
 
       <section class="cta">
         <div class="glow"></div>
