@@ -11,7 +11,7 @@
 
 import { Permissions, webMethod } from 'wix-web-module';
 import wixData from 'wix-data';
-import { isValidDateKey, isPast, nearbySaturdays, toDateKey } from 'public/dates';
+import { isValidDateKey, isPast, nearbySaturdays, toDateKey, formatDateKey } from 'public/dates';
 import { POLICY } from 'public/pricing';
 
 const BOOKINGS = 'Bookings';
@@ -35,6 +35,33 @@ const HOLD_EXPIRY_DAYS = 7;
 const EVENTS_PER_DAY = POLICY.eventsPerDay || 1;
 
 const OPTS = { suppressAuth: true };
+
+/**
+ * A complete, human-readable summary of the enquiry, written into the Lead row.
+ *
+ * Why this exists: Wix Automations can email you when a Lead is added, but
+ * getting seventeen separate fields into that email means wiring seventeen
+ * dynamic values through the automation UI. Writing one preformatted field
+ * here means the email needs a single dynamic value — and the wording stays
+ * under our control rather than Wix's.
+ */
+function buildSummary(details, dateKey) {
+  const line = (label, value) => (value || value === 0) ? `${label}: ${value}` : null;
+  const rows = [
+    line('Event date', formatDateKey(dateKey) || dateKey),
+    line('Name', details.name),
+    line('Email', details.email),
+    line('Phone', details.phone),
+    line('Event type', details.eventType),
+    line('Venue', details.venue),
+    line('City', details.city),
+    line('Guests', details.guestCount),
+    line('Package', details.packageId),
+    line('Notes', details.notes)
+  ].filter(Boolean);
+
+  return rows.join('\n');
+}
 
 /**
  * Is a date taken? Counts confirmed bookings plus unexpired holds.
@@ -145,7 +172,10 @@ export const requestHold = webMethod(Permissions.Anyone, async (details = {}) =>
       estimateTotal: Number(details.estimateTotal) || 0,
       notes: details.notes || '',
       source: details.source || 'website',
-      status: 'new'
+      status: 'new',
+      // One preformatted field so the notification email needs a single
+      // dynamic value instead of one per field.
+      summary: buildSummary(details, dateKey)
     }, OPTS);
 
     const hold = await wixData.insert(HOLDS, {
