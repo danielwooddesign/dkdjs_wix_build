@@ -19,7 +19,7 @@ import { packagesFor, getPackage, visibleIncludes, sellableAddons, formatMoney }
 const KEY = 'weddings';
 
 /** Optional hero image for this page. Paste a Wix Media URL to use one. */
-const IMAGES = { hero: '' };
+const IMAGES = { hero: 'https://static.wixstatic.com/media/fb34fd_b2b57c851762402eb510f134081f9ca0~mv2.jpg' };  // 1920x1088 — reception, couple dancing among guests
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');

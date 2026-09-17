@@ -19,7 +19,7 @@ import { packagesFor, getPackage, visibleIncludes, sellableAddons, formatMoney }
 const KEY = 'events';
 
 /** Optional hero image for this page. Paste a Wix Media URL to use one. */
-const IMAGES = { hero: '' };
+const IMAGES = { hero: 'https://static.wixstatic.com/media/fb34fd_3ee6046173a744c494f449a93d4328b3~mv2.jpg' };  // 1920x1088 — party table, guests mid-laugh
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
