@@ -541,7 +541,7 @@ const DEFAULT_LEGAL = {
   "privacy": {
     "slug": "privacy",
     "title": "Privacy Policy",
-    "updated": "[DATE]",
+    "updated": "September 17, 2026",
     "intro": "New Ad City LLC, trading as DKDJS (\"we\", \"us\"), runs dkdjs.com. This policy explains what we collect, why, and what you can do about it. It is written to describe what this site actually does rather than to cover every eventuality.",
     "sections": [
       {
@@ -550,7 +550,7 @@ const DEFAULT_LEGAL = {
           "New Ad City LLC DBA DKDJS, a DJ and event entertainment service operating in Boise and the Treasure Valley, Idaho.",
           "Email: contact@dkdjs.com",
           "Phone: (208) 972-1308",
-          "Mailing address: [MAILING ADDRESS]"
+          "Mailing address: 715 N Synergy Way, Eagle, ID 83616"
         ]
       },
       {
@@ -639,7 +639,7 @@ const DEFAULT_LEGAL = {
   "terms": {
     "slug": "terms",
     "title": "Terms & Conditions",
-    "updated": "[DATE]",
+    "updated": "September 17, 2026",
     "intro": "These terms apply to bookings with New Ad City LLC, trading as DKDJS. Booking an event with us means agreeing to them. If anything here does not suit your event, tell us before you book — most of it is negotiable if we agree it in writing first.",
     "sections": [
       {
@@ -686,7 +686,8 @@ const DEFAULT_LEGAL = {
         "h": "Travel",
         "body": [
           "We serve Boise, Eagle, Meridian, Nampa, Caldwell, Kuna, Star, Garden City and the surrounding Treasure Valley.",
-          "[TRAVEL POLICY — you have not set an included radius or a surcharge. Until you do, quote travel case by case and say so here.]"
+          "Travel to venues within that area is included in your package price.",
+          "For venues outside it we are usually still happy to come, and will quote any travel cost before you book. You will never be charged for travel you did not agree to in advance."
         ]
       },
       {
@@ -741,7 +742,7 @@ const DEFAULT_LEGAL = {
   "refund": {
     "slug": "refund-policy",
     "title": "Cancellation & Refund Policy",
-    "updated": "[DATE]",
+    "updated": "September 17, 2026",
     "intro": "We would rather be straight with you about this before you book than have it come as a surprise later. Here is exactly what happens if a booking is cancelled.",
     "sections": [
       {
@@ -786,7 +787,7 @@ const DEFAULT_LEGAL = {
       {
         "h": "How refunds are paid",
         "body": [
-          "Refunds go back to the original payment method, and are processed within [NUMBER] business days of being agreed.",
+          "Refunds go back to the original payment method, and are processed within 10 business days of being agreed.",
           "Payments are handled by New Ad City LLC, so a refund may appear under that name rather than DKDJS."
         ]
       }

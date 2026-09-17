@@ -21,12 +21,14 @@ const BALANCE = POLICY.balanceDueDays;
 
 /** Fill these in before publishing. */
 export const LEGAL_CONFIG = {
-  effectiveDate: '[DATE]',
-  address: '[MAILING ADDRESS]',
+  effectiveDate: 'September 17, 2026',
+  address: '715 N Synergy Way, Eagle, ID 83616',
   /** Confirm with your accountant before publishing. */
   bookingRetentionYears: 7,
   leadRetentionMonths: 24,
-  responseDays: 30
+  responseDays: 30,
+  /** Deliberately conservative — easy to beat, hard to breach. */
+  refundBusinessDays: 10
 };
 
 const C = LEGAL_CONFIG;
@@ -137,7 +139,8 @@ export const LEGAL = {
       ]},
       { h: 'Travel', body: [
         `We serve ${CITIES.join(', ')} and the surrounding Treasure Valley.`,
-        '[TRAVEL POLICY — you have not set an included radius or a surcharge. Until you do, quote travel case by case and say so here.]'
+        'Travel to venues within that area is included in your package price.',
+        'For venues outside it we are usually still happy to come, and will quote any travel cost before you book. You will never be charged for travel you did not agree to in advance.'
       ]},
       { h: 'Music and requests', body: [
         'You can give us a must-play list and a do-not-play list, and we will hold to both.',
@@ -202,7 +205,7 @@ export const LEGAL = {
         'If you believe we did not deliver what you booked, tell us within 7 days of the event and we will discuss it properly. We would rather sort out a genuine problem than argue about it.'
       ]},
       { h: 'How refunds are paid', body: [
-        'Refunds go back to the original payment method, and are processed within [NUMBER] business days of being agreed.',
+        `Refunds go back to the original payment method, and are processed within ${C.refundBusinessDays} business days of being agreed.`,
         'Payments are handled by ' + ENTITY + ', so a refund may appear under that name rather than DKDJS.'
       ]}
     ]

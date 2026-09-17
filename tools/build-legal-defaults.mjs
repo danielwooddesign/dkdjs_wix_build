@@ -35,8 +35,9 @@ const newFn = `    const path = (typeof location !== 'undefined' ? location.path
     // Page code wins; the baked copy is the fallback so these pages are never blank.
     const d = (this._content && this._content.legal) || DEFAULT_LEGAL[which] || null;
     if (!d) return '';`;
-if (!src.includes(oldFn)) throw new Error('legal() body not found');
-src = src.replace(oldFn, newFn);
+// Idempotent: on a re-run legal() is already patched, so only patch if needed.
+if (src.includes(oldFn)) src = src.replace(oldFn, newFn);
+else if (!src.includes('DEFAULT_LEGAL[which]')) throw new Error('legal() body not found and not already patched');
 
 writeFileSync('src/public/custom-elements/dkdjs-page.js', src);
 console.log('baked', Object.keys(payload).join(', '), '->', src.length, 'bytes');
