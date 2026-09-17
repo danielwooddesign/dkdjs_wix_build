@@ -20,7 +20,11 @@ const STYLES = `
 :host { display: block; box-sizing: border-box; --bg:#07070B; --surface:#101018; --surface2:#0B0B12; --line:#22222F;
   --text:#F4F4F7; --muted:#A2A2B4; --dim:#8E8EA6; --pink:#FF2E9A; --cyan:#3FE0F0;
   color: var(--text); background: var(--bg);
-  font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+  /* Without this the shadow tree inherits the host page's base font-size. Wix
+     sets 10px on this site, which rendered body copy at 10px and any heading
+     without an explicit size at 20px. Anchor it here. */
+  font-size:16px; line-height:1.5; }
 * { box-sizing: border-box; }
 .disp { font-family:'Anton','Arial Narrow',Impact,system-ui,sans-serif; font-weight:400;
   text-transform:uppercase; line-height:.95; margin:0; }
@@ -30,7 +34,10 @@ section { padding: 56px 20px; }
   text-transform:uppercase; font-weight:600; color:var(--cyan); }
 .eyebrow i { display:block; width:30px; height:2px; background:currentColor; }
 .eyebrow.pink { color: var(--pink); }
-p { margin:0; line-height:1.6; color:var(--muted); }
+p { margin:0; line-height:1.6; color:var(--muted); font-size:17px; }
+.body  { font-size:17px; line-height:1.6; color:var(--muted); }
+.lead  { font-size:clamp(17px,1.4vw,20px); line-height:1.5; color:#C4C4D2; }
+.small { font-size:14px; line-height:1.55; color:var(--dim); }
 .portrait, .portrait.ph { aspect-ratio:4/5; width:100%; }
 .wide, .wide.ph { aspect-ratio:16/9; width:100%; }
 .card-media, .card-media.ph { aspect-ratio:4/3; width:100%; }
@@ -98,7 +105,7 @@ img.photo { width:100%; height:100%; object-fit:cover; display:block; }
 .stat span { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
 
 /* CARD GRIDS */
-h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
+h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 .grid { display:grid; gap:18px; margin-top:34px; }
 .card { background:var(--surface); border:1px solid var(--line); border-radius:3px; overflow:hidden;
   display:flex; flex-direction:column; text-align:left; cursor:pointer; padding:0;
@@ -237,6 +244,7 @@ h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 
 /* -------------------------------------------------------------- ABOUT ----- */
 .split { display:grid; grid-template-columns:1fr; gap:28px; align-items:center; margin-top:28px; }
+.split .body { max-width:62ch; }
 .valuegrid { display:grid; grid-template-columns:1fr; gap:18px; margin-top:28px; }
 .value { background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:22px 20px; }
 .value b { display:block; font-size:17px; color:#fff; margin-bottom:6px; }
