@@ -17,7 +17,7 @@
  * Business facts. Anything blank is unknown and must NOT be invented —
  * schema.org markup with made-up contact details is worse than none.
  */
-import { getPackage, visibleIncludes, formatMoney } from 'public/pricing';
+import { getPackage, visibleIncludes, formatMoney, packagesFor } from 'public/pricing';
 
 export const SITE = {
   name: 'DKDJS — Daniel & Kathy DJs',
@@ -256,4 +256,241 @@ export function servicesSchema() {
     areaServed: CITIES.map((city) => ({ '@type': 'City', name: city })),
     url: SITE.url + s.url
   }));
+}
+
+/* ------------------------------------------------------------------ *
+ * SERVICE PAGES — /weddings, /events, /karaoke
+ *
+ * One shape, three sets of copy. The element renders from this and the page
+ * code builds seoMarkup from the same strings, so what a visitor reads and
+ * what a crawler reads cannot diverge.
+ *
+ * Nothing here states a policy, a guarantee or a capability that is not
+ * already true in pricing.js or equipment.js.
+ * ------------------------------------------------------------------ */
+export const SERVICES = {
+  weddings: {
+    slug: 'weddings',
+    eventTypes: ['wedding'],
+    /** Shown as tiers, in this order. Explicit so price sorting cannot
+     *  lead the page with the cheapest, thinnest option. */
+    packages: ['reception', 'full-day', 'whole-night'],
+    alsoPackages: ['ceremony-only'],
+    eyebrow: 'Wedding DJ & MC',
+    h1: 'The day runs on timing. That is our job.',
+    lead: 'Ceremony audio, cocktail hour, introductions, dinner, the first dance and a '
+        + 'packed floor at the end of the night — run by two people who planned it with you.',
+    intro: [
+      'A wedding is not a playlist. It is a sequence of moments that have to land in the '
+        + 'right order, and most of them depend on someone saying the right thing at the '
+        + 'right time into a microphone that works.',
+      'That is why there are two of us at every wedding. One runs music, sound and '
+        + 'announcements. The other is free to find the maid of honour who has wandered off '
+        + 'with the toast, cue your photographer before the first dance, and keep the '
+        + 'timeline moving without anyone noticing it is being moved.'
+    ],
+    stepsEyebrow: 'How a wedding runs',
+    stepsH2: 'What the day looks like.',
+    steps: [
+      { title: 'Ceremony',
+        copy: 'An optional second system where you say the vows, so the back row hears them. '
+            + 'Officiant microphone, processional and recessional music.' },
+      { title: 'Cocktail hour',
+        copy: 'Background music at a level people can talk over while we change the room over '
+            + 'and sound-check for the reception.' },
+      { title: 'Introductions & dinner',
+        copy: 'Wedding party entrances, welcome, blessing, toasts. Handheld microphone for '
+            + 'anyone speaking, and someone standing next to them who knows how it works.' },
+      { title: 'First dance & formals',
+        copy: 'First dance, parent dances, cake, bouquet — cued with your photographer so '
+            + 'nobody misses the shot.' },
+      { title: 'Open dancing',
+        copy: 'We read the room. Your must-play list gets played, your do-not-play list '
+            + 'does not, and requests get filtered through both.' },
+      { title: 'Send-off',
+        copy: 'Last song, last call, and a clean teardown that does not start while your '
+            + 'guests are still dancing.' }
+    ],
+    faqEyebrow: 'Straight answers',
+    faqH2: 'Questions we get asked.',
+    faq: [
+      { q: 'Do we really get both of you?',
+        a: 'Yes, on every package. It is not an upgrade and it is not conditional.' },
+      { q: 'Do you MC, or just play music?',
+        a: 'We MC. Introductions, announcements and keeping the timeline moving are included '
+         + 'in every wedding package.' },
+      { q: 'What if your equipment fails?',
+        a: 'Spare microphones, cables and critical audio gear travel to every event. We have '
+         + 'never wanted to find out the hard way, so we do not.' },
+      { q: 'Can we give you a do-not-play list?',
+        a: 'Please do. The music questionnaire that comes with your package has space for '
+         + 'both lists, and we hold to them.' },
+      { q: 'How far do you travel?',
+        a: 'We cover Boise, Eagle, Meridian, Nampa, Caldwell, Kuna, Star and Garden City. '
+         + 'Further out, ask — we travel for the right event.' }
+    ],
+    ctaH2: 'Start with the date.',
+    ctaBody: 'We only take one wedding a day. Tell us yours and we will say straight away '
+           + 'whether it is free.'
+  },
+
+  events: {
+    slug: 'events',
+    eventTypes: ['birthday', 'anniversary', 'graduation', 'corporate', 'holiday', 'private', 'other'],
+    packages: ['private-party', 'corporate'],
+    alsoPackages: [],
+    eyebrow: 'Parties & events',
+    h1: 'Any room. Any crowd. Any decade.',
+    lead: 'Birthdays, anniversaries, graduations, company parties and private celebrations '
+        + 'across Boise and the Treasure Valley.',
+    intro: [
+      'Not every event needs a wedding-sized production. Most need good sound, lighting '
+        + 'that changes the mood of a room, and somebody competent running it so the host '
+        + 'gets to be a guest at their own party.',
+      'We bring a system sized to your room rather than the biggest one we own, set it up '
+        + 'before anyone arrives, and take it down after they have gone.'
+    ],
+    stepsEyebrow: 'What we cover',
+    stepsH2: 'The kinds of nights we run.',
+    steps: [
+      { title: 'Milestone birthdays',
+        copy: 'Thirtieth through eightieth. The trick is a playlist that spans the room, '
+            + 'not just the guest of honour.' },
+      { title: 'Anniversaries',
+        copy: 'The songs that mean something, played properly, plus a floor that fills '
+            + 'once the speeches are done.' },
+      { title: 'Graduations',
+        copy: 'Loud, current, and still appropriate for the family members in the room.' },
+      { title: 'Company & holiday parties',
+        copy: 'Background music through dinner, announcements and awards if you need them, '
+            + 'dancing after.' },
+      { title: 'Private celebrations',
+        copy: 'Retirements, reunions, engagement parties, housewarmings — anything with a '
+            + 'room and a reason.' },
+      { title: 'Add karaoke',
+        copy: 'Any event can become a karaoke night for part of the evening. It is the '
+            + 'fastest way to get a shy room involved.' }
+    ],
+    faqEyebrow: 'Straight answers',
+    faqH2: 'Questions we get asked.',
+    faq: [
+      { q: 'How small is too small?',
+        a: 'It is not about headcount. If you want music and a microphone handled properly, '
+         + 'the room is big enough.' },
+      { q: 'Can you do outdoors?',
+        a: 'Yes, with access to power and a plan for weather. Tell us the venue and we will '
+         + 'tell you what it needs.' },
+      { q: 'Do you take requests on the night?',
+        a: 'Yes. With two of us, one can handle requests without the music stopping.' },
+      { q: 'Can you keep it background-level?',
+        a: 'Absolutely. Volume that lets people talk is a skill, and it is a request we get '
+         + 'more often than the opposite.' }
+    ],
+    ctaH2: 'Tell us about your night.',
+    ctaBody: 'Send us the date and roughly what you are planning. We will come back with a '
+           + 'straight answer and a straight price.'
+  },
+
+  karaoke: {
+    slug: 'karaoke',
+    eventTypes: ['karaoke'],
+    packages: ['karaoke-night'],
+    alsoPackages: [],
+    eyebrow: 'Hosted karaoke',
+    h1: 'Somebody has to go first. We make that easy.',
+    lead: 'Hosted karaoke with wireless microphones, on-screen lyrics and someone running '
+        + 'the room so the queue keeps moving.',
+    intro: [
+      'Karaoke goes wrong in predictable ways. The queue stalls, the same four people sing '
+        + 'everything, the microphone squeals, and the person who actually wanted to sing '
+        + 'never gets up.',
+      'Hosted karaoke fixes all four. We run the rotation, we know when to push someone up '
+        + 'and when to leave them alone, and the sound is set up properly so nobody has to '
+        + 'shout over it.'
+    ],
+    stepsEyebrow: 'How it works',
+    stepsH2: 'What you get.',
+    steps: [
+      { title: 'Wireless microphones',
+        copy: 'Handheld and wireless, so singers are not tethered to a stand in the corner.' },
+      { title: 'On-screen lyrics',
+        copy: 'Lyrics on screen where the singer and the room can both see them.' },
+      { title: 'A host, not a jukebox',
+        copy: 'One of us runs the rotation and works the room. The other stays on sound.' },
+      { title: 'A real catalogue',
+        copy: 'Broad enough that nobody spends ten minutes scrolling and then gives up.' },
+      { title: 'Music between singers',
+        copy: 'The room never goes silent between songs, which is where karaoke nights die.' },
+      { title: 'Part of a bigger night',
+        copy: 'Add a karaoke hour to a wedding or a party rather than booking a whole night.' }
+    ],
+    faqEyebrow: 'Straight answers',
+    faqH2: 'Questions we get asked.',
+    faq: [
+      { q: 'What if nobody wants to sing?',
+        a: 'That is the job. Reading who wants to be asked and who wants to be left alone is '
+         + 'most of what hosting is.' },
+      { q: 'Can we do karaoke at our wedding?',
+        a: 'Yes — as a karaoke hour. It works best late, after the formal dancing.' },
+      { q: 'Do you run karaoke at restaurants and bars?',
+        a: 'Yes. Recurring venue nights are priced separately — ask us about a residency.' },
+      { q: 'Can people queue songs from their phones?',
+        a: 'Ask us — how requests are handled depends on the venue and the night.' }
+    ],
+    ctaH2: 'Pick a night.',
+    ctaBody: 'Tell us the date and the room and we will tell you what it needs.'
+  }
+};
+
+/** Crawlable markup for a service page, from the same strings the page renders. */
+export function serviceSeoMarkup(key) {
+  const s = SERVICES[key];
+  if (!s) return '';
+  const parts = [];
+  parts.push(`<h1>${escapeHtml(s.h1)}</h1>`);
+  parts.push(`<p>${escapeHtml(s.lead)}</p>`);
+  (s.intro || []).forEach((t) => parts.push(`<p>${escapeHtml(t)}</p>`));
+  parts.push(`<p>Serving ${escapeHtml(CITIES.join(', '))}.</p>`);
+
+  parts.push(`<h2>${escapeHtml(s.stepsH2)}</h2><ul>`);
+  (s.steps || []).forEach((st) => {
+    parts.push(`<li><strong>${escapeHtml(st.title)}</strong> — ${escapeHtml(st.copy)}</li>`);
+  });
+  parts.push('</ul>');
+
+  // Prices belong in the crawlable copy — the page shows them anyway.
+  const ids = (s.packages || []).concat(s.alsoPackages || []);
+  const pkgs = ids.length
+    ? ids.map(getPackage).filter(Boolean)
+    : packagesFor(s.eventTypes[0]).filter((p) => !p.custom);
+  if (pkgs.length) {
+    parts.push('<h2>Pricing</h2><ul>');
+    pkgs.forEach((p) => {
+      parts.push(`<li><strong>${escapeHtml(p.name)}</strong> — ${escapeHtml(formatMoney(p.price))}`
+        + (p.hours ? ` for ${p.hours} hours` : '') + '.</li>');
+    });
+    parts.push('</ul>');
+  }
+
+  parts.push(`<h2>${escapeHtml(s.faqH2)}</h2>`);
+  (s.faq || []).forEach((f) => {
+    parts.push(`<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`);
+  });
+
+  return parts.join('');
+}
+
+/** FAQPage structured data — the questions are real and answered on the page. */
+export function faqSchema(key) {
+  const s = SERVICES[key];
+  if (!s || !s.faq || !s.faq.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: s.faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a }
+    }))
+  };
 }

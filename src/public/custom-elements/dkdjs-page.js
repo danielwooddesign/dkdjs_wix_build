@@ -261,6 +261,17 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 @media (min-width:1100px) {
   .valuegrid { grid-template-columns:repeat(3,1fr); }
 }
+
+/* ---------------------------------------------------------------- FAQ ----- */
+.faq { display:grid; grid-template-columns:1fr; gap:0; margin-top:28px; }
+.qa { border-top:1px solid var(--line); padding:22px 0; }
+.qa:last-child { border-bottom:1px solid var(--line); }
+.qa b { display:block; font-size:18px; color:#fff; margin-bottom:8px; }
+.qa p { font-size:16px; max-width:70ch; }
+@media (min-width:900px) {
+  .faq { grid-template-columns:repeat(2,1fr); column-gap:40px; }
+  .qa:nth-last-child(2):nth-child(odd) { border-bottom:1px solid var(--line); }
+}
 `;
 
 function esc(value) {
@@ -505,6 +516,9 @@ function pageFromPath() {
   if (path.indexOf('contact') !== -1) return 'contact';
   if (path.indexOf('about') !== -1) return 'about';
   if (path.indexOf('packages') !== -1) return 'packages';
+  if (path.indexOf('wedding') !== -1) return 'weddings';
+  if (path.indexOf('karaoke') !== -1) return 'karaoke';
+  if (path.indexOf('event') !== -1) return 'events';
   return null;
 }
 
@@ -582,7 +596,10 @@ class DkdjsPage extends HTMLElement {
       packages: () => this.packages(),
       availability: () => this.availability(),
       contact: () => this.contact(),
-      about: () => this.about()
+      about: () => this.about(),
+      weddings: () => this.service(),
+      events: () => this.service(),
+      karaoke: () => this.service()
     };
     const wanted = this._page || pageFromPath() || 'packages';
     const build = pages[wanted] || pages.packages;
@@ -735,6 +752,102 @@ class DkdjsPage extends HTMLElement {
       };
       state.textContent = reasons[(result && result.reason)] || reasons.error;
     }
+  }
+
+
+  /* =============================================================== SERVICE == */
+
+  /**
+   * Weddings, Events and Karaoke share one layout and differ only in copy and
+   * which packages apply. Copy arrives in the `content` attribute from
+   * public/content.js SERVICES, which is the same source the page code uses to
+   * build seoMarkup.
+   */
+  service() {
+    const c = (this._content && this._content.service) || null;
+    if (!c) {
+      // The page code has not handed over copy yet. Render nothing rather than
+      // a half page — the attribute lands a moment later and repaints.
+      return '';
+    }
+    const cfg = this._config || {};
+    const tiers = (this._pricing && this._pricing.tiers) || [];
+    const addons = (this._pricing && this._pricing.addons) || [];
+    const also = (this._pricing && this._pricing.also) || [];
+
+    return `
+      <section>
+        <div class="wrap">
+          <div class="eyebrow"><i></i>${esc(c.eyebrow)}</div>
+          <h1 class="disp sec">${esc(c.h1)}</h1>
+          <p class="lead" style="margin-top:16px;max-width:62ch">${esc(c.lead)}</p>
+          ${cfg.images && cfg.images.hero
+            ? `<div style="margin-top:32px">${media(cfg, 'hero', esc(c.h1), 'wide')}</div>` : ''}
+          <div style="margin-top:28px;max-width:66ch">
+            ${(c.intro || []).map((t) => `<p class="body" style="margin-bottom:16px">${esc(t)}</p>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="wrap">
+          <div class="eyebrow"><i></i>${esc(c.stepsEyebrow)}</div>
+          <h2 class="disp sec">${esc(c.stepsH2)}</h2>
+          <div class="valuegrid">
+            ${(c.steps || []).map((st) => `
+              <div class="value"><b>${esc(st.title)}</b><p>${esc(st.copy)}</p></div>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      ${tiers.length ? `
+      <section>
+        <div class="wrap">
+          <div class="eyebrow"><i></i>Straight pricing</div>
+          <h2 class="disp sec">What it costs.</h2>
+          <div class="tiers">
+            ${tiers.map((t) => `
+              <div class="tier${t.featured ? ' featured' : ''}">
+                ${t.badge ? `<div class="badge">${esc(t.badge)}</div>` : ''}
+                <div class="name">${esc(t.name)}</div>
+                <div class="amount"><b>${money(t.price)}</b>${t.hours ? `<span>/ ${esc(t.hours)} hours</span>` : ''}</div>
+                <ul>${(t.includes || []).map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
+                <button class="btn ${t.featured ? 'btn-primary' : 'btn-ghost'}" type="button"
+                  data-go="/check-availability?package=${esc(t.id)}">Check my date</button>
+              </div>`).join('')}
+          </div>
+          ${also.length ? `
+          <p class="small" style="margin-top:20px">Also available: ${also.map((a) =>
+            `${esc(a.name)} — ${esc(a.price)}${a.hours ? ` for ${esc(a.hours)} hours` : ''}`).join(' · ')}.</p>` : ''}
+          ${addons.length ? `
+          <p class="small" style="margin-top:8px">Add-ons: ${addons.map((a) => esc(a.name)).join(' · ')}.</p>` : ''}
+          <div class="hero-actions" style="margin-top:20px">
+            <button class="btn btn-ghost" type="button" data-go="/packages">See every package and add-on</button>
+          </div>
+        </div>
+      </section>` : ''}
+
+      <section class="band">
+        <div class="wrap">
+          <div class="eyebrow"><i></i>${esc(c.faqEyebrow)}</div>
+          <h2 class="disp sec">${esc(c.faqH2)}</h2>
+          <div class="faq">
+            ${(c.faq || []).map((f) => `
+              <div class="qa">
+                <b>${esc(f.q)}</b>
+                <p>${esc(f.a)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap" style="text-align:center">
+          <h2 class="disp sec">${esc(c.ctaH2)}</h2>
+          <p class="lead" style="margin:16px auto 24px;max-width:52ch">${esc(c.ctaBody)}</p>
+          <button class="btn btn-primary" type="button" data-go="/check-availability">Check your date</button>
+        </div>
+      </section>`;
   }
 
   /* =================================================== CHECK AVAILABILITY == */
