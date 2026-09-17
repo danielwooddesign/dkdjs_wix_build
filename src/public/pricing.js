@@ -41,21 +41,24 @@ export const AVAILABLE = {
  * POLICY — none of this is invented. TBD means TBD.
  * ------------------------------------------------------------------ */
 export const POLICY = {
-  /** What it costs to take a date off the calendar. TBD — see brief §31. */
-  holdAmount: null,
-  /** 'deposit' | 'retainer' | 'date hold' — wording has legal weight. TBD. */
-  holdTerm: null,
-  /** Refund window in days, or null for "not decided". TBD. */
+  /* Decided by Daniel 2026-09-17. These were null from the first day of this
+     project and gated the terms section, the booking copy and payments. */
+
+  /** What it costs to take a date off the calendar. Comes off the total. */
+  holdAmount: 200,
+  /** 'retainer' is deliberate: it reserves time and is understood to be earned
+   *  on booking, which is what supports it being non-refundable. */
+  holdTerm: 'retainer',
+  /** No refund window. */
   holdRefundDays: null,
-  /** Whether the hold is refundable at all. TBD. */
-  holdRefundable: null,
+  holdRefundable: false,
   /** Minutes of travel included before a surcharge applies. TBD. */
   travelIncludedMinutes: null,
   /** Events accepted per calendar day. Derived from "you get the two of us,
    *  every time" — but it is a business rule, not a stated one. NEEDS SIGN-OFF. */
   eventsPerDay: 1,
-  /** When the balance is due, in days before the event. TBD. */
-  balanceDueDays: null,
+  /** When the balance is due, in days before the event. */
+  balanceDueDays: 14,
   /** Payments are processed by the umbrella company (brief §30). */
   processingEntity: 'New Ad City',
   processingDisclosure:

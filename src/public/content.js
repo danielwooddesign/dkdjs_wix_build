@@ -21,7 +21,7 @@ import { getPackage, visibleIncludes, formatMoney, packagesFor } from 'public/pr
 
 export const SITE = {
   name: 'DKDJS — Daniel & Kathy DJs',
-  legalName: '',          // TBD: 'New Ad City' DBA? confirm before publishing
+  legalName: 'New Ad City LLC',   // trading as DKDJS
   url: 'https://dkdjs.com',
   phone: '(208) 972-1308',
   email: 'contact@dkdjs.com',
