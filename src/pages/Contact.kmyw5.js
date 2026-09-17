@@ -1,10 +1,35 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+/**
+ * Contact (/contact) — feeds <dkdjs-page page="contact">.
+ *
+ * Canvas setup:
+ *   Velo file   dkdjs-page.js
+ *   Tag name    dkdjs-page
+ *   ID          dkdjsPage
+ *
+ * Phone, email and the service-area city list all come from SITE and CITIES in
+ * public/content.js, so they are never typed twice. The map is a service-area
+ * view with no pin — a deliberate choice, since DKDJS runs from home.
+ */
 
-$w.onReady(function () {
-    // Write your JavaScript here
+import wixLocation from 'wix-location';
+import { SITE, CITIES } from 'public/content';
 
-    // To select an element by ID use: $w('#elementID')
+$w.onReady(() => {
+  const el = $w('#dkdjsPage');
 
-    // Click 'Preview' to run your code
+  // Set here as well as in the editor's Set Attributes panel. If the panel
+  // entry is missing the element would otherwise render the wrong page.
+  el.setAttribute('page', 'contact');
+
+  el.setAttribute('config', JSON.stringify({
+    phone: SITE.phone,
+    email: SITE.email,
+    cities: CITIES,
+    images: {}
+  }));
+
+  el.on('navigate', (event) => {
+    const url = event.detail && event.detail.url;
+    if (url) wixLocation.to(url);
+  });
 });

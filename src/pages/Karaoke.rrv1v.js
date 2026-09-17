@@ -19,7 +19,7 @@ import { packagesFor, getPackage, visibleIncludes, sellableAddons, formatMoney }
 const KEY = 'karaoke';
 
 /** Optional hero image for this page. Paste a Wix Media URL to use one. */
-const IMAGES = { hero: '' };
+const IMAGES = { hero: 'https://static.wixstatic.com/media/fb34fd_e41fb2b7e8924e17816242eff555fddb~mv2.jpg' };  // 1920x1088 — singer with mic, friends reacting
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
