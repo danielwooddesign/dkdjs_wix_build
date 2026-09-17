@@ -22,6 +22,10 @@ const CONFIG = {
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
+
+  // Set here as well as in the editor's Set Attributes panel. If the panel
+  // entry is missing the element would otherwise render the wrong page.
+  el.setAttribute('page', 'about');
   el.setAttribute('config', JSON.stringify(CONFIG));
   el.on('navigate', (event) => {
     const url = event.detail && event.detail.url;

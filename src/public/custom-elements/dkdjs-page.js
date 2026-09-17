@@ -483,13 +483,30 @@ const DEFAULT_PRICING = {
 };
 /* === END GENERATED DEFAULTS === */
 
+/**
+ * Which page to render, when the `page` attribute has not been set.
+ *
+ * The attribute is set in two places — the editor's Set Attributes panel and the
+ * page code — and if BOTH are missed the element used to silently fall back to
+ * the packages page, putting a pricing table on /contact. Reading the URL is a
+ * third safety net: the one thing that is always right.
+ */
+function pageFromPath() {
+  const path = (typeof location !== 'undefined' ? location.pathname : '').toLowerCase();
+  if (path.indexOf('check-availability') !== -1) return 'availability';
+  if (path.indexOf('contact') !== -1) return 'contact';
+  if (path.indexOf('about') !== -1) return 'about';
+  if (path.indexOf('packages') !== -1) return 'packages';
+  return null;
+}
+
 class DkdjsPage extends HTMLElement {
   static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission']; }
 
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this._page = 'packages';
+    this._page = null;
     this._pricing = DEFAULT_PRICING;
     this._config = { images: {} };
     this._content = DEFAULT_PAGE_CONTENT;
@@ -559,12 +576,14 @@ class DkdjsPage extends HTMLElement {
       contact: () => this.contact(),
       about: () => this.about()
     };
-    const build = pages[this._page] || pages.packages;
+    const wanted = this._page || pageFromPath() || 'packages';
+    const build = pages[wanted] || pages.packages;
+    this._resolvedPage = wanted;
     this.shadowRoot.innerHTML = `<style>${STYLES}</style>${build()}`;
     this.shadowRoot.querySelectorAll('[data-go]').forEach((el) => {
       el.addEventListener('click', () => this.go(el.getAttribute('data-go')));
     });
-    if (this._page === 'availability') this.wireForm();
+    if (wanted === 'availability') this.wireForm();
   }
 
 

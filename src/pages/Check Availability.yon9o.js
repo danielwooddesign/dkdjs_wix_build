@@ -23,6 +23,10 @@ const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
 
+  // Set here as well as in the editor's Set Attributes panel. If the panel
+  // entry is missing the element would otherwise render the wrong page.
+  el.setAttribute('page', 'availability');
+
   el.setAttribute('config', JSON.stringify({
     phone: SITE.phone,
     email: SITE.email,
