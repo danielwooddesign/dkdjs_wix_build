@@ -25,8 +25,10 @@ export const SITE = {
   url: 'https://dkdjs.com',
   phone: '(208) 972-1308',
   email: 'contact@dkdjs.com',
-  city: '',               // TBD — the city DKDJS is based in
+  street: '715 N Synergy Way',
+  city: 'Eagle',
   region: 'ID',
+  postalCode: '83616',
   country: 'US',
   priceRange: '$$',
   sameAs: []              // Facebook, Instagram, The Knot… once they exist
@@ -240,6 +242,8 @@ export function localBusinessSchema() {
       addressRegion: SITE.region,
       addressCountry: SITE.country
     };
+    if (SITE.street) data.address.streetAddress = SITE.street;
+    if (SITE.postalCode) data.address.postalCode = SITE.postalCode;
   }
 
   return data;
