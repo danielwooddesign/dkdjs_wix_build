@@ -314,6 +314,18 @@ function media(config, key, label, extraClass) {
 }
 
 /* === PAGE COPY — defaults. Page code may override via the `content` attribute. */
+/* === GENERATED AVAILABILITY — do not edit by hand. Run tools/build-defaults.mjs === */
+const DEFAULT_AVAILABILITY = {
+  "eyebrow": "Check your date",
+  "h1": "Is your date still open?",
+  "intro": "We only take one event a day, so the answer is always a straight yes or no. Tell us about your event and we will come back to you personally — not with an automated quote.",
+  "note": "Sending this does not commit you to anything and does not take a payment. It tells us you are interested and puts your date on our radar while we talk.",
+  "submit": "Send it over",
+  "doneTitle": "Got it.",
+  "doneBody": "We have your details and we will be in touch shortly. If your event is close, call or text and you will hear back faster."
+};
+/* === END GENERATED AVAILABILITY === */
+
 /* === GENERATED CONTACT — do not edit by hand. Run tools/build-defaults.mjs === */
 const DEFAULT_CONTACT = {
   "eyebrow": "Get in touch",
@@ -430,18 +442,7 @@ const DEFAULT_ABOUT = {
 /* === END GENERATED ABOUT === */
 
 const DEFAULT_PAGE_CONTENT = {
-  availability: {
-    eyebrow: 'Check your date',
-    h1: 'Is your date still open?',
-    intro: 'We only take one event a day, so the answer is always a straight yes or no. '
-         + 'Tell us about your event and we will come back to you personally — not with an automated quote.',
-    note: 'Sending this does not commit you to anything and does not take a payment. '
-        + 'It tells us you are interested and puts your date on our radar while we talk.',
-    submit: 'Send it over',
-    doneTitle: 'Got it.',
-    doneBody: 'We have your details and we will be in touch shortly. '
-            + 'If your event is close, call or text and you will hear back faster.'
-  },
+  availability: DEFAULT_AVAILABILITY,
   contact: DEFAULT_CONTACT,
   about: DEFAULT_ABOUT
 };

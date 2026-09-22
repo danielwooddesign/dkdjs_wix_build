@@ -32,7 +32,7 @@ async function loadPublic(name) {
   }
 }
 
-const { HOME, CITIES, TRUST, ABOUT, CONTACT } = await loadPublic('content');
+const { HOME, CITIES, TRUST, ABOUT, CONTACT, AVAILABILITY } = await loadPublic('content');
 const { getPackage, visibleIncludes, formatMoney } = await loadPublic('pricing');
 
 const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
@@ -96,6 +96,16 @@ await bake(
   new URL('../src/public/custom-elements/dkdjs-page.js', import.meta.url),
   CONTACT_BEGIN, CONTACT_END,
   'const DEFAULT_CONTACT = ' + JSON.stringify(CONTACT, null, 2) + ';'
+);
+
+/* -------------------------------------------------------- availability ---- */
+const AVAIL_BEGIN = '/* === GENERATED AVAILABILITY — do not edit by hand. Run tools/build-defaults.mjs === */';
+const AVAIL_END = '/* === END GENERATED AVAILABILITY === */';
+
+await bake(
+  new URL('../src/public/custom-elements/dkdjs-page.js', import.meta.url),
+  AVAIL_BEGIN, AVAIL_END,
+  'const DEFAULT_AVAILABILITY = ' + JSON.stringify(AVAILABILITY, null, 2) + ';'
 );
 
 console.log('baked defaults');

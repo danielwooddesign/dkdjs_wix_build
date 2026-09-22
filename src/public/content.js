@@ -745,6 +745,52 @@ export function contactSeoMarkup() {
   return parts.join('');
 }
 
+
+/**
+ * Check Availability page copy. The form itself is untouched by any of this —
+ * it is the site's conversion path and has broken once already.
+ */
+export const AVAILABILITY = {
+    eyebrow: 'Check your date',
+    h1: 'Is your date still open?',
+    intro: 'We only take one event a day, so the answer is always a straight yes or no. '
+         + 'Tell us about your event and we will come back to you personally — not with an automated quote.',
+    note: 'Sending this does not commit you to anything and does not take a payment. '
+        + 'It tells us you are interested and puts your date on our radar while we talk.',
+    submit: 'Send it over',
+    doneTitle: 'Got it.',
+    doneBody: 'We have your details and we will be in touch shortly. '
+            + 'If your event is close, call or text and you will hear back faster.'
+  };
+
+/**
+ * Crawlable markup for /check-availability.
+ *
+ * Deliberately thin, because the page is a form and thin is the honest
+ * description of it. Three things are mirrored: the heading, the lead and the
+ * note under the form. The confirmation message is NOT included — it lives
+ * behind a `hidden` attribute until the form is sent, and markup that quotes
+ * hidden text is the definition of cloaking. Package names appear because the
+ * dropdown shows them; prices do not, because this page never displays one.
+ */
+export function availabilitySeoMarkup() {
+  const c = AVAILABILITY;
+  const parts = [];
+
+  parts.push(`<h1>${escapeHtml(c.h1)}</h1>`);
+  parts.push(`<p>${escapeHtml(c.intro)}</p>`);
+  parts.push(`<p>Serving ${escapeHtml(CITIES.join(', '))}.</p>`);
+  parts.push(`<p>${escapeHtml(c.note)}</p>`);
+
+  const names = ['reception', 'full-day', 'whole-night']
+    .map(getPackage).filter(Boolean).map((p) => p.name);
+  if (names.length) {
+    parts.push(`<p>Packages: ${escapeHtml(names.join(', '))}.</p>`);
+  }
+
+  return parts.join('');
+}
+
 /** Crawlable markup for a service page, from the same strings the page renders. */
 export function serviceSeoMarkup(key) {
   const s = SERVICES[key];

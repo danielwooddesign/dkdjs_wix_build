@@ -14,8 +14,15 @@
  */
 
 import wixLocation from 'wix-location';
+import wixSeoFrontend from 'wix-seo-frontend';
 import { checkDate, requestHold } from 'backend/availability.web';
-import { SITE, CITIES } from 'public/content';
+import {
+  SITE,
+  CITIES,
+  AVAILABILITY,
+  availabilitySeoMarkup,
+  localBusinessSchema
+} from 'public/content';
 import { getPackage, visibleIncludes } from 'public/pricing';
 
 const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
@@ -26,6 +33,7 @@ $w.onReady(() => {
   // Set here as well as in the editor's Set Attributes panel. If the panel
   // entry is missing the element would otherwise render the wrong page.
   el.setAttribute('page', 'availability');
+  el.setAttribute('content', JSON.stringify({ availability: AVAILABILITY }));
 
   el.setAttribute('config', JSON.stringify({
     phone: SITE.phone,
@@ -71,4 +79,23 @@ $w.onReady(() => {
     const url = event.detail && event.detail.url;
     if (url) wixLocation.to(url);
   });
+
+  applySeo(el);
 });
+
+/**
+ * Added last of all the pages, and deliberately after the form was working:
+ * nothing here touches the form, and a throw is swallowed so it cannot.
+ */
+function applySeo(el) {
+  try {
+    el.seoMarkup = availabilitySeoMarkup();
+  } catch (err) {
+    console.error('[availability] seoMarkup failed', err);
+  }
+  try {
+    wixSeoFrontend.setStructuredData([localBusinessSchema()]);
+  } catch (err) {
+    console.error('[availability] setStructuredData failed', err);
+  }
+}
