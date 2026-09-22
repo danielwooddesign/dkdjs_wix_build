@@ -27,7 +27,7 @@ import {
 /** Same CONFIG shape as the home page — keep the two in step. */
 const CONFIG = {
   phone: SITE.phone,
-  images: { booth: '' }   // 2400x1350
+  images: { booth: 'https://static.wixstatic.com/media/fb34fd_00745eef392e4d64b3c27db5ca7a089f~mv2.jpg' }   // 2400x1350
 };
 
 const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
