@@ -25,10 +25,7 @@ const STYLES = `
 :host { display: block; box-sizing: border-box; --bg:#07070B; --surface:#101018; --surface2:#0B0B12; --line:#22222F;
   --text:#F4F4F7; --muted:#A2A2B4; --dim:#8E8EA6; --pink:#FF2E9A; --cyan:#3FE0F0;
   color: var(--text); background: var(--bg);
-  font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
-  /* Without this the shadow tree inherits the host page's base font-size — Wix
-     sets 10px on this site, which rendered unclassed paragraphs at 10px. */
-  font-size:16px; }
+  font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
 * { box-sizing: border-box; }
 .disp { font-family:'Anton','Arial Narrow',Impact,system-ui,sans-serif; font-weight:400;
   text-transform:uppercase; line-height:.95; margin:0; }
@@ -38,7 +35,7 @@ section { padding: 56px 20px; }
   text-transform:uppercase; font-weight:600; color:var(--cyan); }
 .eyebrow i { display:block; width:30px; height:2px; background:currentColor; }
 .eyebrow.pink { color: var(--pink); }
-p { margin:0; line-height:1.6; color:var(--muted); font-size:17px; }
+p { margin:0; line-height:1.6; color:var(--muted); }
 .portrait, .portrait.ph { aspect-ratio:4/5; width:100%; }
 .wide, .wide.ph { aspect-ratio:16/9; width:100%; }
 .card-media, .card-media.ph { aspect-ratio:4/3; width:100%; }

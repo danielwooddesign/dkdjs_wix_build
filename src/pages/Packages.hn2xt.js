@@ -12,7 +12,13 @@
  */
 
 import wixLocation from 'wix-location';
-import { SITE } from 'public/content';
+import wixSeoFrontend from 'wix-seo-frontend';
+import {
+  SITE,
+  packagesSeoMarkup,
+  packagesOfferSchema,
+  localBusinessSchema
+} from 'public/content';
 import {
   PACKAGES,
   POLICY,
@@ -27,14 +33,14 @@ import {
 /** Same CONFIG shape as the home page — keep the two in step. */
 const CONFIG = {
   phone: SITE.phone,
-  images: { booth: 'https://static.wixstatic.com/media/fb34fd_00745eef392e4d64b3c27db5ca7a089f~mv2.jpg' }   // 2400x1350
+  images: { booth: 'https://static.wixstatic.com/media/fb34fd_a6359f621ce143839e571827b1a9579a~mv2.jpg' }   // 2400x1350
 };
 
 const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
 const EXTRA_IDS = ['private-party', 'karaoke-night', 'corporate', 'ceremony-only', 'residency'];
 
 /** Set true while the rates on the page are still for discussion. */
-const DRAFT_RATES = true;
+const DRAFT_RATES = false;
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
@@ -44,7 +50,30 @@ $w.onReady(() => {
     const url = event.detail && event.detail.url;
     if (url) wixLocation.to(url);
   });
+
+  applySeo(el);
 });
+
+/**
+ * Prices are the reason this page exists and they rendered only inside the
+ * shadow root. The markup below is built from public/pricing, so it cannot
+ * quote a figure the page does not show. Never load-bearing.
+ */
+function applySeo(el) {
+  try {
+    el.seoMarkup = packagesSeoMarkup();
+  } catch (err) {
+    console.error('[packages] seoMarkup failed', err);
+  }
+  try {
+    const schema = [localBusinessSchema()];
+    const offers = packagesOfferSchema();
+    if (offers) schema.push(offers);
+    wixSeoFrontend.setStructuredData(schema);
+  } catch (err) {
+    console.error('[packages] setStructuredData failed', err);
+  }
+}
 
 /**
  * The cheapest wedding tier that already bundles an add-on.

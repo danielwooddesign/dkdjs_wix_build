@@ -312,6 +312,100 @@ function media(config, key, label, extraClass) {
 }
 
 /* === PAGE COPY — defaults. Page code may override via the `content` attribute. */
+/* === GENERATED ABOUT — do not edit by hand. Run tools/build-defaults.mjs === */
+const DEFAULT_ABOUT = {
+  "eyebrow": "More than music",
+  "h1": "We met because we could dance.",
+  "intro": [
+    "We are Daniel and Kathy Wood, a husband-and-wife DJ team serving Boise and the Treasure Valley. DKDJS started with something that has been part of our lives for more than two decades: music, dancing and bringing people together.",
+    "Long before DKDJS was a business, music and dancing were already a big part of who we were.",
+    "After more than 22 years of marriage, they still are."
+  ],
+  "story": [
+    {
+      "h2": "Brooklyn, Springfield, and a dance floor in Colorado.",
+      "paras": [
+        "Daniel was born in Brooklyn, New York. Growing up in a military family meant moving, traveling and experiencing different places and cultures from an early age, including time in Germany and a good deal of the United States.",
+        "Kathy was born in Springfield, Oregon. She lived in Oregon until she was seven, when her family moved to the Los Angeles area of California, where she grew up.",
+        "Our paths eventually crossed in Colorado, and appropriately enough, we met on the dance floor."
+      ]
+    },
+    {
+      "h2": "Twenty-two years of West Coast Swing.",
+      "paras": [
+        "We met at Stampede in Aurora, Colorado, a country-western dance club. A mutual friend introduced us because we both knew how to West Coast Swing. That introduction turned into a partnership that has now lasted more than 22 years.",
+        "Daniel went on to compete in the UCWDC Pro-Am division as a West Coast Swing dancer. Kathy took West Coast Swing lessons as well and became an accomplished social dancer in her own right.",
+        "We never really stopped. West Coast Swing is still something we enjoy together, including at The Farm in Garden City, and line dancing is part of Kathy’s regular weekly routine."
+      ]
+    },
+    {
+      "h2": "From the dance floor to the sound system.",
+      "paras": [
+        "Our path toward becoming DJs happened naturally. Through line dancing we became friends with the people behind the Friday night line dancing at the Nampa Eagles in Nampa, Idaho.",
+        "We started by simply wanting to help. Daniel began assisting with the sound and saw opportunities to make Friday nights better. We contributed speakers, an upgraded sound system and lighting, to give the dancers a more energetic room to work with.",
+        "It worked. Friday nights became something we looked forward to, and helping build a room where people could dance, socialize and have a great time made us realize how much we enjoyed the entertainment side of an event."
+      ]
+    },
+    {
+      "h2": "The party that started DKDJS.",
+      "paras": [
+        "The real turning point came when we were invited to provide music for a birthday party.",
+        "What started as simply playing music quickly became something bigger. We took requests, adjusted the music to the crowd and kept the party moving. Then the karaoke started, and before long the whole room had joined in.",
+        "By the end of the night, people were asking whether we had a business card. We did not. But the question kept coming up.",
+        "Nothing about that night had been forced or planned. We already understood music and dancing. We already had professional sound and lighting equipment. We enjoyed reading a room and taking requests. And we had fun doing it together. That night is what inspired DKDJS."
+      ]
+    },
+    {
+      "h2": "Why we do it this way.",
+      "paras": [
+        "We did not get into this because we wanted to stand behind a booth and play a predetermined playlist. We got into it because we genuinely enjoy music, dancing, people and the atmosphere you can build out of all three.",
+        "Years of West Coast Swing and line dancing give you a particular view of what makes a dance floor work. Different crowds respond to different music, and a good night is not about the DJ showing off. It is about the people in the room having a great time.",
+        "That is why requests are welcome, why we watch the crowd rather than the playlist, and why what we do has grown beyond playing music to include MC work, karaoke, line dancing, professional sound, lighting and our LED video DJ booth."
+      ]
+    },
+    {
+      "h2": "You get the two of us. Every time.",
+      "paras": [
+        "DKDJS is a husband-and-wife team. When you talk with us, you are talking with the same two people who will be there for your event. No wondering which DJ will be assigned to you, and no meeting one person and having a stranger turn up on the day.",
+        "We work together, we dance together, and now we DJ together. Whether it is a wedding, a birthday, a company event, a private party or a karaoke night, the goal is the same: a fun, welcoming room, music people actually want to hear, and a night they remember."
+      ]
+    }
+  ],
+  "signoff": "Daniel & Kathy Wood · Music. Dancing. Karaoke. Entertainment. And a whole lot of fun.",
+  "valuesEyebrow": "How we work",
+  "valuesH2": "What you can count on.",
+  "values": [
+    {
+      "title": "Two of us, always",
+      "copy": "Every booking includes both of us. It is not an upgrade and it is not conditional on the package."
+    },
+    {
+      "title": "One event a day",
+      "copy": "We never double-book a date. Your event gets the whole day, including setup and teardown."
+    },
+    {
+      "title": "Backup gear on site",
+      "copy": "Spare microphones, cables and critical audio equipment travel to every single event."
+    },
+    {
+      "title": "Straight pricing",
+      "copy": "Every package is published on the site. No \"contact us for a quote\" and no surprise line items."
+    },
+    {
+      "title": "We plan with you",
+      "copy": "A planning call and a music questionnaire come with every package, so nothing is improvised."
+    },
+    {
+      "title": "Dancers first",
+      "copy": "Two decades of West Coast Swing and line dancing behind the booth. We read the floor, not a script."
+    }
+  ],
+  "ctaH2": "Let us know what you are planning.",
+  "ctaBody": "Tell us the date and we will tell you straight away whether we are free.",
+  "cta": "Check your date"
+};
+/* === END GENERATED ABOUT === */
+
 const DEFAULT_PAGE_CONTENT = {
   availability: {
     eyebrow: 'Check your date',
@@ -340,117 +434,7 @@ const DEFAULT_PAGE_CONTENT = {
     mapNote: 'We are a mobile service — we come to your venue. '
            + 'The map shows the area we cover rather than a shopfront.'
   },
-  about: {
-    eyebrow: 'More than music',
-    h1: 'We met because we could dance.',
-    intro: [
-      'We are Daniel and Kathy Wood, a husband-and-wife DJ team serving Boise and the '
-        + 'Treasure Valley. DKDJS started with something that has been part of our lives for '
-        + 'more than two decades: music, dancing and bringing people together.',
-      'Long before DKDJS was a business, music and dancing were already a big part of who we were.',
-      'After more than 22 years of marriage, they still are.'
-    ],
-    story: [
-      {
-        h2: 'Brooklyn, Springfield, and a dance floor in Colorado.',
-        paras: [
-          'Daniel was born in Brooklyn, New York, in 1972. Growing up in a military family meant '
-            + 'moving, traveling and experiencing different places and cultures from an early age, '
-            + 'including time in Germany and a good deal of the United States.',
-          'Kathy was born in Springfield, Oregon, the same year. She lived in Oregon until she was '
-            + 'seven, when her family moved to the Los Angeles area of California, where she grew up.',
-          'Our paths eventually crossed in Colorado, and appropriately enough, we met on the dance floor.'
-        ]
-      },
-      {
-        h2: 'Twenty-two years of West Coast Swing.',
-        paras: [
-          'We met at Stampede in Aurora, Colorado, a country-western dance club. A mutual friend '
-            + 'introduced us because we both knew how to West Coast Swing. That introduction turned '
-            + 'into a partnership that has now lasted more than 22 years.',
-          'Daniel went on to compete in the UCWDC Pro-Am division as a West Coast Swing dancer. Kathy '
-            + 'took West Coast Swing lessons as well and became an accomplished social dancer in her '
-            + 'own right.',
-          'We never really stopped. West Coast Swing is still something we enjoy together, including '
-            + 'at The Farm in Garden City, and line dancing is part of Kathy\u2019s regular weekly routine.'
-        ]
-      },
-      {
-        h2: 'From the dance floor to the sound system.',
-        paras: [
-          'Our path toward becoming DJs happened naturally. Through line dancing we became friends '
-            + 'with Shelley and her husband Mike, who are involved with the Friday night line dancing '
-            + 'at the Nampa Eagles in Nampa, Idaho.',
-          'We started by simply wanting to help. Daniel began assisting with the sound and saw '
-            + 'opportunities to make Friday nights better. We contributed speakers, an upgraded sound '
-            + 'system and lighting, to give the dancers a more energetic room to work with.',
-          'It worked. Friday nights became something we looked forward to, and helping build a room '
-            + 'where people could dance, socialize and have a great time made us realize how much we '
-            + 'enjoyed the entertainment side of an event.'
-        ]
-      },
-      {
-        h2: 'The party that started DKDJS.',
-        paras: [
-          'The real turning point came when we were invited to provide music for a birthday party.',
-          'What started as simply playing music quickly became something bigger. We took requests, '
-            + 'adjusted the music to the crowd and kept the party moving. Then the karaoke started, '
-            + 'and before long the whole room had joined in.',
-          'By the end of the night, people were asking whether we had a business card. We did not. '
-            + 'But the question kept coming up.',
-          'Nothing about that night had been forced or planned. We already understood music and '
-            + 'dancing. We already had professional sound and lighting equipment. We enjoyed reading '
-            + 'a room and taking requests. And we had fun doing it together. That night is what '
-            + 'inspired DKDJS.'
-        ]
-      },
-      {
-        h2: 'Why we do it this way.',
-        paras: [
-          'We did not get into this because we wanted to stand behind a booth and play a '
-            + 'predetermined playlist. We got into it because we genuinely enjoy music, dancing, '
-            + 'people and the atmosphere you can build out of all three.',
-          'Years of West Coast Swing and line dancing give you a particular view of what makes a '
-            + 'dance floor work. Different crowds respond to different music, and a good night is not '
-            + 'about the DJ showing off. It is about the people in the room having a great time.',
-          'That is why requests are welcome, why we watch the crowd rather than the playlist, and why '
-            + 'what we do has grown beyond playing music to include MC work, karaoke, line dancing, '
-            + 'professional sound, lighting and our LED video DJ booth.'
-        ]
-      },
-      {
-        h2: 'You get the two of us. Every time.',
-        paras: [
-          'DKDJS is a husband-and-wife team. When you talk with us, you are talking with the same '
-            + 'two people who will be there for your event. No wondering which DJ will be assigned '
-            + 'to you, and no meeting one person and having a stranger turn up on the day.',
-          'We work together, we dance together, and now we DJ together. Whether it is a wedding, a '
-            + 'birthday, a company event, a private party or a karaoke night, the goal is the same: '
-            + 'a fun, welcoming room, music people actually want to hear, and a night they remember.'
-        ]
-      }
-    ],
-    signoff: 'Daniel & Kathy Wood \u00b7 Music. Dancing. Karaoke. Entertainment. And a whole lot of fun.',
-    valuesEyebrow: 'How we work',
-    valuesH2: 'What you can count on.',
-    values: [
-      { title: 'Two of us, always',
-        copy: 'Every booking includes both of us. It is not an upgrade and it is not conditional on the package.' },
-      { title: 'One event a day',
-        copy: 'We never double-book a date. Your event gets the whole day, including setup and teardown.' },
-      { title: 'Backup gear on site',
-        copy: 'Spare microphones, cables and critical audio equipment travel to every single event.' },
-      { title: 'Straight pricing',
-        copy: 'Every package is published on the site. No "contact us for a quote" and no surprise line items.' },
-      { title: 'We plan with you',
-        copy: 'A planning call and a music questionnaire come with every package, so nothing is improvised.' },
-      { title: 'Dancers first',
-        copy: 'Two decades of West Coast Swing and line dancing behind the booth. We read the floor, not a script.' }
-    ],
-    ctaH2: 'Let us know what you are planning.',
-    ctaBody: 'Tell us the date and we will tell you straight away whether we are free.',
-    cta: 'Check your date'
-  }
+  about: DEFAULT_ABOUT
 };
 
 /* === GENERATED DEFAULTS — do not edit by hand. Run tools/build-page-defaults.mjs === */

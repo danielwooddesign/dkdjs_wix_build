@@ -9,7 +9,8 @@
  */
 
 import wixLocation from 'wix-location';
-import { SITE } from 'public/content';
+import wixSeoFrontend from 'wix-seo-frontend';
+import { SITE, CITIES, ABOUT, aboutSeoMarkup, localBusinessSchema } from 'public/content';
 
 /** Same portrait as the home page. Keep the two in step. */
 const CONFIG = {
@@ -27,8 +28,30 @@ $w.onReady(() => {
   // entry is missing the element would otherwise render the wrong page.
   el.setAttribute('page', 'about');
   el.setAttribute('config', JSON.stringify(CONFIG));
+  el.setAttribute('content', JSON.stringify({ about: ABOUT }));
   el.on('navigate', (event) => {
     const url = event.detail && event.detail.url;
     if (url) wixLocation.to(url);
   });
+
+  applySeo(el);
 });
+
+/**
+ * The story only exists inside the shadow root, so a crawler that does not
+ * render JavaScript sees nothing. Same strings, so it is a mirror and not a
+ * second version of the page. Never load-bearing: a failure here must not take
+ * the page down.
+ */
+function applySeo(el) {
+  try {
+    el.seoMarkup = aboutSeoMarkup();
+  } catch (err) {
+    console.error('[about] seoMarkup failed', err);
+  }
+  try {
+    wixSeoFrontend.setStructuredData([localBusinessSchema()]);
+  } catch (err) {
+    console.error('[about] setStructuredData failed', err);
+  }
+}
