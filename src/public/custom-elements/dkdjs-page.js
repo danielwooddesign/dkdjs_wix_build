@@ -232,8 +232,10 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 .contactgrid { display:grid; grid-template-columns:1fr; gap:28px; margin-top:28px; align-items:start; }
 .infocard { background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:26px 24px; }
 .infocard + .infocard { margin-top:16px; }
+/* These are real <h2>s so the page has a heading outline a crawler can read —
+   hence the explicit margin and line-height, which a <div> did not need. */
 .infocard .lbl { font-size:12px; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--dim); font-weight:600; margin-bottom:8px; }
+  color:var(--dim); font-weight:600; margin:0 0 8px; line-height:1.3; }
 .infocard a { color:var(--cyan); text-decoration:none; font-size:20px; }
 .infocard a:hover { text-decoration:underline; }
 .mapwrap { border:1px solid var(--line); border-radius:3px; overflow:hidden; background:var(--surface); }
@@ -312,6 +314,27 @@ function media(config, key, label, extraClass) {
 }
 
 /* === PAGE COPY — defaults. Page code may override via the `content` attribute. */
+/* === GENERATED CONTACT — do not edit by hand. Run tools/build-defaults.mjs === */
+const DEFAULT_CONTACT = {
+  "eyebrow": "Get in touch",
+  "h1": "Talk to the people who show up.",
+  "intro": "Call, text or email and you reach Daniel or Kathy directly. There is no office, no account manager, and no call centre.",
+  "areaBody": "We cover Boise and the Treasure Valley. If your venue is a little further out, ask anyway — we travel for the right event.",
+  "labels": {
+    "phone": "Call or text",
+    "email": "Email",
+    "area": "Where we work",
+    "book": "Fastest way to book"
+  },
+  "cta": "Check your date",
+  "ctaBody": "The quickest route is to check whether your date is free. It takes a few seconds.",
+  "mapQuery": "Boise, Idaho",
+  "mapZoom": 9,
+  "mapTitle": "Map of the Treasure Valley service area",
+  "mapNote": "We are a mobile service — we come to your venue. The map shows the area we cover rather than a shopfront."
+};
+/* === END GENERATED CONTACT === */
+
 /* === GENERATED ABOUT — do not edit by hand. Run tools/build-defaults.mjs === */
 const DEFAULT_ABOUT = {
   "eyebrow": "More than music",
@@ -419,21 +442,7 @@ const DEFAULT_PAGE_CONTENT = {
     doneBody: 'We have your details and we will be in touch shortly. '
             + 'If your event is close, call or text and you will hear back faster.'
   },
-  contact: {
-    eyebrow: 'Get in touch',
-    h1: 'Talk to the people who show up.',
-    intro: 'Call, text or email and you reach Daniel or Kathy directly. '
-         + 'There is no office, no account manager, and no call centre.',
-    areaBody: 'We cover Boise and the Treasure Valley. If your venue is a little further out, '
-            + 'ask anyway — we travel for the right event.',
-    cta: 'Check your date',
-    ctaBody: 'The quickest route is to check whether your date is free. It takes a few seconds.',
-    mapQuery: 'Boise, Idaho',
-    mapZoom: 9,
-    mapTitle: 'Map of the Treasure Valley service area',
-    mapNote: 'We are a mobile service — we come to your venue. '
-           + 'The map shows the area we cover rather than a shopfront.'
-  },
+  contact: DEFAULT_CONTACT,
   about: DEFAULT_ABOUT
 };
 
@@ -1342,21 +1351,21 @@ class DkdjsPage extends HTMLElement {
             <div>
               ${cfg.phone ? `
               <div class="infocard">
-                <div class="lbl">Call or text</div>
+                <h2 class="lbl">${esc(c.labels.phone)}</h2>
                 <a href="tel:${esc(String(cfg.phone).replace(/[^0-9+]/g, ''))}">${esc(cfg.phone)}</a>
               </div>` : ''}
               ${cfg.email ? `
               <div class="infocard">
-                <div class="lbl">Email</div>
+                <h2 class="lbl">${esc(c.labels.email)}</h2>
                 <a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>
               </div>` : ''}
               <div class="infocard">
-                <div class="lbl">Where we work</div>
+                <h2 class="lbl">${esc(c.labels.area)}</h2>
                 <p>${esc(c.areaBody)}</p>
                 <div class="citylist">${cities.map((n) => `<span>${esc(n)}</span>`).join('')}</div>
               </div>
               <div class="infocard">
-                <div class="lbl">Fastest way to book</div>
+                <h2 class="lbl">${esc(c.labels.book)}</h2>
                 <p style="margin-bottom:16px">${esc(c.ctaBody)}</p>
                 <button class="btn btn-primary" type="button" data-go="/check-availability">${esc(c.cta)}</button>
               </div>

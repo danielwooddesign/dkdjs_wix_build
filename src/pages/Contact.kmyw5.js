@@ -12,7 +12,8 @@
  */
 
 import wixLocation from 'wix-location';
-import { SITE, CITIES } from 'public/content';
+import wixSeoFrontend from 'wix-seo-frontend';
+import { SITE, CITIES, CONTACT, contactSeoMarkup, localBusinessSchema } from 'public/content';
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
@@ -28,8 +29,30 @@ $w.onReady(() => {
     images: {}
   }));
 
+  el.setAttribute('content', JSON.stringify({ contact: CONTACT }));
+
   el.on('navigate', (event) => {
     const url = event.detail && event.detail.url;
     if (url) wixLocation.to(url);
   });
+
+  applySeo(el);
 });
+
+/**
+ * This is the page someone opens when they are ready to call, and it had no
+ * crawlable heading or business data at all. Never load-bearing: a failure here
+ * must not take the page down.
+ */
+function applySeo(el) {
+  try {
+    el.seoMarkup = contactSeoMarkup();
+  } catch (err) {
+    console.error('[contact] seoMarkup failed', err);
+  }
+  try {
+    wixSeoFrontend.setStructuredData([localBusinessSchema()]);
+  } catch (err) {
+    console.error('[contact] setStructuredData failed', err);
+  }
+}

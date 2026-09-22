@@ -32,7 +32,7 @@ async function loadPublic(name) {
   }
 }
 
-const { HOME, CITIES, TRUST, ABOUT } = await loadPublic('content');
+const { HOME, CITIES, TRUST, ABOUT, CONTACT } = await loadPublic('content');
 const { getPackage, visibleIncludes, formatMoney } = await loadPublic('pricing');
 
 const WEDDING_TIERS = ['reception', 'full-day', 'whole-night'];
@@ -88,7 +88,18 @@ await bake(
   'const DEFAULT_ABOUT = ' + JSON.stringify(ABOUT, null, 2) + ';'
 );
 
+/* ------------------------------------------------------------- contact ---- */
+const CONTACT_BEGIN = '/* === GENERATED CONTACT — do not edit by hand. Run tools/build-defaults.mjs === */';
+const CONTACT_END = '/* === END GENERATED CONTACT === */';
+
+await bake(
+  new URL('../src/public/custom-elements/dkdjs-page.js', import.meta.url),
+  CONTACT_BEGIN, CONTACT_END,
+  'const DEFAULT_CONTACT = ' + JSON.stringify(CONTACT, null, 2) + ';'
+);
+
 console.log('baked defaults');
 console.log('  content keys  :', Object.keys(content).length);
 console.log('  tiers         :', pricing.packages.map((p) => `${p.name} ${formatMoney(p.price)}`).join(', '));
 console.log('  about story   :', (ABOUT.story || []).length, 'sections');
+console.log('  contact cards :', Object.keys(CONTACT.labels || {}).length);
