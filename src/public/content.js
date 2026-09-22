@@ -687,6 +687,64 @@ export function packagesOfferSchema() {
   };
 }
 
+
+/**
+ * Contact page copy. Same deal as ABOUT: the element renders these strings and
+ * contactSeoMarkup() mirrors them, so they cannot drift. The baked default in
+ * dkdjs-page.js is GENERATED from this — run tools/build-defaults.mjs.
+ */
+export const CONTACT = {
+    eyebrow: 'Get in touch',
+    h1: 'Talk to the people who show up.',
+    intro: 'Call, text or email and you reach Daniel or Kathy directly. '
+         + 'There is no office, no account manager, and no call centre.',
+    areaBody: 'We cover Boise and the Treasure Valley. If your venue is a little further out, '
+            + 'ask anyway — we travel for the right event.',
+    labels: {
+      phone: 'Call or text',
+      email: 'Email',
+      area: 'Where we work',
+      book: 'Fastest way to book'
+    },
+    cta: 'Check your date',
+    ctaBody: 'The quickest route is to check whether your date is free. It takes a few seconds.',
+    mapQuery: 'Boise, Idaho',
+    mapZoom: 9,
+    mapTitle: 'Map of the Treasure Valley service area',
+    mapNote: 'We are a mobile service — we come to your venue. '
+           + 'The map shows the area we cover rather than a shopfront.'
+  };
+
+/**
+ * Crawlable markup for /contact. Phone, email and the city list come from SITE
+ * and CITIES, so the page a visitor reads and the page Google reads quote the
+ * same numbers. The street address is deliberately absent: the visible page
+ * shows a service-area map with no pin, and markup may not say more than the
+ * page does. The address lives in localBusinessSchema() instead.
+ */
+export function contactSeoMarkup() {
+  const c = CONTACT;
+  const parts = [];
+
+  parts.push(`<h1>${escapeHtml(c.h1)}</h1>`);
+  parts.push(`<p>${escapeHtml(c.intro)}</p>`);
+
+  if (SITE.phone) {
+    parts.push(`<h2>${escapeHtml(c.labels.phone)}</h2><p>${escapeHtml(SITE.phone)}</p>`);
+  }
+  if (SITE.email) {
+    parts.push(`<h2>${escapeHtml(c.labels.email)}</h2><p>${escapeHtml(SITE.email)}</p>`);
+  }
+
+  parts.push(`<h2>${escapeHtml(c.labels.area)}</h2><p>${escapeHtml(c.areaBody)}</p>`);
+  parts.push(`<p>Serving ${escapeHtml(CITIES.join(', '))}.</p>`);
+
+  parts.push(`<h2>${escapeHtml(c.labels.book)}</h2><p>${escapeHtml(c.ctaBody)}</p>`);
+  parts.push(`<p>${escapeHtml(c.mapNote)}</p>`);
+
+  return parts.join('');
+}
+
 /** Crawlable markup for a service page, from the same strings the page renders. */
 export function serviceSeoMarkup(key) {
   const s = SERVICES[key];
