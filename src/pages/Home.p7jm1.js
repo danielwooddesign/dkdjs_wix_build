@@ -13,7 +13,10 @@ import wixLocation from 'wix-location';
 import wixSeoFrontend from 'wix-seo-frontend';
 import { checkDate } from 'backend/availability.web';
 import { getPackage, visibleIncludes, formatMoney } from 'public/pricing';
-import { SITE, HOME, CITIES, TRUST, homeSeoMarkup, localBusinessSchema, servicesSchema } from 'public/content';
+import {
+  SITE, HOME, CITIES, TRUST,
+  homeSeoMarkup, localBusinessSchema, servicesSchema, videoSchema
+} from 'public/content';
 
 /**
  * Images and phone. Upload to the Wix Media Manager, copy the URL, paste here.
@@ -80,7 +83,10 @@ function applySeo(el) {
 
   try {
     // Structured data must be set inside onReady for search engines to read it.
-    wixSeoFrontend.setStructuredData([localBusinessSchema()].concat(servicesSchema()));
+    const schema = [localBusinessSchema()].concat(servicesSchema());
+    const video = videoSchema();
+    if (video) schema.push(video);
+    wixSeoFrontend.setStructuredData(schema);
   } catch (err) {
     console.error('[home] setStructuredData failed', err);
   }
