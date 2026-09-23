@@ -94,6 +94,23 @@ img.photo { width:100%; height:100%; object-fit:cover; display:block; }
 .alt:hover { border-color:var(--cyan); color:var(--cyan); }
 
 /* TRUST BAR */
+/* ---------------------------------------------------------------- VIDEO ---- */
+/* A facade, not an iframe: the YouTube player is ~500KB of third-party script
+   and it sits high on the page, so it only loads once someone asks for it. */
+.videosec .wrap { text-align:center; }
+.videofacade { display:block; position:relative; width:100%; max-width:900px;
+  margin:28px auto 0; padding:0; border:1px solid var(--line); border-radius:3px;
+  overflow:hidden; background:var(--surface); cursor:pointer; aspect-ratio:16/9; }
+.videofacade img { width:100%; height:100%; object-fit:cover; display:block; }
+.videofacade:hover { border-color:var(--pink); }
+.videofacade iframe { width:100%; height:100%; border:0; display:block; }
+.playmark { position:absolute; inset:0; margin:auto; width:78px; height:78px;
+  border-radius:50%; background:var(--pink); box-shadow:0 0 40px rgba(255,46,154,.45); }
+.playmark::after { content:''; position:absolute; inset:0; margin:auto; width:0; height:0;
+  border-style:solid; border-width:15px 0 15px 25px; border-color:transparent transparent transparent #0A0A0F;
+  transform:translateX(3px); }
+.videofacade:hover .playmark { transform:scale(1.06); transition:transform .18s ease; }
+.videocap { margin-top:14px; color:var(--dim); }
 .trust { background:var(--surface2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
   padding:18px 20px; }
 .trust .wrap { display:flex; flex-wrap:wrap; gap:10px 28px; align-items:center; justify-content:center;
@@ -259,6 +276,18 @@ const DEFAULT_CONTENT = {
         "label": "Cities served"
       }
     ]
+  },
+  "video": {
+    "eyebrow": "Meet us",
+    "h2": "This is us, in under a minute.",
+    "caption": "Wedding DJ in Boise & the Treasure Valley — 52 seconds.",
+    "playLabel": "Play the video",
+    "youtubeId": "EMta2r1FEu4",
+    "schemaName": "Wedding DJ in Boise & the Treasure Valley | Daniel & Kathy DJs",
+    "schemaDescription": "Meet DKDJS — Daniel and Kathy, a husband-and-wife DJ and MC team serving Boise, Eagle, Meridian and the Treasure Valley.",
+    "duration": "PT0M52S",
+    "uploadDate": "2026-09-23",
+    "thumbnail": "https://i.ytimg.com/vi/EMta2r1FEu4/maxresdefault.jpg"
   },
   "services": {
     "eyebrow": "What we do",
@@ -572,6 +601,22 @@ class DkdjsHome extends HTMLElement {
         </div>
       </div>
 
+      ${c.video && c.video.youtubeId ? `
+      <section class="videosec">
+        <div class="wrap">
+          <div class="eyebrow pink"><i></i>${esc(c.video.eyebrow)}</div>
+          <h2 class="disp sec">${esc(c.video.h2)}</h2>
+          <button class="videofacade" type="button" id="videoPlay"
+                  data-yt="${esc(c.video.youtubeId)}"
+                  aria-label="${esc(c.video.playLabel)}">
+            <img src="${esc(c.video.thumbnail)}" alt="${esc(c.video.schemaName)}"
+                 loading="lazy" width="1280" height="720">
+            <span class="playmark" aria-hidden="true"></span>
+          </button>
+          <p class="small videocap">${esc(c.video.caption)}</p>
+        </div>
+      </section>` : ''}
+
       <section>
         <div class="wrap split">
           ${media(cfg, 'danielKathy', 'DANIEL & KATHY — 1200×1500', 'portrait')}
@@ -688,6 +733,23 @@ class DkdjsHome extends HTMLElement {
     root.querySelectorAll('[data-go]').forEach((el) => {
       el.addEventListener('click', () => this.go(el.getAttribute('data-go')));
     });
+
+    // Swap the facade for the real player on click. Deliberately before the
+    // date-checker's early return below, which would otherwise skip it.
+    const play = root.getElementById('videoPlay');
+    if (play) {
+      play.addEventListener('click', () => {
+        const id = play.getAttribute('data-yt');
+        if (!id) return;
+        const frame = document.createElement('iframe');
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id)
+          + '?autoplay=1&rel=0&modestbranding=1';
+        frame.title = play.getAttribute('aria-label') || 'Video';
+        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture';
+        frame.setAttribute('allowfullscreen', '');
+        play.replaceChildren(frame);
+      }, { once: true });
+    }
 
     const input = root.getElementById('dateInput');
     const btn = root.getElementById('checkBtn');

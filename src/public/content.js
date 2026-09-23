@@ -73,6 +73,21 @@ export const HOME = {
     ]
   },
 
+  video: {
+    eyebrow: 'Meet us',
+    h2: 'This is us, in under a minute.',
+    caption: 'Wedding DJ in Boise & the Treasure Valley \u2014 52 seconds.',
+    playLabel: 'Play the video',
+    youtubeId: 'EMta2r1FEu4',
+    // Kept in step with the video's own YouTube listing.
+    schemaName: 'Wedding DJ in Boise & the Treasure Valley | Daniel & Kathy DJs',
+    schemaDescription: 'Meet DKDJS \u2014 Daniel and Kathy, a husband-and-wife DJ and MC team '
+      + 'serving Boise, Eagle, Meridian and the Treasure Valley.',
+    duration: 'PT0M52S',
+    uploadDate: '2026-09-23',
+    thumbnail: 'https://i.ytimg.com/vi/EMta2r1FEu4/maxresdefault.jpg'
+  },
+
   services: {
     eyebrow: 'What we do',
     h2: 'Four kinds of night.',
@@ -175,6 +190,10 @@ export function homeSeoMarkup() {
 
   parts.push(`<h2>${escapeHtml(c.about.h2)}</h2><p>${escapeHtml(c.about.body)}</p>`);
 
+  if (c.video && c.video.h2) {
+    parts.push(`<h2>${escapeHtml(c.video.h2)}</h2><p>${escapeHtml(c.video.caption)}</p>`);
+  }
+
   parts.push(`<h2>${escapeHtml(c.services.h2)}</h2>`);
   c.services.items.forEach((s) => {
     parts.push(`<h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.copy)}</p>`);
@@ -212,6 +231,29 @@ export function homeSeoMarkup() {
   parts.push(`<h2>${escapeHtml(c.cta.h2)}</h2><p>${escapeHtml(c.cta.body)}</p>`);
 
   return parts.join('');
+}
+
+
+/**
+ * VideoObject for the home-page film. Makes the video eligible for a video
+ * rich result, which takes a lot of vertical space on a phone. Every field is
+ * read off the real YouTube listing — none of it is estimated.
+ */
+export function videoSchema() {
+  const v = HOME.video;
+  if (!v || !v.youtubeId) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: v.schemaName,
+    description: v.schemaDescription,
+    thumbnailUrl: [v.thumbnail],
+    uploadDate: v.uploadDate,
+    duration: v.duration,
+    embedUrl: 'https://www.youtube.com/embed/' + v.youtubeId,
+    contentUrl: 'https://www.youtube.com/watch?v=' + v.youtubeId,
+    publisher: { '@id': SITE.url + '/#business' }
+  };
 }
 
 /**

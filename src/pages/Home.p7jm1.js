@@ -84,8 +84,18 @@ function applySeo(el) {
   try {
     // Structured data must be set inside onReady for search engines to read it.
     const schema = [localBusinessSchema()].concat(servicesSchema());
-    const video = videoSchema();
-    if (video) schema.push(video);
+
+    // Its own try on purpose. This threw once, when content.js was reverted
+    // but this file was not, and it took the whole setStructuredData call with
+    // it — the home page lost LocalBusiness, Service and the address. An
+    // optional extra must never be able to do that again.
+    try {
+      const video = videoSchema();
+      if (video) schema.push(video);
+    } catch (err) {
+      console.error('[home] videoSchema failed', err);
+    }
+
     wixSeoFrontend.setStructuredData(schema);
   } catch (err) {
     console.error('[home] setStructuredData failed', err);
