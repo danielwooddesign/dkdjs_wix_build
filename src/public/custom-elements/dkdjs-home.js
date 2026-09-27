@@ -25,23 +25,27 @@ const STYLES = `
 :host { display: block; box-sizing: border-box; --bg:#07070B; --surface:#101018; --surface2:#0B0B12; --line:#22222F;
   --text:#F4F4F7; --muted:#A2A2B4; --dim:#8E8EA6; --pink:#FF2E9A; --cyan:#3FE0F0;
   color: var(--text); background: var(--bg);
-  font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  font-family:'Barlow','Helvetica Neue',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+  /* Without this the shadow tree inherits the host page's base font-size. Wix
+     sets 10px on this site, which rendered every unclassed paragraph at 10px. */
+  font-size:16px; }
 * { box-sizing: border-box; }
 .disp { font-family:'Anton','Arial Narrow',Impact,system-ui,sans-serif; font-weight:400;
   text-transform:uppercase; line-height:.95; margin:0; }
 section { padding: 56px 20px; }
 .wrap { max-width: 1240px; margin: 0 auto; }
-.eyebrow { display:flex; align-items:center; gap:12px; font-size:12px; letter-spacing:.24em;
+.eyebrow { display:flex; align-items:center; gap:12px; font-size:13px; letter-spacing:.24em;
   text-transform:uppercase; font-weight:600; color:var(--cyan); }
 .eyebrow i { display:block; width:30px; height:2px; background:currentColor; }
 .eyebrow.pink { color: var(--pink); }
-p { margin:0; line-height:1.6; color:var(--muted); }
+p { margin:0; line-height:1.6; color:var(--muted); font-size:17px; }
+.small { font-size:15px; line-height:1.55; color:var(--dim); }
 .portrait, .portrait.ph { aspect-ratio:4/5; width:100%; }
 .wide, .wide.ph { aspect-ratio:16/9; width:100%; }
 .card-media, .card-media.ph { aspect-ratio:4/3; width:100%; }
 .ph { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.045) 0 12px, rgba(255,255,255,0) 12px 24px);
   border:1px dashed #3A3A4A; display:flex; align-items:center; justify-content:center; text-align:center;
-  color:var(--dim); font-size:11px; letter-spacing:.1em; text-transform:uppercase; padding:14px; }
+  color:var(--dim); font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:14px; }
 img.photo { width:100%; height:100%; object-fit:cover; display:block; }
 .frame { position:relative; overflow:hidden; border-radius:3px; }
 
@@ -75,13 +79,13 @@ img.photo { width:100%; height:100%; object-fit:cover; display:block; }
 /* DATE CHECKER */
 .checker { margin-top:26px; max-width:580px; background:rgba(16,16,24,.88); border:1px solid #2B2B3A;
   border-radius:4px; padding:20px; backdrop-filter:blur(8px); }
-.checker label { display:block; font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+.checker label { display:block; font-size:13px; letter-spacing:.16em; text-transform:uppercase;
   font-weight:600; color:var(--dim); margin-bottom:10px; }
 .checker-row { display:flex; flex-wrap:wrap; gap:10px; }
 .checker input { flex:1 1 200px; min-height:52px; background:var(--bg); border:1px solid #33334A;
   border-radius:2px; padding:0 14px; color:var(--text); font-size:16px; font-family:inherit; }
 .checker input:focus { outline:2px solid var(--cyan); outline-offset:1px; }
-.checker .hint { margin-top:10px; font-size:14px; color:var(--dim); }
+.checker .hint { margin-top:10px; font-size:15px; color:var(--dim); }
 .result { margin-top:14px; border-radius:3px; padding:16px 18px; font-size:15px; line-height:1.5; display:none; }
 .result.show { display:block; }
 .result.open { background:rgba(63,224,240,.08); border:1px solid #1E5B66; }
@@ -90,7 +94,7 @@ img.photo { width:100%; height:100%; object-fit:cover; display:block; }
 .result strong { display:block; font-size:17px; color:#fff; margin-bottom:4px; }
 .alts { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
 .alt { background:transparent; border:1px solid #43435A; color:var(--text); border-radius:2px;
-  padding:9px 14px; font-size:14px; cursor:pointer; font-family:inherit; min-height:44px; }
+  padding:9px 14px; font-size:15px; cursor:pointer; font-family:inherit; min-height:44px; }
 .alt:hover { border-color:var(--cyan); color:var(--cyan); }
 
 /* TRUST BAR */
@@ -115,15 +119,15 @@ img.photo { width:100%; height:100%; object-fit:cover; display:block; }
   padding:18px 20px; }
 .trust .wrap { display:flex; flex-wrap:wrap; gap:10px 28px; align-items:center; justify-content:center;
   text-align:center; }
-.trust .cities { font-size:14px; color:var(--muted); letter-spacing:.04em; }
+.trust .cities { font-size:15px; color:var(--muted); letter-spacing:.04em; }
 .trust ul { display:flex; flex-wrap:wrap; gap:8px 22px; list-style:none; margin:0; padding:0; }
-.trust li { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); font-weight:600; }
+.trust li { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); font-weight:600; }
 
 /* SPLIT */
 .split { display:grid; gap:36px; }
 .stats { display:flex; flex-wrap:wrap; gap:28px 44px; margin-top:6px; }
 .stat b { display:block; font-family:'Anton',Impact,sans-serif; font-size:34px; color:var(--cyan); font-weight:400; }
-.stat span { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
+.stat span { font-size:14px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
 
 /* CARD GRIDS */
 h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
@@ -139,16 +143,16 @@ h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 
 .feat { display:flex; gap:16px; align-items:flex-start; }
 .feat b { display:block; font-size:17px; font-weight:600; color:var(--text); margin-bottom:4px; }
-.feat p { font-size:14px; }
+.feat p { font-size:16px; }
 
 /* PRICING */
 .tiers { display:grid; gap:18px; margin-top:34px; }
 .tier { background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:30px 26px 34px;
   display:flex; flex-direction:column; gap:16px; position:relative; }
 .tier.featured { background:#14101C; border-color:var(--pink); box-shadow:0 0 46px rgba(255,46,154,.16); }
-.badge { position:absolute; top:-11px; left:26px; background:var(--pink); color:#0A0A0F; font-size:11px;
+.badge { position:absolute; top:-11px; left:26px; background:var(--pink); color:#0A0A0F; font-size:12px;
   font-weight:700; letter-spacing:.14em; padding:5px 12px; border-radius:2px; }
-.tier .name { font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); font-weight:600; }
+.tier .name { font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); font-weight:600; }
 .tier.featured .name { color:#FF8FC6; }
 .tier .amount { display:flex; align-items:baseline; gap:8px; }
 .tier .amount b { font-family:'Anton',Impact,sans-serif; font-weight:400; font-size:44px; color:#fff; }
@@ -156,14 +160,14 @@ h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 .tier hr { border:0; border-top:1px solid var(--line); margin:0; }
 .tier ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
 .tier li { font-size:15px; color:#B4B4C4; }
-.note { margin-top:20px; font-size:14px; color:var(--dim); }
+.note { margin-top:20px; font-size:15px; color:var(--dim); }
 
 /* BOOTH */
 .booth { background:var(--surface2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
 .uses { display:grid; gap:16px; margin-top:30px; }
 .use { border-left:2px solid var(--pink); padding-left:16px; }
 .use b { display:block; font-size:16px; color:#fff; margin-bottom:4px; }
-.use p { font-size:14px; }
+.use p { font-size:16px; }
 
 /* GALLERY */
 .gallery { display:grid; gap:10px; margin-top:28px; grid-template-columns:repeat(2,1fr); }
@@ -797,7 +801,7 @@ class DkdjsHome extends HTMLElement {
     if (r.status === 'taken' && (r.alternatives || []).length) {
       const alts = document.createElement('div');
       alts.className = 'alts';
-      alts.innerHTML = `<div style="width:100%;font-size:14px;color:var(--muted)">Here’s what’s open nearby:</div>` +
+      alts.innerHTML = `<div style="width:100%;font-size:15px;color:var(--muted)">Here’s what’s open nearby:</div>` +
         r.alternatives.map((k) => `<button class="alt" type="button" data-alt="${esc(k)}">${esc(formatKey(k))}</button>`).join('');
       box.appendChild(alts);
       alts.querySelectorAll('[data-alt]').forEach((b) => {
