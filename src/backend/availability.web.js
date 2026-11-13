@@ -13,6 +13,7 @@ import { Permissions, webMethod } from 'wix-web-module';
 import wixData from 'wix-data';
 import { isValidDateKey, isPast, nearbySaturdays, toDateKey, formatDateKey } from 'public/dates';
 import { POLICY } from 'public/pricing';
+import { confirmHold } from 'backend/booking';
 
 const BOOKINGS = 'Bookings';
 const HOLDS = 'Holds';
@@ -196,35 +197,15 @@ export const requestHold = webMethod(Permissions.Anyone, async (details = {}) =>
 });
 
 /**
- * Owner-only: turn a paid hold into a confirmed booking.
- * Call this from the payment success handler (or by hand, for now).
+ * Owner-only: turn a hold into a confirmed booking by hand.
+ *
+ * The logic moved to backend/booking.js so this and the payment flow in
+ * backend/payments.web.js cannot drift apart — two routes to a booking is
+ * exactly how a date ends up double-sold. Use this for a retainer paid by
+ * invoice, cash or bank transfer, where no Wix payment exists.
  */
-export const confirmBooking = webMethod(Permissions.SiteMember, async (holdId) => {
-  if (!holdId) return { ok: false, reason: 'missing-hold' };
-
-  try {
-    const hold = await wixData.get(HOLDS, holdId, OPTS);
-    if (!hold) return { ok: false, reason: 'not-found' };
-
-    const booking = await wixData.insert(BOOKINGS, {
-      title: `Booking · ${hold.eventDate}`,
-      eventDate: hold.eventDate,
-      leadId: hold.leadId,
-      status: 'confirmed'
-    }, OPTS);
-
-    await wixData.update(HOLDS, { ...hold, status: 'converted' }, OPTS);
-
-    if (hold.leadId) {
-      const lead = await wixData.get(LEADS, hold.leadId, OPTS);
-      if (lead) await wixData.update(LEADS, { ...lead, status: 'booked' }, OPTS);
-    }
-
-    return { ok: true, bookingId: booking._id };
-  } catch (err) {
-    console.error('[availability.confirmBooking]', holdId, err);
-    return { ok: false, reason: 'error' };
-  }
+export const confirmBooking = webMethod(Permissions.SiteMember, async (holdId, payment = {}) => {
+  return confirmHold(holdId, payment);
 });
 
 /**

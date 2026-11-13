@@ -247,6 +247,29 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 /* -------------------------------------------------------------- ABOUT ----- */
 .split { display:grid; grid-template-columns:1fr; gap:28px; align-items:center; margin-top:28px; }
 .split .body { max-width:62ch; }
+/* ------------------------------------------------------------------ PAY --- */
+.paycard { max-width:34rem; margin:34px auto 0; background:var(--surface);
+  border:1px solid var(--line); border-radius:4px; padding:30px 28px; }
+.payrow { display:flex; justify-content:space-between; align-items:baseline;
+  padding:12px 0; border-bottom:1px solid var(--line); }
+.payrow:last-of-type { border-bottom:0; }
+.payrow .k { font-size:14px; color:var(--dim); letter-spacing:.04em; white-space:nowrap;
+  padding-right:18px; }
+.payrow .v { font-size:17px; color:#fff; font-weight:600; text-align:right; }
+.payrow .v.big { font-family:'Anton','Arial Narrow',Impact,sans-serif;
+  font-size:34px; color:var(--cyan); font-weight:400; }
+.payterms { margin-top:18px; font-size:14px; line-height:1.6; color:var(--muted); }
+.paydisclosure { margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+  font-size:13px; line-height:1.55; color:var(--dim); }
+.paybtn { width:100%; margin-top:22px; justify-content:center; }
+.paynote { margin-top:14px; font-size:13px; color:var(--dim); text-align:center; }
+.paybad { max-width:34rem; margin:34px auto 0; background:var(--surface);
+  border:1px solid var(--line); border-left:3px solid var(--pink);
+  border-radius:4px; padding:26px 24px; }
+.paybad b { display:block; font-size:18px; color:#fff; margin-bottom:8px; }
+.paydone { text-align:center; }
+.paydone .tick { font-family:'Anton','Arial Narrow',Impact,sans-serif;
+  font-size:46px; color:var(--cyan); line-height:1; }
 .story { margin-top:48px; max-width:72ch; }
 .story h2 { font-size:clamp(22px,2.8vw,32px); color:#fff; line-height:1.15; margin:40px 0 14px;
   letter-spacing:.2px; }
@@ -604,6 +627,7 @@ const DEFAULT_PRICING = {
 function pageFromPath() {
   const path = (typeof location !== 'undefined' ? location.pathname : '').toLowerCase();
   if (path.indexOf('check-availability') !== -1) return 'availability';
+  if (path.indexOf('/pay') !== -1) return 'pay';
   if (path.indexOf('contact') !== -1) return 'contact';
   if (path.indexOf('about') !== -1) return 'about';
   if (path.indexOf('packages') !== -1) return 'packages';
@@ -876,7 +900,7 @@ const DEFAULT_LEGAL = {
 /* === END GENERATED LEGAL DEFAULTS === */
 
 class DkdjsPage extends HTMLElement {
-  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission']; }
+  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission', 'payment']; }
 
   constructor() {
     super();
@@ -936,6 +960,7 @@ class DkdjsPage extends HTMLElement {
       // visitor has typed into the form.
       if (name === 'availability') { this.paintDate(parsed); return; }
       if (name === 'submission')   { this.paintSubmission(parsed); return; }
+      if (name === 'payment')      { this._payment = parsed; this.render(); return; }
       this.render();
     } catch (err) { /* half-written attribute; the next one wins */ }
   }
@@ -953,7 +978,8 @@ class DkdjsPage extends HTMLElement {
       weddings: () => this.service(),
       events: () => this.service(),
       karaoke: () => this.service(),
-      legal: () => this.legal()
+      legal: () => this.legal(),
+      pay: () => this.pay()
     };
     const wanted = this._page || pageFromPath() || 'packages';
     const build = pages[wanted] || pages.packages;
@@ -963,6 +989,7 @@ class DkdjsPage extends HTMLElement {
       el.addEventListener('click', () => this.go(el.getAttribute('data-go')));
     });
     if (wanted === 'availability') this.wireForm();
+    if (wanted === 'pay') this.wirePay();
   }
 
 
@@ -1381,6 +1408,117 @@ class DkdjsPage extends HTMLElement {
           </div>
         </div>
       </section>`;
+  }
+
+  /* ==================================================================== PAY = */
+
+  /**
+   * One-to-one retainer page, reached as /pay?hold=<id>.
+   *
+   * Everything shown here arrives already filtered by the backend: an event
+   * date, an amount and a first name. The element never sees the lead row,
+   * and it never decides the price — if `amount` is missing, it refuses to
+   * render a pay button rather than inventing a number.
+   */
+  pay() {
+    const p = this._payment;
+    const cfg = this._config || {};
+
+    if (!p) {
+      return `
+        <section><div class="wrap">
+          <div class="eyebrow"><i></i>Secure payment</div>
+          <h1 class="disp sec">Checking your date&hellip;</h1>
+        </div></section>`;
+    }
+
+    if (p.done) {
+      return `
+        <section><div class="wrap">
+          <div class="paycard paydone">
+            <div class="tick">&#10003;</div>
+            <h1 class="disp sec" style="font-size:30px">That date is yours.</h1>
+            <p class="body" style="margin-top:14px">
+              ${esc(p.eventDate || '')} is off our calendar. We will be in touch to start planning.
+            </p>
+            ${cfg.phone ? `<p class="paynote">Questions? Call or text ${esc(cfg.phone)}.</p>` : ''}
+          </div>
+        </div></section>`;
+    }
+
+    if (!p.ok) {
+      const why = {
+        'missing-hold': 'This link is incomplete. Check the address, or ask us to resend it.',
+        'not-found': 'We could not find this hold. It may have been cancelled.',
+        'already-booked': 'This date is already booked — no payment is needed.',
+        'cancelled': 'This hold was cancelled. Get in touch and we will sort it out.',
+        'expired': 'This hold has expired. Ask us to re-open it and we will send a new link.',
+        'date-taken': 'That date has since been booked. Nothing has been charged.',
+        'payment-mismatch': 'Something did not line up with that payment. Nothing has been charged.',
+        'not-paid': 'The payment did not go through. Nothing has been charged.',
+        'no-policy': 'Our payment settings are not ready yet. Please get in touch.'
+      }[p.reason] || 'Something went wrong. Nothing has been charged.';
+
+      return `
+        <section><div class="wrap">
+          <div class="paybad">
+            <b>We cannot take this payment</b>
+            <p class="body">${esc(why)}</p>
+            ${cfg.phone ? `<p class="paynote" style="text-align:left">Call or text ${esc(cfg.phone)}.</p>` : ''}
+          </div>
+        </div></section>`;
+    }
+
+    const term = p.term || 'retainer';
+    const balance = p.balanceDueDays
+      ? `The balance is due ${esc(p.balanceDueDays)} days before your event.`
+      : '';
+    const refund = p.refundable ? '' : `This ${esc(term)} is non-refundable.`;
+
+    return `
+      <section>
+        <div class="wrap" style="text-align:center">
+          <div class="eyebrow pink" style="justify-content:center"><i></i>Secure payment</div>
+          <h1 class="disp sec">${p.firstName ? `Let’s lock it in, ${esc(p.firstName)}.` : 'Let’s lock it in.'}</h1>
+        </div>
+
+        <div class="wrap">
+          <div class="paycard">
+            <div class="payrow">
+              <span class="k">Your date</span>
+              <span class="v">${esc(p.eventDate || '')}</span>
+            </div>
+            <div class="payrow">
+              <span class="k">Date ${esc(term)}</span>
+              <span class="v big">${money(p.amount)}</span>
+            </div>
+
+            <p class="payterms">
+              This ${esc(term)} takes your date off our calendar and comes off your
+              total &mdash; it is not an extra fee. ${refund} ${balance}
+            </p>
+
+            <button class="btn btn-primary paybtn" type="button" id="payBtn"
+              ${p.busy ? 'disabled' : ''}>
+              ${p.busy ? 'Opening secure payment…' : `Pay ${money(p.amount)}`}
+            </button>
+
+            ${p.reason ? `<p class="paynote" style="color:var(--pink)">That payment did not complete. Nothing has been charged.</p>` : ''}
+
+            ${p.disclosure ? `<p class="paydisclosure">${esc(p.disclosure)}</p>` : ''}
+          </div>
+        </div>
+      </section>`;
+  }
+
+  wirePay() {
+    const btn = this.shadowRoot.getElementById('payBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      this.emit('payretainer', {});
+    });
   }
 
   /* ================================================================== ABOUT = */
