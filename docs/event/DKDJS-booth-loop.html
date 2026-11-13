@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DKDJS — booth loop</title>
+<style>
+  /* Deliberately offline-safe: no web fonts, no CDN, no network of any kind.
+     Castle Gardens is an open field and cell signal is not worth betting on. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #07070B; overflow: hidden; cursor: none; }
+  body {
+    font-family: 'Barlow','Helvetica Neue',Helvetica,Arial,sans-serif;
+    color: #F4F4F7; -webkit-font-smoothing: antialiased;
+  }
+  .disp { font-family: 'Anton','Arial Narrow',Impact,sans-serif; font-weight: 400;
+          text-transform: uppercase; line-height: .94; letter-spacing: .5px; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 5vh 6vw;
+    opacity: 0; transition: opacity .7s ease;
+  }
+  .slide.on { opacity: 1; }
+
+  .eyebrow { color: #FF2E9A; font-size: 2.1vw; letter-spacing: .32em;
+             text-transform: uppercase; font-weight: 600; margin-bottom: 2.4vh; }
+  h1 { font-size: 8.4vw; color: #fff; }
+  h2 { font-size: 6.2vw; color: #fff; }
+  .sub { font-size: 2.9vw; color: #A2A2B4; margin-top: 3vh; line-height: 1.4; max-width: 80%; }
+  .cyan { color: #3FE0F0; }
+  .pink { color: #FF2E9A; }
+
+  .rule { width: 16vw; height: 5px; background: #FF2E9A; margin: 3.4vh 0; }
+
+  table.price { border-collapse: collapse; margin-top: 2vh; }
+  table.price td { padding: 1.5vh 2.2vw; font-size: 3.4vw; }
+  table.price td.n { text-align: left; color: #fff; font-weight: 600; }
+  table.price td.h { text-align: left; color: #8E8EA6; font-size: 2.2vw; }
+  table.price td.p { text-align: right; color: #3FE0F0;
+                     font-family: 'Anton','Arial Narrow',Impact,sans-serif; font-size: 4.4vw; }
+
+  .qrwrap { background: #fff; padding: 1.6vh 1.6vh; border-radius: 10px; margin-top: 3vh; }
+  .qrwrap img { display: block; width: 26vh; height: 26vh; }
+
+  .foot { position: absolute; bottom: 3.2vh; left: 0; right: 0; text-align: center;
+          font-size: 1.7vw; color: #6B6B7A; letter-spacing: .07em; }
+
+  video { width: 86vw; max-height: 74vh; border: 1px solid #22222F; border-radius: 4px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide">
+  <div class="eyebrow">Boise &amp; the Treasure Valley</div>
+  <h1 class="disp">Daniel &amp; Kathy<br>DJs</h1>
+  <div class="rule"></div>
+  <div class="sub">A husband-and-wife DJ and MC team.<br>Weddings, parties, corporate events and karaoke.</div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="eyebrow">What's different</div>
+  <h2 class="disp">Two of us at<br>every event.</h2>
+  <div class="sub">Not an upgrade. Not conditional on the package.<br>
+    One runs music and the microphone. The other runs the room.</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="eyebrow">What's different</div>
+  <h2 class="disp">One event<br>a day.</h2>
+  <div class="sub">We never double-book a date.<br>Nobody gets the tired half of us.</div>
+</section>
+
+<!-- 4 — optional local video. Drop dkdjs-video.mp4 beside this file to use it. -->
+<section class="slide" id="videoSlide">
+  <video id="clip" muted playsinline preload="auto">
+    <source src="dkdjs-video.mp4" type="video/mp4">
+  </video>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="eyebrow">Wedding packages</div>
+  <table class="price">
+    <tr><td class="n">The Reception<div class="h">4 hours</div></td><td class="p">$1,095</td></tr>
+    <tr><td class="n">The Full Day<div class="h">6 hours · ceremony audio</div></td><td class="p">$1,595</td></tr>
+    <tr><td class="n">The Whole Night<div class="h">8 hours · everything</div></td><td class="p">$2,095</td></tr>
+  </table>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="eyebrow">Not a wedding?</div>
+  <table class="price">
+    <tr><td class="n">Private party<div class="h">3 hours</div></td><td class="p">$595</td></tr>
+    <tr><td class="n">Karaoke night<div class="h">3 hours, hosted</div></td><td class="p">$450</td></tr>
+    <tr><td class="n">Corporate / holiday<div class="h">4 hours</div></td><td class="p">$895</td></tr>
+  </table>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="eyebrow">Straight pricing</div>
+  <h2 class="disp">Every price<br>published.</h2>
+  <div class="sub">No &ldquo;contact us for a quote.&rdquo;<br>The whole list is on the website.</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="eyebrow">Check your date</div>
+  <h2 class="disp">Is your date<br>open?</h2>
+  <div class="qrwrap"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnwAAAJ8CAIAAADrj+sBAAAOc0lEQVR42u3cMa7jRhREUctg5sT7X6WTiekVjCFj3hTqdZ+zgP+pJqULJvV53/cPAOD3+9MRAIDoAoDoAgCiCwCiCwCiCwCILgCILgAgugAgugAgugCA6AKA6AIAogsAogsAogsAiC4AiC4AILoAILoAILoAgOgCgOgCAP/PM/WH/vrr72sP8cePf649w+RnbzvnqetJfge/uWbn0/M9bft++Z33pgsAa4guAIguAIguACC6ACC6ACC6jgAARBcARBcAEF0AEF0AuN2T/GdtW6zfmNoaTe7ZJneMN96LqTNs2yhOPhtt53Pq7vTNe+wbf1u86QJAEdEFANEFANEFAEQXAEQXAETXEQCA6AKA6AIAogsAogsAt3vaLii5gZncCL1597VtW7htm3rjvm7b96Jt73fqmpO/G37nvekCwFFEFwBEFwBEFwAQXQAQXQAQXUcAAKILAKILAIguAIguANzucQQ9kju0ye3Ttms+de+37X5N/a+N39O2cz71WfWmCwCILgCILgCILgAgugAgugCA6AKA6AKA6AIAogsAogsA/ITt5SJTO7Rtu8HfXE/b3m/bfnXSxh3stvv+zd+xq+xNFwAQXQAQXQBAdAFAdAFAdAEA0QUA0QUARBcARBcARBcA+G3qtpdP3RFNbtVOXU/yXmzcvN34zE/tYLfd0+T53Hw9fue96QKA6AIAogsAogsAogsAiC4AiC4AILoAILoAILoAgOgCwBLR7eWpTddT3bxVe/PfSZ5z8jls+2059X61XY/feW+6ACC6ACC6AIDoAoDoAgCiCwCiCwCiCwCILgCILgAgugBQ4PO+r1MISO6RJjdmk/uxp97TUzd42fWbgDddABBdAEB0AUB0AUB0AQDRBQDRBQBEFwBEFwBEFwAQXQA4yLHby8ld029M7SFv3FC9ee+37TlMPs+nnnPyu7zx77Q9P22/P950AUB0AUB0AQDRBQDRBQDRdQQAILoAILoAgOgCgOgCgOgCABFj28sbNzmT2rZhp67Z/fr180me88Z72nbNbc9G2//a+Nm96QLAgUQXAEQXAEQXABBdABBdABBdRwAAogsAogsAiC4AiC4A3O459YMld0ST2jZUk/cruWPcds4b94dv3p3euF+d/I26+bfOmy4AiC4AiC4AILoAILoAILqOAABEFwBEFwAQXQAQXQAQXQAgom57eWpLs2379GZtm7cb91o3bgLbAO95njduQW/cEvemCwBFRBcARBcARBcAEF0AEF0AEF1HAACiCwCiCwCILgCILgDc7rn5w5+687xxd/rUzdu2Z3Xjc9h2TzfuKiefn+R93/hb500XAEQXAEQXABBdABBdABBdRwAAogsAogsAiC4AiC4AiC4AEPF533fdRbftiJ6693vqGSafw1N3cdvOp+1zJb8XbRvXN/8meNMFANEFANEFAEQXAEQXABBdABBdABBdAEB0AUB0AQDRBYAaT9sFte21tu3rbvxfbRuqyY3ZjZ+9bav21G3htt/MjZ+97Vn1pgsAogsAogsAiC4AiC4AILoAILoAILoAgOgCgOgCAKILADU+7/uO/KHk/ufG/dg2yR3ab5y6g912L9q+Fxu/y23fnbbvl99wb7oAILoAILoAgOgCgOgCAKILAKILAKILAIguAIguACC6AFDgabug5L5u205vco80uWv6zedqu+9Tnyt5L6aup+1ztf1uJLVd88bdaW+6ACC6AIDoAoDoAgCiCwCiCwCiCwCILgCILgAgugAgugBwpej2ctu28Kl7rVP3Ykpyg3fjZ9+497vxftlRP+83M3nO3nQBYBnRBQDRBQDRBQBEFwBEFwBE1xEAgOgCgOgCAKILAKILALf7vO+77qLbNlSTkjuiG3dNNz4bbWfYdr+mzsfe+HnnvPFeeNMFANEFANEFAEQXAEQXAETXEQCA6AKA6AIAogsAogsAogsARIxtL7ft9G7cGp3a+237O1Of/eZ7kXTzJvmp93Tjs9F2zlPPmDddAAgRXQAQXQAQXQBAdAFAdAFAdB0BAIguAIguACC6ACC6AHC7p+2C2jZL2zacN+6RnrotPHXf256fjdc89Xfsjffcr427yt50AaCI6AKA6AKA6AIAogsAogsAousIAEB0AUB0AQDRBQDRBYDbjW0vJ7crN+6jbvxcyT3bjdq2stvOuW1XuW2b+tSN9FOfZ2+6ACC6AIDoAoDoAoDoAgCiCwCiCwCILgCILgCILgAgugCwypP8Z23bnsnt029M7Rhv3GfeqG1ft+2+b/wOtn0v2va98aYLAKILAIguAIguAIguACC6ACC6AIDoAoDoAoDoAgCiCwBLPG0X1LYtPOWba07uGJ/6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"></div>
+  <div class="sub" style="font-size:2.3vw;margin-top:2vh">dkdjs.com &nbsp;·&nbsp; (208) 972-1308</div>
+</section>
+
+<div class="foot">DKDJS &mdash; Daniel &amp; Kathy DJs &nbsp;·&nbsp; dkdjs.com &nbsp;·&nbsp; (208) 972-1308</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var clip   = document.getElementById('clip');
+  var vSlide = document.getElementById('videoSlide');
+
+  // No local MP4? Drop the video slide rather than showing a black rectangle.
+  var hasVideo = false;
+  clip.addEventListener('loadeddata', function () { hasVideo = true; });
+  clip.addEventListener('error', function () {
+    vSlide.classList.add('hidden');
+    slides = slides.filter(function (s) { return s !== vSlide; });
+  });
+
+  var HOLD = 7000;          // ms per still slide
+  var i = 0, timer = null;
+
+  function show(n) {
+    slides.forEach(function (s) { s.classList.remove('on'); });
+    var s = slides[n];
+    if (!s) return;
+    s.classList.add('on');
+
+    clearTimeout(timer);
+    if (s === vSlide && hasVideo) {
+      clip.currentTime = 0;
+      var p = clip.play();
+      if (p && p.catch) p.catch(function () {});
+      // Fall through on video end, with a ceiling in case it never fires.
+      clip.onended = next;
+      timer = setTimeout(next, 70000);
+    } else {
+      timer = setTimeout(next, HOLD);
+    }
+  }
+  function next() { i = (i + 1) % slides.length; show(i); }
+
+  show(0);
+
+  // Space pauses, arrows step — handy if someone is standing there asking.
+  var paused = false;
+  document.addEventListener('keydown', function (e) {
+    if (e.code === 'Space') {
+      e.preventDefault(); paused = !paused;
+      if (paused) { clearTimeout(timer); clip.pause(); } else { show(i); }
+    }
+    if (e.code === 'ArrowRight') { e.preventDefault(); clearTimeout(timer); next(); }
+    if (e.code === 'ArrowLeft')  { e.preventDefault(); clearTimeout(timer);
+                                   i = (i - 1 + slides.length) % slides.length; show(i); }
+  });
+
+  // Monitors sleep. Keep it awake if the browser allows it.
+  if ('wakeLock' in navigator) {
+    var lock = function () { navigator.wakeLock.request('screen').catch(function () {}); };
+    lock();
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') lock();
+    });
+  }
+})();
+</script>
+</body>
+</html>
