@@ -14,14 +14,16 @@
 import { SITE, CITIES } from 'public/content';
 import { POLICY, formatMoney } from 'public/pricing';
 
-const ENTITY = SITE.legalName || 'New Ad City LLC';
+const ENTITY = SITE.legalName || 'DKDJS LLC';
 const HOLD = formatMoney(POLICY.holdAmount);
 const TERM = POLICY.holdTerm || 'retainer';
 const BALANCE = POLICY.balanceDueDays;
 
 /** Fill these in before publishing. */
 export const LEGAL_CONFIG = {
-  effectiveDate: 'September 17, 2026',
+  /* Re-dated 2026-11-15: the contracting party changed from New Ad City LLC
+     to DKDJS LLC, which is a material change, not a wording tidy-up. */
+  effectiveDate: 'November 15, 2026',
   address: '715 N Synergy Way, Eagle, ID 83616',
   /** Confirm with your accountant before publishing. */
   bookingRetentionYears: 7,
@@ -40,13 +42,13 @@ export const LEGAL = {
     slug: 'privacy',
     title: 'Privacy Policy',
     updated: C.effectiveDate,
-    intro: `${ENTITY}, trading as DKDJS ("we", "us"), runs dkdjs.com. This policy `
+    intro: `${ENTITY} ("we", "us") runs dkdjs.com. This policy `
          + 'explains what we collect, why, and what you can do about it. It is written '
          + 'to describe what this site actually does rather than to cover every '
          + 'eventuality.',
     sections: [
       { h: 'Who we are', body: [
-        `${ENTITY} DBA DKDJS, a DJ and event entertainment service operating in Boise and the Treasure Valley, Idaho.`,
+        `${ENTITY}, a DJ and event entertainment service operating in Boise and the Treasure Valley, Idaho.`,
         `Email: ${SITE.email}`,
         `Phone: ${SITE.phone}`,
         `Mailing address: ${C.address}`
@@ -60,7 +62,7 @@ export const LEGAL = {
         'Our pages load two typefaces from Google Fonts, and our contact page embeds a Google map. Both tell Google your IP address and basic browser information. We receive nothing from either.'
       ]},
       { h: 'Payments', body: [
-        'We never see or store your card details. Payments are processed by our payment provider, and your receipt or card statement may reference ' + ENTITY + ' rather than DKDJS. The provider handles card data under its own privacy and security standards.'
+        'We never see or store your card details. Payments are processed by our payment provider, which handles card data under its own privacy and security standards.'
       ]},
       { h: 'How we use it', body: [
         'To tell you whether your date is available; to hold a date and prepare a quote; to plan and run your event and contact you about it; to answer your questions; to keep the business records we are required to keep; and to understand how the site is used so we can improve it.',
@@ -107,7 +109,7 @@ export const LEGAL = {
     slug: 'terms',
     title: 'Terms & Conditions',
     updated: C.effectiveDate,
-    intro: `These terms apply to bookings with ${ENTITY}, trading as DKDJS. `
+    intro: `These terms apply to bookings with ${ENTITY}. `
          + 'Booking an event with us means agreeing to them. If anything here does '
          + 'not suit your event, tell us before you book — most of it is negotiable '
          + 'if we agree it in writing first.',
@@ -119,7 +121,7 @@ export const LEGAL = {
       { h: 'Payment', body: [
         `The ${TERM} is ${HOLD} and comes off your total. It is not an additional fee.`,
         `The balance is due ${BALANCE} days before your event.`,
-        'Payments are processed by our payment provider. Your receipt or statement may reference ' + ENTITY + ' rather than DKDJS.',
+        'Payments are processed by our payment provider.',
         'If the balance is not paid by the due date we will contact you. We reserve the right to treat a booking as cancelled if the balance remains unpaid at the time of the event.'
       ]},
       { h: 'What we provide', body: [
@@ -206,7 +208,7 @@ export const LEGAL = {
       ]},
       { h: 'How refunds are paid', body: [
         `Refunds go back to the original payment method, and are processed within ${C.refundBusinessDays} business days of being agreed.`,
-        'Payments are handled by ' + ENTITY + ', so a refund may appear under that name rather than DKDJS.'
+        `Refunds are issued by ${ENTITY} through the same payment provider that took the original payment.`
       ]}
     ]
   }

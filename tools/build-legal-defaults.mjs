@@ -5,7 +5,34 @@
 //
 // Regenerate after editing public/legal.js.
 import { readFileSync, writeFileSync } from 'fs';
-const { LEGAL } = await import('../src/public/legal.js');
+import { readFile, writeFile, unlink } from 'fs/promises';
+
+/**
+ * Velo resolves `public/x` against the site root; Node does not.
+ *
+ * legal.js imports content.js, which imports pricing.js, so rewriting only the
+ * entry point is not enough — the copy would still import the originals and
+ * fail on their bare specifiers. Rewrite the whole chain into sibling copies
+ * that point at each other, import the entry, then delete them all.
+ */
+const CHAIN = ['pricing', 'content', 'legal'];
+
+async function loadChain(entry) {
+  const tmp = (n) => new URL(`../src/public/.lb-${n}.mjs`, import.meta.url);
+  try {
+    for (const name of CHAIN) {
+      const src = new URL(`../src/public/${name}.js`, import.meta.url);
+      const code = (await readFile(src, 'utf8'))
+        .replace(/(["'])public\/([A-Za-z0-9_-]+)\1/g, "'./.lb-$2.mjs'");
+      await writeFile(tmp(name), code);
+    }
+    return await import(tmp(entry).href + '?t=' + Date.now());
+  } finally {
+    for (const name of CHAIN) await unlink(tmp(name)).catch(() => {});
+  }
+}
+
+const { LEGAL } = await loadChain('legal');
 
 const payload = {};
 for (const key of ['privacy','terms','refund']) {

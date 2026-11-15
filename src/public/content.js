@@ -21,7 +21,9 @@ import { getPackage, visibleIncludes, formatMoney, packagesFor, sellableAddons, 
 
 export const SITE = {
   name: 'DKDJS — Daniel & Kathy DJs',
-  legalName: 'New Ad City LLC',   // trading as DKDJS
+  /* DKDJS LLC — Idaho Certificate of Organization, file #0007081242,
+     filed 2026-11-03. Its own entity, not a DBA of New Ad City. */
+  legalName: 'DKDJS LLC',
   url: 'https://dkdjs.com',
   phone: '(208) 972-1308',
   email: 'contact@dkdjs.com',

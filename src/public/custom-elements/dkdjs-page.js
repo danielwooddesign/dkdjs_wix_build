@@ -644,13 +644,13 @@ const DEFAULT_LEGAL = {
   "privacy": {
     "slug": "privacy",
     "title": "Privacy Policy",
-    "updated": "September 17, 2026",
-    "intro": "New Ad City LLC, trading as DKDJS (\"we\", \"us\"), runs dkdjs.com. This policy explains what we collect, why, and what you can do about it. It is written to describe what this site actually does rather than to cover every eventuality.",
+    "updated": "November 15, 2026",
+    "intro": "DKDJS LLC (\"we\", \"us\") runs dkdjs.com. This policy explains what we collect, why, and what you can do about it. It is written to describe what this site actually does rather than to cover every eventuality.",
     "sections": [
       {
         "h": "Who we are",
         "body": [
-          "New Ad City LLC DBA DKDJS, a DJ and event entertainment service operating in Boise and the Treasure Valley, Idaho.",
+          "DKDJS LLC, a DJ and event entertainment service operating in Boise and the Treasure Valley, Idaho.",
           "Email: contact@dkdjs.com",
           "Phone: (208) 972-1308",
           "Mailing address: 715 N Synergy Way, Eagle, ID 83616"
@@ -673,7 +673,7 @@ const DEFAULT_LEGAL = {
       {
         "h": "Payments",
         "body": [
-          "We never see or store your card details. Payments are processed by our payment provider, and your receipt or card statement may reference New Ad City LLC rather than DKDJS. The provider handles card data under its own privacy and security standards."
+          "We never see or store your card details. Payments are processed by our payment provider, which handles card data under its own privacy and security standards."
         ]
       },
       {
@@ -742,8 +742,8 @@ const DEFAULT_LEGAL = {
   "terms": {
     "slug": "terms",
     "title": "Terms & Conditions",
-    "updated": "September 17, 2026",
-    "intro": "These terms apply to bookings with New Ad City LLC, trading as DKDJS. Booking an event with us means agreeing to them. If anything here does not suit your event, tell us before you book — most of it is negotiable if we agree it in writing first.",
+    "updated": "November 15, 2026",
+    "intro": "These terms apply to bookings with DKDJS LLC. Booking an event with us means agreeing to them. If anything here does not suit your event, tell us before you book — most of it is negotiable if we agree it in writing first.",
     "sections": [
       {
         "h": "Booking and confirmation",
@@ -757,7 +757,7 @@ const DEFAULT_LEGAL = {
         "body": [
           "The retainer is $200 and comes off your total. It is not an additional fee.",
           "The balance is due 14 days before your event.",
-          "Payments are processed by our payment provider. Your receipt or statement may reference New Ad City LLC rather than DKDJS.",
+          "Payments are processed by our payment provider.",
           "If the balance is not paid by the due date we will contact you. We reserve the right to treat a booking as cancelled if the balance remains unpaid at the time of the event."
         ]
       },
@@ -845,7 +845,7 @@ const DEFAULT_LEGAL = {
   "refund": {
     "slug": "refund-policy",
     "title": "Cancellation & Refund Policy",
-    "updated": "September 17, 2026",
+    "updated": "November 15, 2026",
     "intro": "We would rather be straight with you about this before you book than have it come as a surprise later. Here is exactly what happens if a booking is cancelled.",
     "sections": [
       {
@@ -891,7 +891,7 @@ const DEFAULT_LEGAL = {
         "h": "How refunds are paid",
         "body": [
           "Refunds go back to the original payment method, and are processed within 10 business days of being agreed.",
-          "Payments are handled by New Ad City LLC, so a refund may appear under that name rather than DKDJS."
+          "Refunds are issued by DKDJS LLC through the same payment provider that took the original payment."
         ]
       }
     ]

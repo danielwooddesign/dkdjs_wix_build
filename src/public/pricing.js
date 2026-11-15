@@ -60,10 +60,14 @@ export const POLICY = {
   /** When the balance is due, in days before the event. */
   balanceDueDays: 14,
   /** Payments are processed by the umbrella company (brief §30). */
-  processingEntity: 'New Ad City',
-  processingDisclosure:
-    'Payments for DKDJS are securely processed through New Ad City, the company behind DKDJS. ' +
-    'Your payment receipt or card statement may reference New Ad City.'
+  /* DKDJS LLC is its own company as of 2026-11-03, so there is no longer a
+     second name for a customer to be surprised by on their statement. The
+     disclosure stays as an empty string rather than being deleted: the pay
+     page and the refund policy both render it only when it is non-empty, so
+     if the merchant account ever shows a different descriptor, putting the
+     sentence back here is the only change needed. */
+  processingEntity: 'DKDJS LLC',
+  processingDisclosure: ''
 };
 
 /** True when a policy value is set and safe to display. */
