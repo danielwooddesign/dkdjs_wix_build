@@ -262,7 +262,7 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 .paydisclosure { margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
   font-size:13px; line-height:1.55; color:var(--dim); }
 .paybtn { width:100%; margin-top:22px; justify-content:center; }
-.paynote { margin-top:14px; font-size:13px; color:var(--dim); text-align:center; }
+.paynote { margin-top:14px; font-size:14px; color:var(--dim); text-align:center; }
 .paybad { max-width:34rem; margin:34px auto 0; background:var(--surface);
   border:1px solid var(--line); border-left:3px solid var(--pink);
   border-radius:4px; padding:26px 24px; }
@@ -270,6 +270,46 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 .paydone { text-align:center; }
 .paydone .tick { font-family:'Anton','Arial Narrow',Impact,sans-serif;
   font-size:46px; color:var(--cyan); line-height:1; }
+
+/* ------------------------------------------------------------ AGREEMENT --- */
+.agr { max-width:46rem; margin:30px auto 0; }
+.agrsec { background:var(--surface); border:1px solid var(--line); border-radius:4px;
+  padding:24px 22px; margin-bottom:14px; }
+.agrsec h2 { font-size:14px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--cyan); margin:0 0 14px; font-weight:600; }
+.agrsec p { font-size:16px; line-height:1.65; margin:0 0 12px; }
+.agrsec p:last-child { margin-bottom:0; }
+.agrrow { display:flex; justify-content:space-between; gap:18px; align-items:baseline;
+  padding:9px 0; border-bottom:1px solid var(--line); }
+.agrrow:last-of-type { border-bottom:0; }
+.agrrow .k { font-size:14px; color:var(--dim); white-space:nowrap; }
+.agrrow .v { font-size:16px; color:#fff; text-align:right; }
+.agrline { display:flex; justify-content:space-between; gap:18px; align-items:baseline;
+  padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+.agrline .n { color:var(--muted); }
+.agrline .a { color:#fff; white-space:nowrap; font-weight:600; }
+.agrtotal { display:flex; justify-content:space-between; align-items:baseline;
+  margin-top:14px; padding-top:14px; border-top:2px solid var(--line); }
+.agrtotal .n { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); }
+.agrtotal .a { font-family:'Anton','Arial Narrow',Impact,sans-serif;
+  font-size:32px; color:var(--cyan); line-height:1; }
+.agrlinks { list-style:none; margin:14px 0 0; padding:0; }
+.agrlinks li { margin:0 0 8px; }
+.agrlinks a { color:var(--cyan); font-size:16px; }
+.agrsign { background:var(--surface); border:1px solid var(--line);
+  border-left:3px solid var(--cyan); border-radius:4px; padding:26px 22px; }
+.agrsign label { display:block; font-size:14px; letter-spacing:.06em; color:var(--dim);
+  text-transform:uppercase; margin:0 0 8px; }
+.agrsign input[type=text] { width:100%; box-sizing:border-box; background:#000;
+  border:1px solid var(--line); border-radius:3px; color:#fff; font:inherit;
+  font-size:19px; padding:13px 14px; }
+.agrsign input[type=text]:focus { outline:0; border-color:var(--cyan); }
+.agrhint { font-size:14px; color:var(--dim); margin:8px 0 0; }
+.agrconsent { display:flex; gap:12px; align-items:flex-start; margin-top:22px; }
+.agrconsent input { flex:0 0 auto; width:22px; height:22px; margin:2px 0 0;
+  accent-color:var(--cyan); }
+.agrconsent span { font-size:15px; line-height:1.6; color:var(--muted); }
+.agrerr { margin-top:16px; font-size:15px; color:var(--pink); }
 .story { margin-top:48px; max-width:72ch; }
 .story h2 { font-size:clamp(22px,2.8vw,32px); color:#fff; line-height:1.15; margin:40px 0 14px;
   letter-spacing:.2px; }
@@ -627,6 +667,7 @@ const DEFAULT_PRICING = {
 function pageFromPath() {
   const path = (typeof location !== 'undefined' ? location.pathname : '').toLowerCase();
   if (path.indexOf('check-availability') !== -1) return 'availability';
+  if (path.indexOf('agreement') !== -1) return 'agreement';
   if (path.indexOf('/pay') !== -1) return 'pay';
   if (path.indexOf('contact') !== -1) return 'contact';
   if (path.indexOf('about') !== -1) return 'about';
@@ -900,7 +941,7 @@ const DEFAULT_LEGAL = {
 /* === END GENERATED LEGAL DEFAULTS === */
 
 class DkdjsPage extends HTMLElement {
-  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission', 'payment']; }
+  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission', 'payment', 'agreement']; }
 
   constructor() {
     super();
@@ -961,6 +1002,8 @@ class DkdjsPage extends HTMLElement {
       if (name === 'availability') { this.paintDate(parsed); return; }
       if (name === 'submission')   { this.paintSubmission(parsed); return; }
       if (name === 'payment')      { this._payment = parsed; this.render(); return; }
+      // Repaints in place: a full render would wipe the typed signature.
+      if (name === 'agreement')    { this.paintAgreement(parsed); return; }
       this.render();
     } catch (err) { /* half-written attribute; the next one wins */ }
   }
@@ -979,7 +1022,8 @@ class DkdjsPage extends HTMLElement {
       events: () => this.service(),
       karaoke: () => this.service(),
       legal: () => this.legal(),
-      pay: () => this.pay()
+      pay: () => this.pay(),
+      agreement: () => this.agreement()
     };
     const wanted = this._page || pageFromPath() || 'packages';
     const build = pages[wanted] || pages.packages;
@@ -990,6 +1034,7 @@ class DkdjsPage extends HTMLElement {
     });
     if (wanted === 'availability') this.wireForm();
     if (wanted === 'pay') this.wirePay();
+    if (wanted === 'agreement') this.wireAgreement();
   }
 
 
@@ -1518,6 +1563,255 @@ class DkdjsPage extends HTMLElement {
       if (btn.disabled) return;
       btn.disabled = true;
       this.emit('payretainer', {});
+    });
+  }
+
+  /* ============================================================== AGREEMENT = */
+
+  /**
+   * The booking agreement, reached as /agreement?hold=<id>.
+   *
+   * The element renders what the backend hands it and nothing else. It does
+   * not know the prices, it does not compose the clauses, and it never
+   * decides whether a signature is valid — it collects a name and a tick and
+   * emits them. Everything that matters legally is recorded server-side.
+   */
+  agreement() {
+    const a = this._agreement;
+    const cfg = this._config || {};
+
+    if (!a) {
+      return `
+        <section><div class="wrap">
+          <div class="eyebrow"><i></i>Booking agreement</div>
+          <h1 class="disp sec">Loading your agreement&hellip;</h1>
+        </div></section>`;
+    }
+
+    if (!a.ok) {
+      const why = {
+        'missing-hold': 'This link is incomplete. Check the address, or ask us to resend it.',
+        'not-found': 'We could not find this booking. It may have been cancelled.',
+        'already-booked': 'This booking is already confirmed — nothing left to sign.',
+        'cancelled': 'This hold was cancelled. Get in touch and we will sort it out.',
+        'expired': 'This hold has expired. Ask us to re-open it and we will send a new link.',
+        'date-taken': 'That date has since been booked. Nothing has been signed.',
+        // Daniel's side is unfinished — say so plainly rather than blaming the link.
+        'not-ready': 'We are still putting your figures together. This link will work '
+          + 'as soon as we have, and we will let you know.'
+      }[a.reason] || 'Something went wrong. Nothing has been signed.';
+
+      return `
+        <section><div class="wrap">
+          <div class="paybad">
+            <b>We cannot open this agreement</b>
+            <p class="body">${esc(why)}</p>
+            ${cfg.phone ? `<p class="paynote" style="text-align:left">Call or text ${esc(cfg.phone)}.</p>` : ''}
+          </div>
+        </div></section>`;
+    }
+
+    const doc = a.agreement;
+
+    const sections = doc.sections.map((sec) => {
+      const rows = (sec.rows || []).map(([k, v]) => `
+        <div class="agrrow"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join('');
+
+      const lines = (sec.lines || []).map((l) => `
+        <div class="agrline"><span class="n">${esc(l.label)}</span><span class="a">${esc(l.amount)}</span></div>`).join('');
+
+      const total = sec.total
+        ? `<div class="agrtotal"><span class="n">Total</span><span class="a">${esc(sec.total)}</span></div>`
+        : '';
+
+      const body = (sec.body || []).map((para) => `<p>${esc(para)}</p>`).join('');
+
+      const links = (sec.links || []).length
+        ? `<ul class="agrlinks">${sec.links.map((l) => `
+            <li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a></li>`).join('')}</ul>`
+        : '';
+
+      return `<div class="agrsec"><h2>${esc(sec.h)}</h2>${rows}${lines}${total}${body}${links}</div>`;
+    }).join('');
+
+    /* Already signed.
+     *
+     * The whole agreement is rendered again, not just a receipt, and with a
+     * print button. ESIGN and Idaho's UETA both require that the signer be
+     * able to KEEP the record they agreed to, and print-to-PDF is the one way
+     * to offer that which does not depend on an email template existing.
+     *
+     * The form is not offered a second time: a second signature on one
+     * booking would be a second record of the same agreement, and the backend
+     * refuses to write one in any case.
+     */
+    if (a.signed) {
+      const when = a.signed.signedAt
+        ? new Date(a.signed.signedAt).toLocaleDateString('en-US',
+            { year: 'numeric', month: 'long', day: 'numeric' })
+        : '';
+
+      return `
+        <section>
+          <div class="wrap" style="text-align:center">
+            <div class="eyebrow"><i></i>Signed agreement</div>
+            <h1 class="disp sec">${esc(doc.title)}</h1>
+          </div>
+
+          <div class="wrap">
+            <div class="agr">
+              ${sections}
+
+              <div class="agrsign">
+                <h2 style="font-size:14px;letter-spacing:.12em;text-transform:uppercase;
+                           color:var(--cyan);margin:0 0 14px;font-weight:600">Signed</h2>
+                <div class="agrrow">
+                  <span class="k">Signature</span>
+                  <span class="v">${esc(a.signed.signerName || '')}</span>
+                </div>
+                ${when ? `<div class="agrrow"><span class="k">Date signed</span>
+                  <span class="v">${esc(when)}</span></div>` : ''}
+                <div class="agrrow">
+                  <span class="k">Terms version</span>
+                  <span class="v">${esc(doc.termsVersion || '')}</span>
+                </div>
+
+                <button class="btn paybtn" type="button" id="agrPrintBtn">
+                  Print or save a copy
+                </button>
+
+                ${a.paid
+                  ? `<p class="paynote">Your retainer is paid and ${esc(doc.eventDate)} is yours.</p>`
+                  : `<button class="btn btn-primary paybtn" type="button" id="agrPayBtn">
+                       Pay the ${money(doc.retainer)} retainer
+                     </button>
+                     <p class="paynote">Your date is reserved once the retainer is in.</p>`}
+              </div>
+            </div>
+          </div>
+        </section>`;
+    }
+
+    return `
+      <section>
+        <div class="wrap" style="text-align:center">
+          <div class="eyebrow pink" style="justify-content:center"><i></i>Booking agreement</div>
+          <h1 class="disp sec">${esc(doc.title)}</h1>
+          <p class="body" style="margin-top:12px">
+            ${esc(doc.firstName)}, here is your booking in writing. Read it, then sign at the bottom.
+          </p>
+        </div>
+
+        <div class="wrap">
+          <div class="agr">
+            ${sections}
+
+            <form class="agrsign" id="agrForm" novalidate>
+              <label for="agrName">Your full legal name</label>
+              <input type="text" id="agrName" name="fullName" autocomplete="name"
+                     spellcheck="false" placeholder="First and last name">
+              <p class="agrhint">Type it as it appears on your ID. This is your signature.</p>
+
+              <div class="agrconsent">
+                <input type="checkbox" id="agrConsent">
+                <span>${esc(a.consent || '')}</span>
+              </div>
+
+              <button class="btn btn-primary paybtn" type="submit" id="agrBtn">
+                Sign and continue to payment
+              </button>
+              <p class="agrerr" id="agrErr"></p>
+              <p class="paynote">
+                Signing does not take a payment. The next page asks for the
+                ${money(doc.retainer)} retainer.
+              </p>
+            </form>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  /**
+   * Repaint without destroying what the visitor has typed.
+   *
+   * The pay page can afford a full re-render because it has no input. This one
+   * has a name in a text field, so a blanket render() while the request is in
+   * flight would wipe it — the same class of bug the availability form's
+   * paintSubmission() exists to avoid.
+   */
+  paintAgreement(data) {
+    const previous = this._agreement;
+    this._agreement = data;
+
+    const form = this.shadowRoot.getElementById('agrForm');
+
+    // No form on screen yet, or the state changed in a way that needs a new
+    // layout (it just got signed, or it failed to load) — paint it all.
+    if (!form || !data || !data.ok || data.signed
+        || !previous || !previous.ok || previous.signed) {
+      this.render();
+      return;
+    }
+
+    const btn = this.shadowRoot.getElementById('agrBtn');
+    if (btn) {
+      btn.disabled = Boolean(data.busy);
+      btn.textContent = data.busy ? 'Signing…' : 'Sign and continue to payment';
+    }
+
+    const err = this.shadowRoot.getElementById('agrErr');
+    if (err) {
+      err.textContent = data.error
+        ? ({
+            'bad-name': 'Please type your first and last name.',
+            'no-consent': 'Please tick the box to confirm you agree.',
+            'not-ready': 'We are still preparing your figures. Nothing has been signed.',
+            'date-taken': 'That date has just been booked. Nothing has been signed.',
+            'expired': 'This hold has expired. Get in touch and we will re-open it.'
+          }[data.error] || 'That did not go through. Nothing has been signed.')
+        : '';
+    }
+  }
+
+  wireAgreement() {
+    const pay = this.shadowRoot.getElementById('agrPayBtn');
+    if (pay) pay.addEventListener('click', () => this.emit('payaftersigning', {}));
+
+    /* window.print() prints the host page, which is what we want: the Wix page
+       around this element is nothing but the agreement. */
+    const print = this.shadowRoot.getElementById('agrPrintBtn');
+    if (print) print.addEventListener('click', () => {
+      try { window.print(); } catch (err) { console.error('[agreement] print failed', err); }
+    });
+
+    const form = this.shadowRoot.getElementById('agrForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const name = this.shadowRoot.getElementById('agrName');
+      const consent = this.shadowRoot.getElementById('agrConsent');
+      const err = this.shadowRoot.getElementById('agrErr');
+
+      const fullName = String(name.value || '').trim().replace(/\s+/g, ' ');
+
+      /* Checked here only so the visitor gets an instant answer. The backend
+         checks both again and is the one that decides — this is a courtesy,
+         not a gate. */
+      if (fullName.length < 3 || !/\s/.test(fullName)) {
+        if (err) err.textContent = 'Please type your first and last name.';
+        name.focus();
+        return;
+      }
+      if (!consent.checked) {
+        if (err) err.textContent = 'Please tick the box to confirm you agree.';
+        consent.focus();
+        return;
+      }
+
+      if (err) err.textContent = '';
+      this.emit('signagreement', { fullName, consent: true });
     });
   }
 
