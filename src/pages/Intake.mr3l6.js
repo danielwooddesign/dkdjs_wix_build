@@ -84,7 +84,24 @@ $w.onReady(() => {
     paint({ checking: true, applied: null });
     try {
       const result = await inspectSchema();
-      paint({ checking: false, check: result.ok ? result : null });
+
+      if (!result.ok) {
+        /* A structured refusal, not a crash — show what it said. The usual
+           one is 'api-unavailable', meaning the Collections API is not
+           reachable on this site, which is a different problem from a
+           collection being missing a field. */
+        paint({
+          checking: false,
+          check: null,
+          applied: `${result.reason}: ${result.detail || ''}`
+            + (result.seen ? ` [elevate=${result.seen.elevate}, `
+              + `collections=${result.seen.collections}, `
+              + `keys=${(result.seen.keys || []).join('|')}]` : '')
+        });
+        return;
+      }
+
+      paint({ checking: false, check: result, applied: null });
     } catch (err) {
       /* The real message matters here. The usual cause is not being signed in
          as the site owner — inspectSchema is Permissions.Admin — but a

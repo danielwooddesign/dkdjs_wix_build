@@ -38,9 +38,42 @@ import { Permissions, webMethod } from 'wix-web-module';
 import { elevate } from 'wix-auth';
 import { collections } from 'wix-data.v2';
 
-const getCollection = elevate(collections.getDataCollection);
-const updateCollection = elevate(collections.updateDataCollection);
-const createCollection = elevate(collections.createDataCollection);
+/**
+ * Elevation is resolved on first use, not at module load.
+ *
+ * It used to be three top-level `elevate(...)` calls. If any of those
+ * arguments is undefined on a given site, elevate throws while the module is
+ * being loaded — which takes down every method in the file, and Velo reports
+ * it as the generic "Unable to handle the request" with no clue which line
+ * or why. Doing it lazily means a problem here is reported as a value, by
+ * the function that needed it.
+ */
+let api = null;
+
+function getApi() {
+  if (api) return api;
+
+  const missing = [];
+  if (typeof elevate !== 'function') missing.push('wix-auth elevate');
+  if (!collections) missing.push('wix-data.v2 collections');
+  else {
+    ['getDataCollection', 'updateDataCollection', 'createDataCollection']
+      .forEach((fn) => { if (typeof collections[fn] !== 'function') missing.push('collections.' + fn); });
+  }
+
+  if (missing.length) {
+    const err = new Error('Collections API unavailable: ' + missing.join(', '));
+    err.dkdjsMissing = missing;
+    throw err;
+  }
+
+  api = {
+    get: elevate(collections.getDataCollection),
+    update: elevate(collections.updateDataCollection),
+    create: elevate(collections.createDataCollection)
+  };
+  return api;
+}
 
 const WATCHED = ['Leads', 'Holds', 'Bookings', 'Agreements'];
 
@@ -77,6 +110,26 @@ export const EXPECTED = {
  * expected keys that are absent. Read-only — it changes nothing.
  */
 export const inspectSchema = webMethod(Permissions.Admin, async () => {
+  /* Nothing in here is allowed to throw. A thrown error reaches the browser
+     as "Unable to handle the request", which says nothing — and this function
+     exists precisely to diagnose. */
+  let getCollection;
+  try {
+    getCollection = getApi().get;
+  } catch (err) {
+    return {
+      ok: false,
+      reason: 'api-unavailable',
+      detail: String((err && err.message) || err),
+      missing: (err && err.dkdjsMissing) || null,
+      seen: {
+        elevate: typeof elevate,
+        collections: typeof collections,
+        keys: collections ? Object.keys(collections).slice(0, 30) : null
+      }
+    };
+  }
+
   const out = {};
 
   for (const name of WATCHED) {
@@ -179,7 +232,9 @@ const HOLD_FIELDS = [
 export const addHoldFields = webMethod(Permissions.Admin, async (dryRun = true) => {
   let leads;
   let holds;
+  let getCollection;
   try {
+    getCollection = getApi().get;
     leads = await getCollection('Leads');
     holds = await getCollection('Holds');
   } catch (err) {
@@ -220,7 +275,7 @@ export const addHoldFields = webMethod(Permissions.Admin, async (dryRun = true) 
   };
 
   try {
-    const result = await updateCollection(updated);
+    const result = await getApi().update(updated);
     return {
       ok: true,
       added: toAdd.map(([key]) => key),
@@ -280,7 +335,9 @@ const AGREEMENT_FIELDS = [
 export const createAgreements = webMethod(Permissions.Admin, async (dryRun = true) => {
   let leads;
   let holds;
+  let getCollection;
   try {
+    getCollection = getApi().get;
     leads = await getCollection('Leads');
     holds = await getCollection('Holds');
   } catch (err) {
@@ -320,7 +377,7 @@ export const createAgreements = webMethod(Permissions.Admin, async (dryRun = tru
   if (dryRun) return { ok: true, dryRun: true, types, collection };
 
   try {
-    const created = await createCollection(collection);
+    const created = await getApi().create(collection);
     return { ok: true, created: created && created._id, fields: AGREEMENT_FIELDS.length };
   } catch (err) {
     console.error('[schema.createAgreements]', err);
