@@ -84,6 +84,17 @@ offers the choice — the snapshot runs to a couple of thousand characters.
 | `finishTime` | Text | |
 | `agreementSignedAt` | Date and Time | |
 | `agreementId` | Text | |
+| `arrivalTime` | Text | When you arrive to set up |
+| `setting` | Text | Indoors / Outdoors / Both |
+| `agreedItems` | Tags | **Prints into the contract as promises** |
+| `clientProvides` | Tags | Prints as things you are not bringing |
+| `eventType` | Text | Decides which agreement they get |
+| `venue` | Text | |
+| `city` | Text | |
+| `guestCount` | Number | |
+
+The last four also exist on `Leads`. The hold's value wins when both are set,
+because the hold is what you corrected.
 
 And, if you haven't added them from the payments work: `paymentId` (Text),
 `paymentAmount` (Number), `lastPaymentStatus` (Text), `transactionId` (Text),
@@ -195,3 +206,70 @@ wrong, add a note elsewhere and leave the row alone.
    payments work: Velo has no server-side webhook, so a reported success is
    written with `paymentVerified: false` for you to match against the Wix
    Payments dashboard. Signing doesn't change that.
+
+---
+
+## 7. The intake page — reading emails into a booking
+
+`/intake` lets you paste a customer email and get the contract fields back,
+instead of retyping them. It proposes; it never saves on its own.
+
+### Before it works
+
+1. Get an API key from `console.anthropic.com`.
+2. Wix dashboard → **Settings → Secrets Manager** → add a secret named
+   exactly **`anthropicApiKey`**.
+3. Create the page: slug `intake`, indexing **OFF**, element ID `dkdjsPage`,
+   paste `docs/INTAKE-PAGE-SNIPPET.js`.
+
+You don't need to make it a members-only page. Both backend methods are
+`Permissions.Admin`, so anyone else who finds the URL gets a form where every
+button fails. You do need to be logged in to your own site as the owner.
+
+Cost is roughly a cent or two per email.
+
+### What it will and won't do
+
+**It extracts facts** — date, venue, city, guests, times, indoor/outdoor —
+and suggests a package and add-ons when the email is unambiguous.
+
+**It never touches money.** There is no price, total or discount field in the
+schema it fills. Prices come from the pricing module and nowhere else. If a
+customer writes a figure, it comes back as a line of text for you to read,
+flagged.
+
+**It extracts requests, not agreements.** Everything the customer asked for
+arrives in its own list with the tickbox **unticked**. A request becomes a
+promise in the contract only when you tick it. That default is deliberate —
+the alternative is a system whose resting state is promising everything
+anyone asks for.
+
+**It can't change the date.** The hold date is what the calendar, the
+availability check and the booking all key on. If the email disagrees with
+the hold, you get a warning and the hold is left alone.
+
+### Why you still read every field
+
+The email is written by a stranger, and anything a stranger writes can
+contain instructions aimed at the parser — deliberately, or because they
+forwarded a thread containing something odd. Three things stand between that
+and your contract:
+
+1. The model is told the message is data, not instructions.
+2. **Every field is checked against what you actually sell.** An unknown
+   package id, an add-on that isn't available yet, a time it couldn't read, a
+   guest count over 5,000 — all dropped, all reported in the warnings box.
+3. **Nothing is written until you press Save**, and the save re-runs every
+   check from scratch rather than trusting what the browser sends back.
+
+That's three layers, and they're good ones, but none of them knows what you
+meant to agree to. Read the proposal against the email. It takes thirty
+seconds and it's the only step that catches a plausible-but-wrong field.
+
+### The flow end to end
+
+```
+email  →  /intake  →  check and tick  →  save to hold
+                                            ↓
+                          /agreement?hold=<id>  →  sign  →  /pay  →  booked
+```

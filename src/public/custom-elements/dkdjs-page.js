@@ -293,6 +293,61 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 .agrtotal .n { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); }
 .agrtotal .a { font-family:'Anton','Arial Narrow',Impact,sans-serif;
   font-size:32px; color:var(--cyan); line-height:1; }
+/* --------------------------------------------------------------- INTAKE --- */
+/* Admin-only screen. Plainer than the customer pages on purpose: it is a
+   working tool, and density beats atmosphere when you are checking fields
+   against an email. */
+.itk { max-width:52rem; margin:26px auto 0; }
+.itkbox { background:var(--surface); border:1px solid var(--line); border-radius:4px;
+  padding:22px 20px; margin-bottom:14px; }
+.itkbox h2 { font-size:14px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--cyan); margin:0 0 14px; font-weight:600; }
+.itkbox > p { font-size:15px; line-height:1.6; margin:0 0 14px; }
+.itk label { display:block; font-size:14px; letter-spacing:.05em; color:var(--dim);
+  text-transform:uppercase; margin:0 0 6px; }
+.itk input[type=text], .itk select, .itk textarea { width:100%; box-sizing:border-box;
+  background:#000; border:1px solid var(--line); border-radius:3px; color:#fff;
+  font:inherit; font-size:16px; padding:10px 12px; }
+.itk textarea { min-height:200px; resize:vertical; line-height:1.55; }
+.itk input[type=text]:focus, .itk select:focus, .itk textarea:focus {
+  outline:0; border-color:var(--cyan); }
+.itkgrid { display:grid; grid-template-columns:1fr; gap:14px; }
+.itkwarn { background:rgba(255,255,255,.03); border:1px solid var(--line);
+  border-left:3px solid var(--pink); border-radius:4px; padding:18px 18px;
+  margin-bottom:14px; }
+.itkwarn b { display:block; font-size:16px; color:#fff; margin-bottom:10px; }
+.itkwarn ul { margin:0; padding:0 0 0 20px; }
+.itkwarn li { font-size:15px; line-height:1.6; color:var(--muted); margin:0 0 7px; }
+.itkask { display:flex; gap:12px; align-items:center; padding:11px 0;
+  border-bottom:1px solid var(--line); }
+.itkask:last-child { border-bottom:0; }
+.itkask input[type=checkbox] { flex:0 0 auto; width:20px; height:20px; margin:0;
+  accent-color:var(--cyan); }
+.itkask input[type=text] { flex:1 1 auto; }
+.itkchecks { display:grid; grid-template-columns:1fr; gap:10px; }
+.itk label.itkchk { display:flex; gap:10px; align-items:center; font-size:16px;
+  color:#fff; text-transform:none; letter-spacing:0; margin:0; }
+.itkchk input { width:19px; height:19px; margin:0; accent-color:var(--cyan); }
+.itkrow { display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+.itkrow .btn { flex:1 1 auto; justify-content:center; }
+.itkhint { font-size:14px; line-height:1.6; color:var(--dim); margin:8px 0 0; }
+.itkerr { font-size:15px; color:var(--pink); margin:14px 0 0; }
+.itkchk-col { border-top:1px solid var(--line); padding:12px 0; }
+.itkchk-col:first-of-type { border-top:0; }
+.itkchk-col b { display:block; font-size:16px; color:#fff; margin-bottom:5px; }
+.itkchk-col .good { color:var(--cyan); font-size:15px; }
+.itkchk-col .bad { color:var(--pink); font-size:15px; }
+.itkpre { background:#000; border:1px solid var(--line); border-radius:3px;
+  padding:12px 14px; margin:10px 0 0; font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:14px; line-height:1.55; color:var(--muted); white-space:pre-wrap;
+  word-break:break-word; max-height:280px; overflow:auto; }
+@media (min-width:700px) {
+  .itkgrid { grid-template-columns:1fr 1fr; }
+  .itkchecks { grid-template-columns:1fr 1fr; }
+}
+.agrlist { margin:4px 0 0; padding:0 0 0 20px; }
+.agrlist li { font-size:16px; line-height:1.6; color:#fff; margin:0 0 8px; }
+.agrlist li:last-child { margin-bottom:0; }
 .agrlinks { list-style:none; margin:14px 0 0; padding:0; }
 .agrlinks li { margin:0 0 8px; }
 .agrlinks a { color:var(--cyan); font-size:16px; }
@@ -667,6 +722,7 @@ const DEFAULT_PRICING = {
 function pageFromPath() {
   const path = (typeof location !== 'undefined' ? location.pathname : '').toLowerCase();
   if (path.indexOf('check-availability') !== -1) return 'availability';
+  if (path.indexOf('intake') !== -1) return 'intake';
   if (path.indexOf('agreement') !== -1) return 'agreement';
   if (path.indexOf('/pay') !== -1) return 'pay';
   if (path.indexOf('contact') !== -1) return 'contact';
@@ -941,7 +997,7 @@ const DEFAULT_LEGAL = {
 /* === END GENERATED LEGAL DEFAULTS === */
 
 class DkdjsPage extends HTMLElement {
-  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission', 'payment', 'agreement']; }
+  static get observedAttributes() { return ['page', 'pricing', 'config', 'content', 'availability', 'submission', 'payment', 'agreement', 'intake']; }
 
   constructor() {
     super();
@@ -1004,6 +1060,7 @@ class DkdjsPage extends HTMLElement {
       if (name === 'payment')      { this._payment = parsed; this.render(); return; }
       // Repaints in place: a full render would wipe the typed signature.
       if (name === 'agreement')    { this.paintAgreement(parsed); return; }
+      if (name === 'intake')       { this.paintIntake(parsed); return; }
       this.render();
     } catch (err) { /* half-written attribute; the next one wins */ }
   }
@@ -1023,7 +1080,8 @@ class DkdjsPage extends HTMLElement {
       karaoke: () => this.service(),
       legal: () => this.legal(),
       pay: () => this.pay(),
-      agreement: () => this.agreement()
+      agreement: () => this.agreement(),
+      intake: () => this.intake()
     };
     const wanted = this._page || pageFromPath() || 'packages';
     const build = pages[wanted] || pages.packages;
@@ -1035,6 +1093,7 @@ class DkdjsPage extends HTMLElement {
     if (wanted === 'availability') this.wireForm();
     if (wanted === 'pay') this.wirePay();
     if (wanted === 'agreement') this.wireAgreement();
+    if (wanted === 'intake') this.wireIntake();
   }
 
 
@@ -1566,6 +1625,397 @@ class DkdjsPage extends HTMLElement {
     });
   }
 
+  /* ================================================================= INTAKE = */
+
+  /**
+   * Admin-only intake screen, reached as /intake?hold=<id>.
+   *
+   * Paste an email, get a proposal, check every field, save. The element
+   * holds no opinion about what any of it means — it renders what the backend
+   * proposed and sends back what Daniel left on screen.
+   *
+   * Two deliberate choices in here:
+   *
+   *   - Every extracted request starts UNTICKED. A request becomes a promise
+   *     only by Daniel ticking it, because he is the only one who knows what
+   *     he is willing to commit to. Pre-ticking them would make the default
+   *     outcome "promise everything the customer asked for".
+   *
+   *   - The date is shown but not editable. It is what the hold, the
+   *     availability check and the booking all key on; changing it from a
+   *     parsed email would silently move a reserved date.
+   */
+  intake() {
+    const k = this._intake || {};
+    const stage = k.stage || 'idle';
+    const p = k.proposal || {};
+    const busy = stage === 'busy';
+
+    const warn = (k.flags || []).length
+      ? `<div class="itkwarn">
+           <b>Check these before you save</b>
+           <ul>${k.flags.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+         </div>`
+      : '';
+
+    const err = k.error
+      ? `<p class="itkerr">${esc({
+          'too-short': 'That is too short to read anything from.',
+          'too-long': 'That is too long — paste just the relevant email, not the whole thread.',
+          'no-key': 'No API key is set. Add the anthropicApiKey secret in the Wix dashboard.',
+          'bad-key': 'The API key was rejected. Check it in the Wix Secrets Manager.',
+          'api-error': 'The parsing service returned an error. Nothing has been saved.',
+          'network': 'Could not reach the parsing service. Nothing has been saved.',
+          'no-fields': 'Nothing usable came back. Fill the fields in by hand.',
+          'missing-hold': 'Enter the hold id first.',
+          'not-found': 'No hold with that id.'
+        }[k.error] || 'Something went wrong. Nothing has been saved.')}</p>`
+      : '';
+
+    if (stage === 'saved') {
+      return `
+        <section><div class="wrap"><div class="itk">
+          <div class="itkbox">
+            <h2>Saved</h2>
+            <p>The hold is updated. The agreement will now render with these details.</p>
+            ${warn}
+            <a class="btn btn-primary paybtn" href="/agreement?hold=${esc(k.holdId || '')}"
+               target="_blank" rel="noopener">Open the agreement</a>
+            <p class="itkhint">Read it as the customer will see it before you send the link.</p>
+            <div class="itkrow">
+              <button class="btn" type="button" id="itkReset">Do another</button>
+            </div>
+          </div>
+        </div></div></section>`;
+    }
+
+    /* ----------------------------------------------------------- paste box */
+    if (stage === 'idle' || busy) {
+      return `
+        <section><div class="wrap"><div class="itk">
+          <div class="eyebrow"><i></i>Internal — enquiry intake</div>
+          <h1 class="disp sec" style="font-size:30px">Read an email into a booking</h1>
+
+          <div class="itkbox" style="margin-top:22px">
+            <label for="itkHold">Hold id</label>
+            <input type="text" id="itkHold" spellcheck="false"
+                   value="${esc(k.holdId || '')}" placeholder="From the Holds collection, _id column">
+            <p class="itkhint">
+              The date on the hold is the one that counts. This never changes it.
+            </p>
+          </div>
+
+          ${this.intakeCheck()}
+
+          <div class="itkbox">
+            <label for="itkText">Paste the customer's email</label>
+            <textarea id="itkText" spellcheck="false"
+              placeholder="Paste the whole message. Signatures and quoted replies are fine.">${esc(k.text || '')}</textarea>
+            <div class="itkrow">
+              <button class="btn btn-primary" type="button" id="itkParse" ${busy ? 'disabled' : ''}>
+                ${busy ? 'Reading…' : 'Read this email'}
+              </button>
+            </div>
+            ${err}
+            <p class="itkhint">
+              Nothing is saved at this step. You will get a proposal to check first.
+            </p>
+          </div>
+        </div></div></section>`;
+    }
+
+    /* -------------------------------------------------------- review form */
+    const field = (id, label, value, type) => `
+      <div>
+        <label for="${id}">${esc(label)}</label>
+        <input type="text" id="${id}" spellcheck="false" value="${esc(value || '')}"
+               ${type === 'time' ? 'placeholder="e.g. 4:30 PM"' : ''}>
+      </div>`;
+
+    const settingOptions = ['', 'Indoors', 'Outdoors', 'Both']
+      .map((opt) => `<option value="${esc(opt)}" ${p.setting === opt ? 'selected' : ''}>${
+        esc(opt || '—')}</option>`).join('');
+
+    const packageOptions = [{ id: '', name: '— none chosen —' }]
+      .concat(k.packages || [])
+      .map((pkg) => `<option value="${esc(pkg.id)}" ${p.packageId === pkg.id ? 'selected' : ''}>${
+        esc(pkg.name)}</option>`).join('');
+
+    const addonBoxes = (k.addons || []).map((addon) => `
+      <label class="itkchk">
+        <input type="checkbox" class="itkAddon" value="${esc(addon.id)}"
+          ${(p.addonIds || []).indexOf(addon.id) !== -1 ? 'checked' : ''}>
+        <span>${esc(addon.name)}</span>
+      </label>`).join('');
+
+    const requestRows = (p.requests || []).length
+      ? (p.requests || []).map((req, i) => `
+          <div class="itkask">
+            <input type="checkbox" class="itkAskOn" data-i="${i}">
+            <input type="text" class="itkAskText" data-i="${i}" value="${esc(req)}" spellcheck="false">
+          </div>`).join('')
+      : '<p class="itkhint">Nothing was asked for beyond the package.</p>';
+
+    return `
+      <section><div class="wrap"><div class="itk">
+        <div class="eyebrow pink"><i></i>Check before saving</div>
+        <h1 class="disp sec" style="font-size:30px">What the email says</h1>
+
+        ${warn}
+
+        <div class="itkbox">
+          <h2>The event</h2>
+          <div class="itkgrid">
+            ${field('itkType', 'Event type', p.eventType)}
+            ${field('itkVenue', 'Venue', p.venue)}
+            ${field('itkCity', 'City', p.city)}
+            ${field('itkGuests', 'Approximate guests', p.guestCount)}
+            <div>
+              <label for="itkSetting">Indoors or outdoors</label>
+              <select id="itkSetting">${settingOptions}</select>
+            </div>
+          </div>
+        </div>
+
+        <div class="itkbox">
+          <h2>Times</h2>
+          <div class="itkgrid">
+            ${field('itkArrival', 'We arrive', p.arrivalTime, 'time')}
+            ${field('itkCeremony', 'Ceremony begins', p.ceremonyTime, 'time')}
+            ${field('itkReception', 'Reception begins', p.receptionTime, 'time')}
+            ${field('itkStart', 'We start', p.startTime, 'time')}
+            ${field('itkFinish', 'Music finishes', p.finishTime, 'time')}
+          </div>
+          <p class="itkhint">
+            Anything the email did not say is blank. Blank is better than a guess —
+            these print into the contract.
+          </p>
+        </div>
+
+        <div class="itkbox">
+          <h2>Package and add-ons</h2>
+          <label for="itkPackage">Package</label>
+          <select id="itkPackage">${packageOptions}</select>
+          <p class="itkhint">
+            The agreement will not render without a package, because the total is
+            the thing being signed for.
+          </p>
+          <label style="margin-top:18px">Add-ons</label>
+          <div class="itkchecks">${addonBoxes}</div>
+          <p class="itkhint">Prices come from the pricing module, never from the email.</p>
+        </div>
+
+        <div class="itkbox">
+          <h2>What they asked for</h2>
+          <p>
+            Tick only what you are willing to commit to. Ticked lines print into
+            the contract as things DKDJS has agreed to do. Unticked lines are
+            just notes and go nowhere.
+          </p>
+          ${requestRows}
+        </div>
+
+        <div class="itkbox">
+          <h2>What they are providing</h2>
+          <label for="itkProvides">One per line</label>
+          <textarea id="itkProvides" style="min-height:110px" spellcheck="false">${
+            esc((p.clientProvides || []).join('\n'))}</textarea>
+          <p class="itkhint">
+            Printed into the contract as things you are not bringing.
+          </p>
+        </div>
+
+        <div class="itkbox">
+          <div class="itkrow">
+            <button class="btn btn-primary" type="button" id="itkSave"
+              ${stage === 'saving' ? 'disabled' : ''}>
+              ${stage === 'saving' ? 'Saving…' : 'Save to the hold'}
+            </button>
+            <button class="btn" type="button" id="itkReset">Start over</button>
+          </div>
+          ${err}
+        </div>
+      </div></div></section>`;
+  }
+
+  /**
+   * CMS setup panel.
+   *
+   * Lives on the intake page rather than in a one-off script because the
+   * question it answers — "are the fields my code writes to actually there,
+   * under the keys it uses?" — comes back every time a collection is touched.
+   * A CSV export cannot answer it: exports show display names, code uses keys.
+   */
+  intakeCheck() {
+    const k = this._intake || {};
+    const check = k.check;
+
+    if (!check) {
+      return `
+        <div class="itkbox">
+          <h2>CMS setup</h2>
+          <p>
+            Checks that every field this build writes to exists, under the key
+            it writes to. Reads only — it changes nothing.
+          </p>
+          <div class="itkrow">
+            <button class="btn" type="button" id="itkCheck"
+              ${k.checking ? 'disabled' : ''}>
+              ${k.checking ? 'Checking…' : 'Check CMS setup'}
+            </button>
+          </div>
+        </div>`;
+    }
+
+    const cols = check.collections || {};
+    const blocks = Object.keys(cols).map((name) => {
+      const c = cols[name];
+      if (!c.exists) {
+        return `<div class="itkchk-col"><b>${esc(name)}</b>
+          <span class="bad">Not found. ${esc(c.error || '')}</span></div>`;
+      }
+      const missing = c.missing || [];
+      return `<div class="itkchk-col">
+        <b>${esc(name)}</b>
+        ${missing.length
+          ? `<span class="bad">Missing ${missing.length}: ${esc(missing.join(', '))}</span>`
+          : '<span class="good">All expected fields present.</span>'}
+      </div>`;
+    }).join('');
+
+    /* The full key list, formatted to be copied straight into a message.
+       This is the bit that resolves a display-name-versus-key mismatch. */
+    const dump = Object.keys(cols).map((name) => {
+      const c = cols[name];
+      if (!c.exists) return `${name}: NOT FOUND`;
+      return `${name}:\n` + (c.fields || [])
+        .filter((f) => !f.system)
+        .map((f) => `  ${f.key}  [${f.type}]  "${f.name}"`).join('\n');
+    }).join('\n\n');
+
+    const holdsMissing = (cols.Holds && cols.Holds.missing) || [];
+
+    return `
+      <div class="itkbox">
+        <h2>CMS setup</h2>
+        ${blocks}
+        ${holdsMissing.length ? `
+          <div class="itkrow">
+            <button class="btn btn-primary" type="button" id="itkAddFields"
+              ${k.adding ? 'disabled' : ''}>
+              ${k.adding ? 'Adding…' : `Add the ${holdsMissing.length} missing Holds fields`}
+            </button>
+            <button class="btn" type="button" id="itkCheck">Re-check</button>
+          </div>
+          <p class="itkhint">
+            Adds only what is missing, under the exact keys the code uses.
+            Existing fields and data are untouched.
+          </p>` : `
+          <div class="itkrow">
+            <button class="btn" type="button" id="itkCheck">Re-check</button>
+          </div>`}
+        ${k.applied ? `<p class="itkhint">${esc(k.applied)}</p>` : ''}
+        <label style="margin-top:18px">Every field, as the code sees it</label>
+        <div class="itkpre">${esc(dump)}</div>
+      </div>`;
+  }
+
+  /**
+   * Repaint the intake screen.
+   *
+   * Full render on a stage change, because the layout is different. Within a
+   * stage only the button and the error line move, so the pasted email and
+   * any hand-corrected field survive a failed request.
+   */
+  paintIntake(data) {
+    const before = this._intake || {};
+    this._intake = data || {};
+
+    /* The setup panel lives inside the idle stage, so a stage comparison alone
+       would leave it frozen while it is working. These four move it. */
+    const panelChanged = ['check', 'checking', 'adding', 'applied']
+      .some((key) => before[key] !== this._intake[key]);
+
+    if (panelChanged
+        || (before.stage || 'idle') !== (this._intake.stage || 'idle')
+        || !this.shadowRoot.querySelector('.itk')) {
+      this.render();
+      return;
+    }
+
+    const err = this.shadowRoot.querySelector('.itkerr');
+    if (err && !this._intake.error) err.textContent = '';
+    if (this._intake.error && !err) this.render();
+  }
+
+  wireIntake() {
+    const sr = this.shadowRoot;
+    const val = (id) => {
+      const el = sr.getElementById(id);
+      return el ? String(el.value || '').trim() : '';
+    };
+
+    const parse = sr.getElementById('itkParse');
+    if (parse) parse.addEventListener('click', () => {
+      const text = val('itkText');
+      const holdId = val('itkHold');
+      /* Both are kept in the emitted detail so the page can put them straight
+         back into state — a failed parse must not cost him the paste. */
+      this.emit('parseintake', { holdId, text });
+    });
+
+    const check = sr.getElementById('itkCheck');
+    if (check) check.addEventListener('click', () => this.emit('checkschema', {}));
+
+    const addFields = sr.getElementById('itkAddFields');
+    if (addFields) addFields.addEventListener('click', () => this.emit('applyschema', {}));
+
+    const reset = sr.getElementById('itkReset');
+    if (reset) reset.addEventListener('click', () => this.emit('resetintake', {}));
+
+    const save = sr.getElementById('itkSave');
+    if (save) save.addEventListener('click', () => {
+      if (save.disabled) return;
+
+      const addonIds = [...sr.querySelectorAll('.itkAddon')]
+        .filter((box) => box.checked).map((box) => box.value);
+
+      // Only ticked requests become promises.
+      const agreedItems = [...sr.querySelectorAll('.itkAskOn')]
+        .filter((box) => box.checked)
+        .map((box) => {
+          const text = sr.querySelector(`.itkAskText[data-i="${box.getAttribute('data-i')}"]`);
+          return text ? String(text.value || '').trim() : '';
+        })
+        .filter(Boolean);
+
+      const clientProvides = val('itkProvides')
+        .split('\n').map((line) => line.trim()).filter(Boolean);
+
+      this.emit('saveintake', {
+        patch: {
+          eventType: val('itkType'),
+          venue: val('itkVenue'),
+          city: val('itkCity'),
+          guestCount: val('itkGuests'),
+          setting: val('itkSetting'),
+          arrivalTime: val('itkArrival'),
+          ceremonyTime: val('itkCeremony'),
+          receptionTime: val('itkReception'),
+          startTime: val('itkStart'),
+          finishTime: val('itkFinish'),
+          packageId: val('itkPackage'),
+          addonIds,
+          agreedItems,
+          clientProvides,
+          /* Sent back so a save failure can repaint the form with his edits
+             rather than the original proposal. */
+          requests: [...sr.querySelectorAll('.itkAskText')].map((i) => String(i.value || '').trim())
+        }
+      });
+    });
+  }
+
   /* ============================================================== AGREEMENT = */
 
   /**
@@ -1626,12 +2076,16 @@ class DkdjsPage extends HTMLElement {
 
       const body = (sec.body || []).map((para) => `<p>${esc(para)}</p>`).join('');
 
+      const list = (sec.list || []).length
+        ? `<ul class="agrlist">${sec.list.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>`
+        : '';
+
       const links = (sec.links || []).length
         ? `<ul class="agrlinks">${sec.links.map((l) => `
             <li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a></li>`).join('')}</ul>`
         : '';
 
-      return `<div class="agrsec"><h2>${esc(sec.h)}</h2>${rows}${lines}${total}${body}${links}</div>`;
+      return `<div class="agrsec"><h2>${esc(sec.h)}</h2>${rows}${lines}${total}${body}${list}${links}</div>`;
     }).join('');
 
     /* Already signed.

@@ -54,11 +54,13 @@ export const KINDS = {
        dropped, so a half-filled record produces a short agreement, never a
        row reading "Ceremony start: undefined". */
     fields: [
+      ['arrivalTime',   'We arrive to set up'],
       ['ceremonyTime',  'Ceremony begins'],
       ['receptionTime', 'Reception begins'],
       ['finishTime',    'Music finishes'],
       ['venue',         'Venue'],
       ['city',          'City'],
+      ['setting',       'Indoors or outdoors'],
       ['guestCount',    'Approximate guests']
     ],
     notes: [
@@ -80,12 +82,14 @@ export const KINDS = {
     title: 'Event Booking Agreement',
     heading: 'Your event',
     fields: [
-      ['eventType',  'Event'],
-      ['startTime',  'We start'],
-      ['finishTime', 'Music finishes'],
-      ['venue',      'Venue'],
-      ['city',       'City'],
-      ['guestCount', 'Approximate guests']
+      ['eventType',   'Event'],
+      ['arrivalTime', 'We arrive to set up'],
+      ['startTime',   'We start'],
+      ['finishTime',  'Music finishes'],
+      ['venue',       'Venue'],
+      ['city',        'City'],
+      ['setting',     'Indoors or outdoors'],
+      ['guestCount',  'Approximate guests']
     ],
     notes: [
       'Tell us about any speeches, awards or announcements before the day. It '
@@ -95,6 +99,24 @@ export const KINDS = {
     ]
   }
 };
+
+/**
+ * Tidy a list that came from a CMS Tags field or a textarea.
+ *
+ * Capped at 20 lines of 200 characters. Not arbitrary: every line here is a
+ * commitment printed into a contract, and an unbounded list pasted out of an
+ * email thread is how a page of someone else's wishes ends up reading as
+ * something DKDJS promised.
+ */
+function cleanList(value) {
+  const raw = Array.isArray(value) ? value : String(value || '').split('\n');
+
+  return raw
+    .map((line) => String(line).replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .map((line) => (line.length > 200 ? line.slice(0, 197) + '\u2026' : line))
+    .slice(0, 20);
+}
 
 /** Weddings get the wedding agreement. Everything else gets the other one. */
 export function kindFor(eventType) {
@@ -190,6 +212,42 @@ export function buildAgreement(b = {}) {
     ]
   });
 
+  /* ------------------------------------------------- what else we agreed */
+
+  /* Everything here is a commitment beyond the package, so it appears only
+     because Daniel put it on the hold row deliberately. The intake page can
+     PROPOSE these lines; it cannot write them.
+
+     Note what this section does not say. There is no "anything not listed is
+     excluded" line. That is an entire-agreement clause — a real legal clause,
+     and not mine to invent. The Terms already define what is provided as the
+     package as described on the site, and that governs. If an
+     entire-agreement clause is wanted it belongs in the Terms, written by an
+     attorney. */
+  const agreedItems = cleanList(b.agreedItems);
+  const clientProvides = cleanList(b.clientProvides);
+
+  /* Two sections rather than one with two lists, so a heading always sits
+     directly above the list it introduces. What DKDJS owes and what the
+     client owes are the two things a dispute turns on; they should not share
+     a box. */
+  if (agreedItems.length) {
+    sections.push({
+      h: 'What else we have agreed',
+      body: ['In addition to your package, we have agreed to:'],
+      list: agreedItems
+    });
+  }
+
+  if (clientProvides.length) {
+    sections.push({
+      h: 'What you are providing',
+      body: ['You or your venue are providing the following, so we are not '
+        + 'bringing them:'],
+      list: clientProvides
+    });
+  }
+
   /* ------------------------------------------------ what governs the rest */
   sections.push({
     h: 'The terms that apply',
@@ -262,6 +320,7 @@ export function agreementText(agreement) {
     (s.lines || []).forEach((l) => out.push(`  ${l.label} — ${l.amount}`));
     if (s.total) out.push(`  TOTAL: ${s.total}`);
     (s.body || []).forEach((p) => out.push(`  ${p}`));
+    (s.list || []).forEach((l) => out.push(`    - ${l}`));
     (s.links || []).forEach((l) => out.push(`  ${l.label}: ${l.url}`));
     out.push('');
   });
