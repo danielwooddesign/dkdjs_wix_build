@@ -35,8 +35,14 @@
  */
 
 import { Permissions, webMethod } from 'wix-web-module';
-import { elevate } from 'wix-auth';
-import { collections } from 'wix-data.v2';
+
+/* wix-auth and wix-data.v2 are NOT imported at the top of this file, on
+   purpose. A static import that cannot resolve throws while the module is
+   being loaded, before any function in it is registered — so every method
+   here fails, nothing can catch it, and Site Monitoring shows no entry at
+   all, because there is no function to attribute the failure to. That is
+   precisely what happened. Loading them dynamically turns an unresolvable
+   module from a silent total failure into a message. */
 
 /**
  * Elevation is resolved on first use, not at module load.
@@ -50,30 +56,72 @@ import { collections } from 'wix-data.v2';
  */
 let api = null;
 
-function getApi() {
+/**
+ * Resolve the Collections API, reporting rather than throwing.
+ *
+ * Returns { ok: true, get, update, create } or { ok: false, detail, seen }.
+ * Nothing in here is allowed to escape as an exception.
+ */
+async function getApi() {
   if (api) return api;
 
-  const missing = [];
-  if (typeof elevate !== 'function') missing.push('wix-auth elevate');
-  if (!collections) missing.push('wix-data.v2 collections');
+  const problems = [];
+  let elevate = null;
+  let collections = null;
+
+  try {
+    ({ elevate } = await import('wix-auth'));
+  } catch (err) {
+    problems.push('wix-auth did not load: ' + String((err && err.message) || err));
+  }
+
+  try {
+    ({ collections } = await import('wix-data.v2'));
+  } catch (err) {
+    problems.push('wix-data.v2 did not load: ' + String((err && err.message) || err));
+  }
+
+  const seen = {
+    elevate: typeof elevate,
+    collections: typeof collections,
+    methods: collections ? Object.keys(collections).slice(0, 40) : null
+  };
+
+  if (typeof elevate !== 'function') problems.push('elevate is not a function');
+  if (!collections) problems.push('collections is empty');
   else {
     ['getDataCollection', 'updateDataCollection', 'createDataCollection']
-      .forEach((fn) => { if (typeof collections[fn] !== 'function') missing.push('collections.' + fn); });
+      .forEach((fn) => {
+        if (typeof collections[fn] !== 'function') problems.push('missing collections.' + fn);
+      });
   }
 
-  if (missing.length) {
-    const err = new Error('Collections API unavailable: ' + missing.join(', '));
-    err.dkdjsMissing = missing;
-    throw err;
+  if (problems.length) return { ok: false, detail: problems.join('; '), seen };
+
+  try {
+    api = {
+      ok: true,
+      get: elevate(collections.getDataCollection),
+      update: elevate(collections.updateDataCollection),
+      create: elevate(collections.createDataCollection)
+    };
+  } catch (err) {
+    return { ok: false, detail: 'elevate() failed: ' + String((err && err.message) || err), seen };
   }
 
-  api = {
-    get: elevate(collections.getDataCollection),
-    update: elevate(collections.updateDataCollection),
-    create: elevate(collections.createDataCollection)
-  };
   return api;
 }
+
+/**
+ * Proof of life. No imports, no API, nothing that can fail.
+ *
+ * If this returns and inspectSchema does not, the module is loading and the
+ * fault is in the Collections API. If this does not return either, the
+ * problem is the module or the permission, not the code inside it.
+ */
+export const ping = webMethod(Permissions.Admin, async () => {
+  return { ok: true, at: new Date().toISOString(), file: 'schema.web.js' };
+});
 
 const WATCHED = ['Leads', 'Holds', 'Bookings', 'Agreements'];
 
@@ -113,22 +161,11 @@ export const inspectSchema = webMethod(Permissions.Admin, async () => {
   /* Nothing in here is allowed to throw. A thrown error reaches the browser
      as "Unable to handle the request", which says nothing — and this function
      exists precisely to diagnose. */
-  let getCollection;
-  try {
-    getCollection = getApi().get;
-  } catch (err) {
-    return {
-      ok: false,
-      reason: 'api-unavailable',
-      detail: String((err && err.message) || err),
-      missing: (err && err.dkdjsMissing) || null,
-      seen: {
-        elevate: typeof elevate,
-        collections: typeof collections,
-        keys: collections ? Object.keys(collections).slice(0, 30) : null
-      }
-    };
+  const resolved = await getApi();
+  if (!resolved.ok) {
+    return { ok: false, reason: 'api-unavailable', detail: resolved.detail, seen: resolved.seen };
   }
+  const getCollection = resolved.get;
 
   const out = {};
 
@@ -232,9 +269,13 @@ const HOLD_FIELDS = [
 export const addHoldFields = webMethod(Permissions.Admin, async (dryRun = true) => {
   let leads;
   let holds;
-  let getCollection;
+  const resolved = await getApi();
+  if (!resolved.ok) {
+    return { ok: false, reason: 'api-unavailable', detail: resolved.detail, seen: resolved.seen };
+  }
+  const getCollection = resolved.get;
+
   try {
-    getCollection = getApi().get;
     leads = await getCollection('Leads');
     holds = await getCollection('Holds');
   } catch (err) {
@@ -275,7 +316,7 @@ export const addHoldFields = webMethod(Permissions.Admin, async (dryRun = true) 
   };
 
   try {
-    const result = await getApi().update(updated);
+    const result = await resolved.update(updated);
     return {
       ok: true,
       added: toAdd.map(([key]) => key),
@@ -335,9 +376,14 @@ const AGREEMENT_FIELDS = [
 export const createAgreements = webMethod(Permissions.Admin, async (dryRun = true) => {
   let leads;
   let holds;
-  let getCollection;
+
+  const resolved = await getApi();
+  if (!resolved.ok) {
+    return { ok: false, reason: 'api-unavailable', detail: resolved.detail, seen: resolved.seen };
+  }
+  const getCollection = resolved.get;
+
   try {
-    getCollection = getApi().get;
     leads = await getCollection('Leads');
     holds = await getCollection('Holds');
   } catch (err) {
@@ -377,7 +423,7 @@ export const createAgreements = webMethod(Permissions.Admin, async (dryRun = tru
   if (dryRun) return { ok: true, dryRun: true, types, collection };
 
   try {
-    const created = await getApi().create(collection);
+    const created = await resolved.create(collection);
     return { ok: true, created: created && created._id, fields: AGREEMENT_FIELDS.length };
   } catch (err) {
     console.error('[schema.createAgreements]', err);

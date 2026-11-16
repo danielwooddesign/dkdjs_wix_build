@@ -26,7 +26,7 @@ import wixLocation from 'wix-location';
 import { SITE } from 'public/content';
 import { PACKAGES, sellableAddons } from 'public/pricing';
 import { parseEnquiry, applyIntake } from 'backend/intake.web';
-import { inspectSchema, addHoldFields } from 'backend/schema.web';
+import { ping, inspectSchema, addHoldFields } from 'backend/schema.web';
 
 $w.onReady(() => {
   const el = $w('#dkdjsPage');
@@ -82,6 +82,23 @@ $w.onReady(() => {
      names, code uses keys, and Wix generates one from the other. */
   el.on('checkschema', async () => {
     paint({ checking: true, applied: null });
+    try {
+      /* Proof of life first. ping() touches nothing — no imports, no API — so
+         if it fails, the module itself is not loading and the fault is not in
+         the Collections code at all. That distinction cost two publish cycles
+         to make by guesswork. */
+      await ping();
+    } catch (err) {
+      console.error('[intake] ping failed', err);
+      paint({
+        checking: false,
+        applied: 'schema.web.js is not loading at all: '
+          + ((err && err.message) || err)
+          + ' — the file is not reaching the server, or the method is refusing the caller.'
+      });
+      return;
+    }
+
     try {
       const result = await inspectSchema();
 
