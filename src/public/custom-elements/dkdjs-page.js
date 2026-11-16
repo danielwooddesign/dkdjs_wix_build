@@ -1864,6 +1864,11 @@ class DkdjsPage extends HTMLElement {
               ${k.checking ? 'Checking…' : 'Check CMS setup'}
             </button>
           </div>
+          ${k.applied ? `<p class="itkerr">${esc(k.applied)}</p>` : ''}
+          <p class="itkhint">
+            You have to be signed in to this site as the owner. These calls are
+            admin-only, so for anyone else they fail and nothing is shown.
+          </p>
         </div>`;
     }
 

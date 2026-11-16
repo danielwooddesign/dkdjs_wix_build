@@ -86,8 +86,17 @@ $w.onReady(() => {
       const result = await inspectSchema();
       paint({ checking: false, check: result.ok ? result : null });
     } catch (err) {
+      /* The real message matters here. The usual cause is not being signed in
+         as the site owner — inspectSchema is Permissions.Admin — but a
+         backend that has not published yet fails the same way, and the two
+         need telling apart. */
       console.error('[intake] inspectSchema failed', err);
-      paint({ checking: false, applied: 'Could not read the collections. Are you logged in as the owner?' });
+      paint({
+        checking: false,
+        applied: 'Could not read the collections: '
+          + ((err && err.message) || err)
+          + ' — if that mentions permissions, sign in to dkdjs.com as the owner.'
+      });
     }
   });
 
