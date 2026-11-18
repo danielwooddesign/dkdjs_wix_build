@@ -417,8 +417,16 @@ export const applyIntake = webMethod(Permissions.Admin, async (holdId, patch = {
   // Arrays are replaced wholesale, not merged: the review screen showed the
   // full list, so what came back is the intended list.
   if (proposal.addonIds.length) update.addonIds = proposal.addonIds;
-  if (agreedItems.length) update.agreedItems = agreedItems;
-  if (proposal.clientProvides.length) update.clientProvides = proposal.clientProvides;
+
+  /* agreedItems and clientProvides are Text fields holding one item per
+     line, not Tags. Tags split on commas, and a commitment like
+     "Traditional DJ setup rather than the LED video booth, at your request"
+     is exactly the kind of line that has a comma in it. addonIds stays Tags
+     — those are ids, and an id never contains one. */
+  if (agreedItems.length) update.agreedItems = agreedItems.join('\n');
+  if (proposal.clientProvides.length) {
+    update.clientProvides = proposal.clientProvides.join('\n');
+  }
 
   /* The event date is deliberately NOT written here. It is the one field the
      availability check, the Bookings row and the hold itself all key on, and

@@ -249,8 +249,9 @@ const HOLD_FIELDS = [
   ['startTime', 'Start Time', 'TEXT'],
   ['finishTime', 'Finish Time', 'TEXT'],
   ['setting', 'Indoors Or Outdoors', 'TEXT'],
-  ['agreedItems', 'Agreed Items', 'TAGS'],
-  ['clientProvides', 'Client Provides', 'TAGS'],
+  /* TEXT, one item per line — not TAGS. A Tags field splits on commas. */
+  ['agreedItems', 'Agreed Items', 'TEXT'],
+  ['clientProvides', 'Client Provides', 'TEXT'],
   ['agreementSignedAt', 'Agreement Signed At', 'DATETIME'],
   ['agreementId', 'Agreement Id', 'TEXT'],
   ['paymentId', 'Payment Id', 'TEXT'],

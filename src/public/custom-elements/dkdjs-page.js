@@ -247,8 +247,16 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 /* -------------------------------------------------------------- ABOUT ----- */
 .split { display:grid; grid-template-columns:1fr; gap:28px; align-items:center; margin-top:28px; }
 .split .body { max-width:62ch; }
+/* Widths below are in px, never rem.
+   A rem resolves against the DOCUMENT root, not against :host, and Wix sets
+   font-size:10px on this site's html element. So 34rem rendered as 340px
+   instead of 544px, and every card written in rem came out at 62.5% of its
+   intended width. The :host font-size:16px further up fixes inherited text
+   size; it cannot fix rem. (The backticks that used to be around the word
+   rem in this comment ended the template literal this stylesheet lives in,
+   which is its own small lesson.) */
 /* ------------------------------------------------------------------ PAY --- */
-.paycard { max-width:34rem; margin:34px auto 0; background:var(--surface);
+.paycard { max-width:544px; margin:34px auto 0; background:var(--surface);
   border:1px solid var(--line); border-radius:4px; padding:30px 28px; }
 .payrow { display:flex; justify-content:space-between; align-items:baseline;
   padding:12px 0; border-bottom:1px solid var(--line); }
@@ -263,7 +271,7 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
   font-size:13px; line-height:1.55; color:var(--dim); }
 .paybtn { width:100%; margin-top:22px; justify-content:center; }
 .paynote { margin-top:14px; font-size:14px; color:var(--dim); text-align:center; }
-.paybad { max-width:34rem; margin:34px auto 0; background:var(--surface);
+.paybad { max-width:544px; margin:34px auto 0; background:var(--surface);
   border:1px solid var(--line); border-left:3px solid var(--pink);
   border-radius:4px; padding:26px 24px; }
 .paybad b { display:block; font-size:18px; color:#fff; margin-bottom:8px; }
@@ -272,7 +280,7 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
   font-size:46px; color:var(--cyan); line-height:1; }
 
 /* ------------------------------------------------------------ AGREEMENT --- */
-.agr { max-width:46rem; margin:30px auto 0; }
+.agr { max-width:740px; margin:30px auto 0; }
 .agrsec { background:var(--surface); border:1px solid var(--line); border-radius:4px;
   padding:24px 22px; margin-bottom:14px; }
 .agrsec h2 { font-size:14px; letter-spacing:.12em; text-transform:uppercase;
@@ -297,7 +305,7 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
 /* Admin-only screen. Plainer than the customer pages on purpose: it is a
    working tool, and density beats atmosphere when you are checking fields
    against an email. */
-.itk { max-width:52rem; margin:26px auto 0; }
+.itk { max-width:840px; margin:26px auto 0; }
 .itkbox { background:var(--surface); border:1px solid var(--line); border-radius:4px;
   padding:22px 20px; margin-bottom:14px; }
 .itkbox h2 { font-size:14px; letter-spacing:.12em; text-transform:uppercase;
@@ -345,6 +353,8 @@ h1.sec, h2.sec { font-size:clamp(30px,5vw,50px); color:#fff; margin:16px 0 0; }
   .itkgrid { grid-template-columns:1fr 1fr; }
   .itkchecks { grid-template-columns:1fr 1fr; }
 }
+.agrsnap { white-space:pre-wrap; font-size:16px; line-height:1.65; color:var(--text);
+  margin:0; word-break:break-word; }
 .agrlist { margin:4px 0 0; padding:0 0 0 20px; }
 .agrlist li { font-size:16px; line-height:1.6; color:#fff; margin:0 0 8px; }
 .agrlist li:last-child { margin-bottom:0; }
@@ -2043,6 +2053,67 @@ class DkdjsPage extends HTMLElement {
         </div></section>`;
     }
 
+    /* Already signed.
+     *
+     * Rendered from the STORED SNAPSHOT, verbatim — not from a fresh build of
+     * whatever the hold says today. If a hold is edited after signing, a
+     * re-render would show the customer a document they never agreed to. The
+     * snapshot is the record, so the record is what is shown.
+     *
+     * Checked BEFORE the refusal below, on purpose. Once the retainer is paid
+     * the hold stops being "payable", and in the old order that made a
+     * customer who had just paid unable to open their own contract — quietly
+     * undoing the retention requirement the print button exists to satisfy.
+     */
+    if (a.signed) {
+      const when = a.signed.signedAt
+        ? new Date(a.signed.signedAt).toLocaleDateString('en-US',
+            { year: 'numeric', month: 'long', day: 'numeric' })
+        : '';
+
+      return `
+        <section>
+          <div class="wrap" style="text-align:center">
+            <div class="eyebrow"><i></i>Signed agreement</div>
+            <h1 class="disp sec">${esc(a.title || 'Booking Agreement')}</h1>
+          </div>
+
+          <div class="wrap">
+            <div class="agr">
+              <div class="agrsec">
+                <div class="agrsnap">${esc(a.signed.snapshot || '')}</div>
+              </div>
+
+              <div class="agrsign">
+                <h2 style="font-size:14px;letter-spacing:.12em;text-transform:uppercase;
+                           color:var(--cyan);margin:0 0 14px;font-weight:600">Signed</h2>
+                <div class="agrrow">
+                  <span class="k">Signature</span>
+                  <span class="v">${esc(a.signed.signerName || '')}</span>
+                </div>
+                ${when ? `<div class="agrrow"><span class="k">Date signed</span>
+                  <span class="v">${esc(when)}</span></div>` : ''}
+                <div class="agrrow">
+                  <span class="k">Terms version</span>
+                  <span class="v">${esc(a.signed.termsVersion || '')}</span>
+                </div>
+
+                <button class="btn paybtn" type="button" id="agrPrintBtn">
+                  Print or save a copy
+                </button>
+
+                ${a.paid
+                  ? `<p class="paynote">Your retainer is paid and the date is yours.</p>`
+                  : `<button class="btn btn-primary paybtn" type="button" id="agrPayBtn">
+                       Pay the ${money(a.retainer)} retainer
+                     </button>
+                     <p class="paynote">Your date is reserved once the retainer is in.</p>`}
+              </div>
+            </div>
+          </div>
+        </section>`;
+    }
+
     if (!a.ok) {
       const why = {
         'missing-hold': 'This link is incomplete. Check the address, or ask us to resend it.',
@@ -2056,10 +2127,17 @@ class DkdjsPage extends HTMLElement {
           + 'as soon as we have, and we will let you know.'
       }[a.reason] || 'Something went wrong. Nothing has been signed.';
 
+      /* 'not-ready' is our side being unfinished, not their link being
+         broken. Under a heading saying we cannot open the agreement, the
+         reassuring sentence below it reads as a contradiction. */
+      const heading = a.reason === 'not-ready'
+        ? 'Your agreement is not quite ready'
+        : 'We cannot open this agreement';
+
       return `
         <section><div class="wrap">
           <div class="paybad">
-            <b>We cannot open this agreement</b>
+            <b>${esc(heading)}</b>
             <p class="body">${esc(why)}</p>
             ${cfg.phone ? `<p class="paynote" style="text-align:left">Call or text ${esc(cfg.phone)}.</p>` : ''}
           </div>
@@ -2092,64 +2170,6 @@ class DkdjsPage extends HTMLElement {
 
       return `<div class="agrsec"><h2>${esc(sec.h)}</h2>${rows}${lines}${total}${body}${list}${links}</div>`;
     }).join('');
-
-    /* Already signed.
-     *
-     * The whole agreement is rendered again, not just a receipt, and with a
-     * print button. ESIGN and Idaho's UETA both require that the signer be
-     * able to KEEP the record they agreed to, and print-to-PDF is the one way
-     * to offer that which does not depend on an email template existing.
-     *
-     * The form is not offered a second time: a second signature on one
-     * booking would be a second record of the same agreement, and the backend
-     * refuses to write one in any case.
-     */
-    if (a.signed) {
-      const when = a.signed.signedAt
-        ? new Date(a.signed.signedAt).toLocaleDateString('en-US',
-            { year: 'numeric', month: 'long', day: 'numeric' })
-        : '';
-
-      return `
-        <section>
-          <div class="wrap" style="text-align:center">
-            <div class="eyebrow"><i></i>Signed agreement</div>
-            <h1 class="disp sec">${esc(doc.title)}</h1>
-          </div>
-
-          <div class="wrap">
-            <div class="agr">
-              ${sections}
-
-              <div class="agrsign">
-                <h2 style="font-size:14px;letter-spacing:.12em;text-transform:uppercase;
-                           color:var(--cyan);margin:0 0 14px;font-weight:600">Signed</h2>
-                <div class="agrrow">
-                  <span class="k">Signature</span>
-                  <span class="v">${esc(a.signed.signerName || '')}</span>
-                </div>
-                ${when ? `<div class="agrrow"><span class="k">Date signed</span>
-                  <span class="v">${esc(when)}</span></div>` : ''}
-                <div class="agrrow">
-                  <span class="k">Terms version</span>
-                  <span class="v">${esc(doc.termsVersion || '')}</span>
-                </div>
-
-                <button class="btn paybtn" type="button" id="agrPrintBtn">
-                  Print or save a copy
-                </button>
-
-                ${a.paid
-                  ? `<p class="paynote">Your retainer is paid and ${esc(doc.eventDate)} is yours.</p>`
-                  : `<button class="btn btn-primary paybtn" type="button" id="agrPayBtn">
-                       Pay the ${money(doc.retainer)} retainer
-                     </button>
-                     <p class="paynote">Your date is reserved once the retainer is in.</p>`}
-              </div>
-            </div>
-          </div>
-        </section>`;
-    }
 
     return `
       <section>

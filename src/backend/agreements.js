@@ -73,9 +73,16 @@ function mergeRecord(hold, lead) {
        These print in the contract as things DKDJS has agreed to do, and a
        Lead is what the CUSTOMER typed. Letting a request promote itself into
        a promise by travelling through this function is exactly the failure
-       the intake page's unticked checkboxes exist to prevent. */
-    agreedItems: Array.isArray(hold.agreedItems) ? hold.agreedItems : [],
-    clientProvides: Array.isArray(hold.clientProvides) ? hold.clientProvides : []
+       the intake page's unticked checkboxes exist to prevent.
+
+       Passed through whatever shape they are in. These moved from a Tags
+       field to a Text field on 2026-11-18, because the Tags field splits
+       its input on commas — which turned "…video booth, at your request"
+       into two bullets, the second reading only "at your request".
+       cleanList() in public/agreements takes an array or a newline string,
+       so this hands the value over rather than guessing at it. */
+    agreedItems: hold.agreedItems,
+    clientProvides: hold.clientProvides
   };
 }
 
