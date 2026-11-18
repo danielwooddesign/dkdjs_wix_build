@@ -45,7 +45,7 @@ export const POLICY = {
      project and gated the terms section, the booking copy and payments. */
 
   /** What it costs to take a date off the calendar. Comes off the total. */
-  holdAmount: 200,
+  holdAmount: 1,
   /** 'retainer' is deliberate: it reserves time and is understood to be earned
    *  on booking, which is what supports it being non-refundable. */
   holdTerm: 'retainer',
