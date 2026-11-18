@@ -70,7 +70,14 @@ $w.onReady(async () => {
   }
   el.setAttribute('agreement', JSON.stringify(state));
 
-  if (!state.ok) return;
+  if (!state.ok) {
+    /* The visitor sees a polite "still putting your figures together".
+       Daniel, with the console open, sees which fields are blank. */
+    if (state.missing) {
+      console.warn('[agreement] hold is missing:', state.missing.join(', '));
+    }
+    return;
+  }
 
   // 2. "Pay the retainer" on the signed view.
   el.on('payaftersigning', () => wixLocation.to(payUrl));

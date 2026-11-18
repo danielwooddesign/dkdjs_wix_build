@@ -118,6 +118,22 @@ function cleanList(value) {
     .slice(0, 20);
 }
 
+/**
+ * Make a phone number readable.
+ *
+ * The enquiry form takes whatever the visitor types, so "17202086813" is a
+ * normal thing to find on a lead. It is their number either way, but a
+ * contract should not look like it was filled in by a machine.
+ * Anything that is not a plain US number is returned untouched rather than
+ * mangled into a shape it does not fit.
+ */
+function formatPhone(value) {
+  const digits = String(value || '').replace(/\D/g, '');
+  const local = digits.length === 11 && digits[0] === '1' ? digits.slice(1) : digits;
+  if (local.length !== 10) return String(value || '').trim();
+  return `(${local.slice(0, 3)}) ${local.slice(3, 6)}-${local.slice(6)}`;
+}
+
 /** Weddings get the wedding agreement. Everything else gets the other one. */
 export function kindFor(eventType) {
   return /wedding/i.test(String(eventType || '')) ? KINDS.wedding : KINDS.event;
@@ -157,6 +173,16 @@ export function buildAgreement(b = {}) {
      cannot be signed through this page. Daniel quotes those by hand. */
   if (quote && (quote.custom || !quote.total)) missing.push('total');
 
+  /* If the package commits to a number of hours, the agreement has to say
+     which hours. "Six hours" with no start time is not a term anyone can
+     hold either side to — and overtime is exactly the thing a booking
+     argues about. Same principle as refusing without a price.
+     NOTE: arrivalTime is deliberately not accepted here. That is load-in,
+     not coverage; treating it as the start would quietly give away the
+     setup hour. */
+  const coverageStart = b.startTime || b.ceremonyTime || b.receptionTime;
+  if (pkg && pkg.hours && !coverageStart) missing.push('startTime');
+
   if (missing.length) return { ok: false, missing, kind: kind.id };
 
   const retainer = Number(POLICY.holdAmount);
@@ -170,9 +196,9 @@ export function buildAgreement(b = {}) {
     h: 'This agreement is between',
     rows: [
       [COMPANY.legalName, `an Idaho ${COMPANY.entityType}, ${COMPANY.address}`],
-      ['and', b.name],
+      ['Client', b.name],
       ['Email', b.email || ''],
-      ['Phone', b.phone || '']
+      ['Phone', formatPhone(b.phone)]
     ]
   });
 

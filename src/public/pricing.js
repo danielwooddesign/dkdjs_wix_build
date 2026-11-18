@@ -106,16 +106,26 @@ export const PACKAGES = [
     featured: true,
     badge: 'MOST BOOKED',
     eventTypes: ['wedding'],
-    bundledAddons: ['ceremony-audio', 'led-booth'],
+    /* The LED booth came out of this bundle on 2026-11-18. Two reasons, both
+       from the first real wedding enquiry: a couple turned it down and asked
+       for the traditional setup, and the booth is 200lb, which not every
+       venue can physically take. Bundling it charged everyone for something
+       some couples do not want and some venues cannot host — and it hid the
+       one piece of kit no local competitor has. It is now a $349 add-on.
+       Package rates are unchanged; this is not the rate rise deferred to
+       April 2027. */
+    bundledAddons: ['ceremony-audio'],
     includes: [
       'Everything in The Reception',
       'Ceremony audio',
       'Officiant microphone',
       'Cocktail-hour music',
       'Two wireless microphones',
-      'Timeline coordination',
-      { text: 'Curved LED Video DJ Booth', requires: 'ledBooth' },
-      { text: 'Basic personalized visuals', requires: 'ledBooth' }
+      'Timeline coordination'
+      /* 'Basic personalized visuals' was removed with the booth on
+         2026-11-18. The visuals play on the booth's LED screen, so without
+         the booth there is no surface to show them on. Leaving the line in
+         would have promised something the package no longer contains. */
     ]
   },
   {

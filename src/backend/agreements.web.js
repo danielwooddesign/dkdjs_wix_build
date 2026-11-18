@@ -32,7 +32,10 @@ export const getAgreement = webMethod(Permissions.Anyone, async (holdId) => {
   const loaded = await loadAgreement(holdId);
 
   if (!loaded.ok) {
-    return { ok: false, reason: loaded.reason };
+    /* `missing` names the empty fields when the hold is not finished. It is
+       field names, nothing about the customer, and it saves Daniel opening
+       Site Monitoring to find out why a link will not render. */
+    return { ok: false, reason: loaded.reason, missing: loaded.missing || null };
   }
 
   // If it is already signed, say so rather than inviting a second signature.
