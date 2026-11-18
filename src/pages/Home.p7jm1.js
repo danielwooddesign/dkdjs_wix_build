@@ -33,7 +33,7 @@ const CONFIG = {
     events:      'https://static.wixstatic.com/media/fb34fd_09636f5792c6457fb028f10170b58116~mv2.jpg',   // 1536x1024 — birthday
     karaoke:     'https://static.wixstatic.com/media/fb34fd_8eaf4b26647d4720b388263cff46f014~mv2.jpg',   // 2560x1440 — crops to 4:3 for the card
     'line-dancing': 'https://static.wixstatic.com/media/fb34fd_f3d165569f3f46b2a1e296f6b75bba78~mv2.jpg', // 1536x1024
-    booth:       'https://static.wixstatic.com/media/fb34fd_00745eef392e4d64b3c27db5ca7a089f~mv2.jpg',   // 2400x1350 — exactly the spec
+    booth:       'https://static.wixstatic.com/media/fb34fd_d5e3102786474aaea0aff602b5cdbf43~mv2.jpg',   // 2400x1350 — exactly the spec
     // Spare, not placed: fb34fd_1a51697befa64989b95e679165ab0538 (lounge, 1536x1024)
     gallery1: '', gallery2: '', gallery3: '',
     gallery4: '', gallery5: '', gallery6: ''   // 1600x1200 each
