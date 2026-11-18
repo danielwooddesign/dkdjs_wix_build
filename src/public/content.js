@@ -490,15 +490,21 @@ export const SERVICES = {
   },
 
   /**
-   * Venue residencies — written for bar and restaurant owners, not couples.
+   * For venues, clubs and dance organisers — written for trade, not couples.
    *
    * Deliberately kept out of the nav. It is an outreach asset: a link to put
-   * in an email and a page to open on a phone at the bar. A B2B page in the
+   * in an email and a page to open on a phone at the bar. A trade page in the
    * main nav would compete for the attention of every couple browsing
    * packages, and couples are the business.
    *
-   * No tiers and no price. Residency terms move with the night, the hours
-   * and the room, and `residency` is already 'quoted' in pricing.js.
+   * Leads on the dancing rather than the services, because the services are
+   * what every DJ in the valley also sells and the dancing is not. Daniel and
+   * Kathy dance, they DJ a weekly line dancing night, and a dance school
+   * booked them. An organiser choosing between DJs cares about that more than
+   * an equipment list.
+   *
+   * No tiers and no price: terms move with the night, the hours and the room,
+   * and `residency` is already 'quoted' in pricing.js.
    */
   residency: {
     slug: 'venues',
@@ -508,62 +514,63 @@ export const SERVICES = {
     /* Venue owners are not checking a wedding date. */
     ctaHref: '/contact',
     ctaLabel: 'Get in touch',
-    eyebrow: 'For bars, restaurants and clubs',
-    h1: 'Your quietest night is the one worth booking.',
-    lead: 'Recurring karaoke and DJ nights for Treasure Valley venues, run by two '
-        + 'people who already do this every week.',
+    eyebrow: 'For venues, clubs and dance organisers',
+    h1: 'The floor fills faster when the DJ knows the dances.',
+    lead: 'Line dancing nights, hosted karaoke, DJ hire and recurring residencies '
+        + 'for Treasure Valley venues, clubs and dance organisers.',
     intro: [
-      'A new night is easy to start and hard to keep. The first one is busy because '
-        + 'it is new. The fourth one tells you whether you have a night, and that '
-        + 'usually comes down to whether somebody is running the room or just '
-        + 'running the music.',
-      'We already hold one. Every Friday we DJ the line dancing night at the Nampa '
-        + 'Eagles Lodge — same night, same room, a crowd that comes back for it. It '
-        + 'is free to get in. Come and watch an hour before you decide anything; it '
-        + 'will tell you more than this page can.'
+      'We are dancers before we are DJs — West Coast swing and line dancing, on the '
+        + 'same floors our clients run. That is not a sales line. It decides which '
+        + 'version of a song goes on, when a lesson should run, and when a floor is '
+        + 'working and should be left alone.',
+      'Every Friday we DJ the line dancing night at the Nampa Eagles Lodge — same '
+        + 'night, same room, a crowd that comes back for it. Our first karaoke '
+        + 'booking came from one of the owners of Dirt Road Dancing. Friday is free '
+        + 'to get in; come and watch an hour before you decide anything.'
     ],
-    stepsEyebrow: 'How a residency works',
-    stepsH2: 'What it involves.',
+    stepsEyebrow: 'What we do for venues and organisers',
+    stepsH2: 'The work.',
     steps: [
-      { title: 'We bring all of it',
-        copy: 'Sound, microphones, lighting and the catalogue. Your staff carry '
-            + 'nothing and set nothing up.' },
-      { title: 'Two of us, every night',
-        copy: 'One runs sound and music. The other works the room, keeps the '
-            + 'rotation moving and reads who wants to be asked to sing.' },
-      { title: 'Sized to your room',
-        copy: 'We look at the space before the first night and bring the rig that '
-            + 'fits it. A dining room and a hall are not the same job.' },
+      { title: 'Line dancing nights',
+        copy: 'Weekly or one-off. We know the dances, the counts, and which version '
+            + 'of a song the floor is expecting.' },
+      { title: 'Events and workshops',
+        copy: 'Sound and microphones for your instructors, then open dancing after. '
+            + 'That is exactly what we run every Friday.' },
+      { title: 'Hosted karaoke',
+        copy: 'Two of us: one on sound, one working the room and keeping the '
+            + 'rotation moving so the night does not stall.' },
+      { title: 'DJ hire for your own events',
+        copy: 'Anniversaries, fundraisers, member nights. We bring everything and '
+            + 'set all of it up.' },
+      { title: 'A recurring residency',
+        copy: 'The same night every week so regulars learn it. A residency is a '
+            + 'habit being built, not a booking.' },
       { title: 'Your promos on our screen',
-        copy: 'Our LED booth can run your specials and upcoming events between songs.' },
-      { title: 'The same night each week',
-        copy: 'Regulars have to learn when it is on. A residency is a habit being '
-            + 'built, not a booking.' },
-      { title: 'Quoted per venue',
-        copy: 'The night, the hours and the size of the room all move the number, '
-            + 'so we quote once we have seen the room.' }
+        copy: 'Our LED booth can run your specials and upcoming events between songs.' }
     ],
-    faqEyebrow: 'What owners ask',
+    faqEyebrow: 'What venues and organisers ask',
     faqH2: 'Straight answers.',
     faq: [
       { q: 'Can we watch you work first?',
         a: 'Yes, and we would rather you did. We are at the Nampa Eagles Lodge '
          + 'every Friday for the line dancing night. Free to get in. Come down.' },
+      { q: 'Do you actually know the dances?',
+        a: 'Yes. We dance West Coast swing and line dancing ourselves, which is how '
+         + 'we ended up doing this. It is the part of the job you cannot bluff.' },
+      { q: 'Will you run sound for our instructors?',
+        a: 'Yes. Microphone for the teaching, music cued for the lesson, then open '
+         + 'dancing after. It is the shape of our Friday night.' },
       { q: 'What do you need from us?',
         a: 'Somewhere to set up, mains power within reach of it, and a night you '
-         + 'want to fill. We handle the rest.' },
+         + 'want to fill. We bring the sound, microphones, lighting and catalogue, '
+         + 'and we size the rig to the room after we have seen it.' },
       { q: 'How loud is it?',
         a: 'As loud as your room and your neighbours allow. We set levels for the '
          + 'space, and we can run it low through service and bring it up later.' },
-      { q: 'What if the first night is quiet?',
-        a: 'Most first nights are. That is why we would rather talk about a run of '
-         + 'nights than a single booking — a night is built over weeks.' },
-      { q: 'Karaoke or DJ?',
-        a: 'Either. Hosted karaoke, a DJ night, or both on the same evening if that '
-         + 'suits the room.' },
       { q: 'What does it cost?',
-        a: 'Quoted per venue. Tell us the night, the hours and the room, and we '
-         + 'will give you a number.' }
+        a: 'Quoted per venue. The night, the hours and the size of the room all '
+         + 'move the number, so tell us those and we will give you one.' }
     ],
     ctaH2: 'Come and watch us work.',
     ctaBody: 'We are at the Nampa Eagles every Friday. Or get in touch and we will '
