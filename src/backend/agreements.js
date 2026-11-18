@@ -38,6 +38,14 @@ function mergeRecord(hold, lead) {
     ? hold[key]
     : (lead ? lead[key] : undefined));
 
+  /** Hold's list wins if it has anything; otherwise whatever the form caught. */
+  const list = (key) => {
+    const fromHold = hold[key];
+    if (Array.isArray(fromHold) && fromHold.length) return fromHold;
+    const fromLead = lead && lead[key];
+    return Array.isArray(fromLead) ? fromLead : [];
+  };
+
   return {
     name: pick('name'),
     email: pick('email'),
@@ -47,14 +55,27 @@ function mergeRecord(hold, lead) {
     venue: pick('venue'),
     city: pick('city'),
     guestCount: pick('guestCount'),
-    // Daniel's fields. None of these exist on a Lead.
-    packageId: hold.packageId,
-    addonIds: Array.isArray(hold.addonIds) ? hold.addonIds : [],
+
+    packageId: pick('packageId'),
+    addonIds: list('addonIds'),
     extraHours: hold.extraHours,
+
+    arrivalTime: hold.arrivalTime,
     ceremonyTime: hold.ceremonyTime,
     receptionTime: hold.receptionTime,
-    startTime: hold.startTime,
-    finishTime: hold.finishTime
+    startTime: pick('startTime'),
+    /* The enquiry form calls it endTime; the agreement calls it finishTime.
+       Same thing, named differently either side of this function. */
+    finishTime: hold.finishTime || (lead ? lead.endTime : undefined),
+    setting: hold.setting,
+
+    /* Commitments, and deliberately hold-only — never from the Lead.
+       These print in the contract as things DKDJS has agreed to do, and a
+       Lead is what the CUSTOMER typed. Letting a request promote itself into
+       a promise by travelling through this function is exactly the failure
+       the intake page's unticked checkboxes exist to prevent. */
+    agreedItems: Array.isArray(hold.agreedItems) ? hold.agreedItems : [],
+    clientProvides: Array.isArray(hold.clientProvides) ? hold.clientProvides : []
   };
 }
 
