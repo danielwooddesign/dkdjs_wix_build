@@ -739,6 +739,7 @@ function pageFromPath() {
   if (path.indexOf('about') !== -1) return 'about';
   if (path.indexOf('packages') !== -1) return 'packages';
   if (path.indexOf('wedding') !== -1) return 'weddings';
+  if (path.indexOf('venue') !== -1) return 'residency';
   if (path.indexOf('karaoke') !== -1) return 'karaoke';
   if (path.indexOf('event') !== -1) return 'events';
   if (path.indexOf('privacy') !== -1 || path.indexOf('terms') !== -1
@@ -1088,6 +1089,7 @@ class DkdjsPage extends HTMLElement {
       weddings: () => this.service(),
       events: () => this.service(),
       karaoke: () => this.service(),
+      residency: () => this.service(),
       legal: () => this.legal(),
       pay: () => this.pay(),
       agreement: () => this.agreement(),
@@ -1372,7 +1374,8 @@ class DkdjsPage extends HTMLElement {
         <div class="wrap" style="text-align:center">
           <h2 class="disp sec">${esc(c.ctaH2)}</h2>
           <p class="lead" style="margin:16px auto 24px;max-width:52ch">${esc(c.ctaBody)}</p>
-          <button class="btn btn-primary" type="button" data-go="/check-availability">Check your date</button>
+          <button class="btn btn-primary" type="button"
+            data-go="${esc(c.ctaHref || '/check-availability')}">${esc(c.ctaLabel || 'Check your date')}</button>
         </div>
       </section>`;
   }

@@ -487,6 +487,87 @@ export const SERVICES = {
     ],
     ctaH2: 'Pick a night.',
     ctaBody: 'Tell us the date and the room and we will tell you what it needs.'
+  },
+
+  /**
+   * Venue residencies — written for bar and restaurant owners, not couples.
+   *
+   * Deliberately kept out of the nav. It is an outreach asset: a link to put
+   * in an email and a page to open on a phone at the bar. A B2B page in the
+   * main nav would compete for the attention of every couple browsing
+   * packages, and couples are the business.
+   *
+   * No tiers and no price. Residency terms move with the night, the hours
+   * and the room, and `residency` is already 'quoted' in pricing.js.
+   */
+  residency: {
+    slug: 'venues',
+    eventTypes: ['residency'],
+    packages: [],
+    alsoPackages: [],
+    /* Venue owners are not checking a wedding date. */
+    ctaHref: '/contact',
+    ctaLabel: 'Get in touch',
+    eyebrow: 'For bars, restaurants and clubs',
+    h1: 'Your quietest night is the one worth booking.',
+    lead: 'Recurring karaoke and DJ nights for Treasure Valley venues, run by two '
+        + 'people who already do this every week.',
+    intro: [
+      'A new night is easy to start and hard to keep. The first one is busy because '
+        + 'it is new. The fourth one tells you whether you have a night, and that '
+        + 'usually comes down to whether somebody is running the room or just '
+        + 'running the music.',
+      'We already hold one. Every Friday we DJ the line dancing night at the Nampa '
+        + 'Eagles Lodge — same night, same room, a crowd that comes back for it. It '
+        + 'is free to get in. Come and watch an hour before you decide anything; it '
+        + 'will tell you more than this page can.'
+    ],
+    stepsEyebrow: 'How a residency works',
+    stepsH2: 'What it involves.',
+    steps: [
+      { title: 'We bring all of it',
+        copy: 'Sound, microphones, lighting and the catalogue. Your staff carry '
+            + 'nothing and set nothing up.' },
+      { title: 'Two of us, every night',
+        copy: 'One runs sound and music. The other works the room, keeps the '
+            + 'rotation moving and reads who wants to be asked to sing.' },
+      { title: 'Sized to your room',
+        copy: 'We look at the space before the first night and bring the rig that '
+            + 'fits it. A dining room and a hall are not the same job.' },
+      { title: 'Your promos on our screen',
+        copy: 'Our LED booth can run your specials and upcoming events between songs.' },
+      { title: 'The same night each week',
+        copy: 'Regulars have to learn when it is on. A residency is a habit being '
+            + 'built, not a booking.' },
+      { title: 'Quoted per venue',
+        copy: 'The night, the hours and the size of the room all move the number, '
+            + 'so we quote once we have seen the room.' }
+    ],
+    faqEyebrow: 'What owners ask',
+    faqH2: 'Straight answers.',
+    faq: [
+      { q: 'Can we watch you work first?',
+        a: 'Yes, and we would rather you did. We are at the Nampa Eagles Lodge '
+         + 'every Friday for the line dancing night. Free to get in. Come down.' },
+      { q: 'What do you need from us?',
+        a: 'Somewhere to set up, mains power within reach of it, and a night you '
+         + 'want to fill. We handle the rest.' },
+      { q: 'How loud is it?',
+        a: 'As loud as your room and your neighbours allow. We set levels for the '
+         + 'space, and we can run it low through service and bring it up later.' },
+      { q: 'What if the first night is quiet?',
+        a: 'Most first nights are. That is why we would rather talk about a run of '
+         + 'nights than a single booking — a night is built over weeks.' },
+      { q: 'Karaoke or DJ?',
+        a: 'Either. Hosted karaoke, a DJ night, or both on the same evening if that '
+         + 'suits the room.' },
+      { q: 'What does it cost?',
+        a: 'Quoted per venue. Tell us the night, the hours and the room, and we '
+         + 'will give you a number.' }
+    ],
+    ctaH2: 'Come and watch us work.',
+    ctaBody: 'We are at the Nampa Eagles every Friday. Or get in touch and we will '
+           + 'come and look at your room.'
   }
 };
 
